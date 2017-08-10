@@ -52,8 +52,15 @@ elseif($loginstatus===true AND !isset($_POST['sendlogin']))
 	{
 	$error .= $lang['alreadylogin']."<br />";
 	}
+
+if($show_motd==true)
+	{
+	$motd=implode("", file('motd.txt'));
+	$smarty->assign("motd", $motd);
+	}
 	
 if(!empty($error))
 	{
 	$smarty->assign("error", $error);
 	}
+	

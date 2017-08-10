@@ -114,6 +114,7 @@ if(isset($_GET['action']) AND $_GET['action'] == 'del')
 	
 if(isset($_POST['sendmsg']))
 	{
+	$_POST['msgtoall']=str_replace("\\", "\\\\", $_POST['msgtoall']);
 	$gm=$ts3->gm($_POST['msgtoall']);
 	if($gm['success']===false)
 		{

@@ -17,8 +17,8 @@
 <title>Teamspeak 3 - Webinterface</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
-<link rel="stylesheet" href="templates/new/gfx/style.css" type="text/css" media="screen" />
-<link rel="stylesheet" href="templates/new/gfx/tsview.css" type="text/css" media="screen" />
+<link rel="stylesheet" href="templates/{$tmpl}/gfx/style.css" type="text/css" media="screen" />
+<link rel="stylesheet" href="templates/{$tmpl}/gfx/tsview.css" type="text/css" media="screen" />
 <script type="text/javascript">
 //<![CDATA[
 function Klappen(Id) 

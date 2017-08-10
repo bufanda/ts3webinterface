@@ -17,5 +17,5 @@ $wiversionurl="http://www.ts3.cs-united.de/ts3wi/wiversion.html";
 $seversionurl="http://www.ts3.cs-united.de/ts3wi/seversion.html";
 $getthedirtylist="http://www.ts3.cs-united.de/ts3wi/dirtylist.html";
 
-$wiversion="beta2.8.2";
+$wiversion="beta2.9.1";
 ?>

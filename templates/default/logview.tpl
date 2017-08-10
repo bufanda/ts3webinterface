@@ -34,9 +34,9 @@
 		<td class="green1" colspan="4">
 		{$lang['comparator']}: <select name="comparator">
 			<option value="" {if isset($smarty.post.comparator) AND empty($smarty.post.comparator)}selected="selected"{/if}>-</option>
-			<option value="<" {if isset($smarty.post.comparator) AND $smarty.post.comparator == '<'}selected="selected"{/if}>Before</option>
-			<option value="=" {if isset($smarty.post.comparator) AND $smarty.post.comparator == '='}selected="selected"{/if}>Exactly</option>
-			<option value=">" {if isset($smarty.post.comparator) AND $smarty.post.comparator == '>'}selected="selected"{/if}>Later</option>
+			<option value="<" {if isset($smarty.post.comparator) AND $smarty.post.comparator == '<'}selected="selected"{/if}>{$lang['before']}</option>
+			<option value="=" {if isset($smarty.post.comparator) AND $smarty.post.comparator == '='}selected="selected"{/if}>{$lang['exactly']}</option>
+			<option value=">" {if isset($smarty.post.comparator) AND $smarty.post.comparator == '>'}selected="selected"{/if}>{$lang['later']}</option>
 			</select>
 		{$lang['like']} 
 		{$lang['date']} 
@@ -81,7 +81,7 @@
 		</tr>
 		<tr>
 			<td colspan="4"> 
-			<input type="submit" name="getfilter" value="Search" />
+			<input type="submit" name="getfilter" value="{$lang['search']}" />
 		</td>
 	</tr>
 </table>

@@ -14,13 +14,13 @@
 */
 session_start();
 $ip='';
-if($_SESSION['logged']==true OR $_SESSION['pubviewer']==true)
+if(isset($_SESSION['logged']) AND $_SESSION['logged']==true OR isset($_SESSION['pubviewer']) AND $_SESSION['pubviewer']==true)
 	{
 	if(isset($_GET['ip']))
 		{
 		$ip=$_GET['ip'];
 		}
-		else
+		elseif(isset($_SESSION['server_ip']))
 		{
 		$ip=$_SESSION['server_ip'];
 		}

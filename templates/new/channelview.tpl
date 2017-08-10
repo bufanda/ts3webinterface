@@ -70,7 +70,7 @@
 			<td class="green2">{$lang['codec']}:</td>
 			<td class="green2">
 			{if $channelinfo['channel_codec'] == '0'}
-				$lang['codec0'];
+				{$lang['codec0']}
 			{elseif $channelinfo['channel_codec'] == '1'}
 				{$lang['codec1']}
 			{elseif $channelinfo['channel_codec']=='2'}

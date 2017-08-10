@@ -12,6 +12,7 @@
 *
 *You should have received a copy of the GNU General Public License along with this program; if not, see <http://www.gnu.org/licenses/>. 
 */
+error_reporting(E_ALL);
 define("SECURECHECK", 1);
 session_start();
 $_SESSION['pubviewer']=true;
@@ -89,9 +90,9 @@ function create_tree($pid, $place, $alldata, $port, $ip, $showicons)
 							}
 						if($value['channel_icon_id']!=100 AND $value['channel_icon_id']!=200 AND $value['channel_icon_id']!=300 AND $value['channel_icon_id']!=500 AND $value['channel_icon_id']!=600)
 							{
-							if(file_exists('icons/'.$_SESSION['server_ip'].'-'.$port.'/icon_'.$value['channel_icon_id']))
+							if(file_exists('icons/'.$ip.'-'.$port.'/icon_'.$value['channel_icon_id']))
 								{
-								$chan_img.="<img style=\"height:16px;width:16px\" src=\"site/showfile.php?name=icon_".$value['channel_icon_id']."&amp;port=".$port."\" alt=\"\" />";
+								$chan_img.="<img style=\"height:16px;width:16px\" src=\"site/showfile.php?name=icon_".$value['channel_icon_id']."&amp;port=".$port."&amp;ip=".$ip."\" alt=\"\" />";
 								}
 							}
 							else
@@ -286,6 +287,7 @@ $bgcolor=isset($_GET['bgcolor']) ? secure($_GET['bgcolor']):'000000';
 $fontcolor=isset($_GET['fontcolor']) ? secure($_GET['fontcolor']):'ffffff';
 
 $ts3=new ts3admin($server[$_GET['skey']]['ip'], $server[$_GET['skey']]['tport']);
+
 $con=$ts3->connect();
 if($con['success']!==true)
 	{
@@ -325,7 +327,7 @@ if($con['success']!==true)
 			if($alldata['server']['virtualserver_icon_id']!=100 AND $alldata['server']['virtualserver_icon_id']!=200 AND $alldata['server']['virtualserver_icon_id']!=300 AND $alldata['server']['virtualserver_icon_id']!=500 AND $alldata['server']['virtualserver_icon_id']!=600)
 				{
 				$servericon=true;
-				if(!file_exists('icons/'.$ip.'-'.$port.'/icon_'.$alldata['server']['virtualserver_icon_id']))
+				if(!file_exists('icons/'.$server[$_GET['skey']]['ip'].'-'.$port.'/icon_'.$alldata['server']['virtualserver_icon_id']))
 					{
 					$servericon=false;
 					}	

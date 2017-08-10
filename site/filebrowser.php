@@ -12,7 +12,9 @@
 *
 *You should have received a copy of the GNU General Public License along with this program; if not, see <http://www.gnu.org/licenses/>. 
 */
+error_reporting(E_ALL & ~E_NOTICE);
 session_start();
+
 define("SECURECHECK", 1);
 
 define('DS', DIRECTORY_SEPARATOR);
@@ -24,6 +26,8 @@ require('../ts3admin.class.php');
 require('../functions.inc.php');
 require_once('../libs/Smarty/libs/Smarty.class.php');
 
+if(!isset($_SESSION['logged']) OR isset($_SESSION['logged']) AND $_SESSION['logged']!=true OR empty($_GET['port']) OR empty($_GET['cid'])) {die($lang['error_file_alone']);}
+
 $smarty=new Smarty();
 
 $smarty->template_dir = '..'.DS.'templates/';
@@ -33,6 +37,7 @@ $smarty->cache_dir = '..'.DS.'cache/';
 
 $error='';
 $noerror='';
+$flist='';
 
 if(!file_exists('..'.DS.'templates'.DS.$style))
 	{

@@ -326,7 +326,7 @@ if(empty($alldata['server']) or empty($alldata['channel']) or empty($alldata['cl
 			}	
 		}
 		
-	$tree.="<div class='server_img'></div><div class='servername'>".secure($alldata['server']['virtualserver_name'])."&nbsp;</div><div style='float:".$showicons.";width:16px'>".(($alldata['server']['virtualserver_icon_id']!=0) ? "<img src='site/showfile.php?name=icon_".$alldata['server']['virtualserver_icon_id']."&amp;port=".$port."' alt=\"\" />":'')."</div><div class='clear'></div>";
+	$tree.="<div class='server_img'></div><div class='servername'><a href=\"javascript:oeffnefenster('site/interactive.php?port=".$port."&amp;action=action');\">".secure($alldata['server']['virtualserver_name'])."</a>&nbsp;</div><div style='float:".$showicons.";width:16px'>".(($alldata['server']['virtualserver_icon_id']!=0) ? "<img src='site/showfile.php?name=icon_".$alldata['server']['virtualserver_icon_id']."&amp;port=".$port."' alt=\"\" />":'')."</div><div class='clear'></div>";
 	$tree.=create_tree(0, "<div class='place'></div>", $alldata, $port, $showicons); 
 	}
 ?>

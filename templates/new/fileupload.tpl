@@ -29,7 +29,7 @@
 	</tr>
 	<tr>
 		<td class="green1"  style="width:75px">{$lang['option']}</td>
-		<td class="green1"  align="left"><input type="submit" name="upload" value="upload" /></td>
+		<td class="green1"  align="left"><input type="submit" name="upload" value="{$lang['iconupload']}" /></td>
 	</tr>
 </table>
 </form>

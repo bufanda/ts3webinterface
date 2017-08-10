@@ -19,10 +19,47 @@ function create_channel_tree($pid, $place, $alldata)
 		{
 		if ($pid==$value['pid'])
 			{
-			$tree.= "<div class='channel'>".$place."<div class='chanimg'>&nbsp;</div><div class='channame'>".secure($value['channel_name'])."</div><div class='clear'></div></div>\n";
-			
+			if(preg_match("^\[([\S]*)spacer([\d]+)\]^", $value['channel_name'], $treffer) AND $value['pid']==0 AND $value['channel_flag_permanent']==1)
+			{
+			$getspacer=explode($treffer[0], $value['channel_name']);
+			$checkspacer=$getspacer[1][0].$getspacer[1][0].$getspacer[1][0];
+			if($treffer[1]=="*" or strlen($getspacer[1])==3 AND $checkspacer==$getspacer[1])
+				{
+				$spacer='';
+				for($i=0; $i<=50; $i++)
+					{
+					if(strlen($spacer)<50)
+						{
+						$spacer.=$getspacer[1];
+						}
+						else
+						{
+						break;
+						}
+					}
+				$tree .= "<div class='channel'>".$place."<div class='channame'>".$spacer."</div></div><div class='clear'></div>";
+				}
+				elseif($treffer[1]=="c")
+				{
+				$spacer=explode($treffer[0], $value['channel_name']);
+				$tree .= "<div class='channel'>".$place."<div class='channame' style=\"width:90%;text-align:center\">".$spacer[1]."</div></div><div class='clear'></div>";
+				}
+				elseif($treffer[1]=="r")
+				{
+				$spacer=explode($treffer[0], $value['channel_name']);
+				$tree .= "<div class='channel'>".$place."<div class='channame' style=\"float:right\">".$spacer[1]."</div></div><div class='clear'></div>";
+				}
+				else
+				{
+				$spacer=explode($treffer[0], $value['channel_name']);
+				$tree .= "<div class='channel'>".$place."<div class='channame'>".$spacer[1]."</div></div><div class='clear'></div>";
+				}
+			}
+			else
+			{
+			$tree.= "<div class='channel'>".$place."<div class='chanimg'>&nbsp;</div><div class='channame'>".secure(str_replace("\\s", " ", $value['channel_name']))."</div><div class='clear'></div></div>\n";
+			}
 			$tree.= create_channel_tree($value['cid'], $place."<div class='place'>&nbsp;</div>", $alldata);
-			
 			}
 		}
 	return $tree;

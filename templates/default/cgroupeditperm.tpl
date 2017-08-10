@@ -1,3 +1,12 @@
+{if !empty($error) OR !empty($noerror)}
+<table>
+	{if !empty($error)}
+	<tr>
+		<td class="error">{$error}</td>
+	</tr>
+	{/if}
+</table>
+{/if}
 <table  class="border" cellpadding="0" cellspacing="0" style="width:100%">
 	<tr>
 		<td class="thead">{$lang['filter']}</td>
@@ -296,7 +305,7 @@
 						<div style="display:{$display}" id="Lay20">
 						<table style="width:100%;border-collapse:collapse;border:0" cellpadding="0" cellspacing="0">
 		{/if}
-		{if $value['permname'] == 'i_client_modify_power'}
+		{if $build <= 12998 AND $value['permname'] == 'i_client_modify_power' OR $build > 12998 AND $value['permname'] == 'i_client_permission_modify_power'}
 						</table>
 						</div>
 						</td>
@@ -422,7 +431,7 @@
 		<tr>
 			<td colspan="6" class="center">
 			<input type="hidden" name="showmyperms" value="{$showmyperms}" />
-			<input type="submit" name="editall" value="Edit" />
+			<input type="submit" name="editall" value="{$lang['edit']}" />
 			</td>
 		</tr>
 </table>

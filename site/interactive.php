@@ -15,11 +15,14 @@
 error_reporting(E_ALL & ~E_NOTICE);
 session_start();
 define("SECURECHECK", 1);
+
 require('../config.php');
 require('lang.php');
 require('../ts3admin.class.php');
 require('../functions.inc.php');
 require_once('../libs/Smarty/libs/Smarty.class.php');
+
+if(!isset($_SESSION['logged']) OR isset($_SESSION['logged']) AND $_SESSION['logged']!=true OR empty($_GET['port'])) {die($lang['error_file_alone']);}
 
 $smarty=new Smarty();
 
@@ -42,9 +45,13 @@ $ts3->selectServer($_GET['port']);
 
 $channellist=$ts3->getElement('data', $ts3->channelList("-limits"));
 
+$servergrouplist=$ts3->getElement('data', $ts3->serverGroupList());
+$channelgrouplist=$ts3->getElement('data', $ts3->channelGroupList());
+
 $smarty->assign("lang", $lang);
 
 $smarty->assign("channellist", $channellist);
-
+$smarty->assign("servergrouplist", $servergrouplist);
+$smarty->assign("channelgrouplist", $channelgrouplist);
 $smarty->display($style.DS.'interactive.tpl');
 ?>

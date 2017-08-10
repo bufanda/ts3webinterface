@@ -1,3 +1,12 @@
+{if !empty($error) OR !empty($noerror)}
+<table>
+	{if !empty($error)}
+	<tr>
+		<td class="error">{$error}</td>
+	</tr>
+	{/if}
+</table>
+{/if}
 <form method="post" action="index.php?site=chanclienteditperm&amp;port={$port}">
 	<table class="border" cellpadding="1" cellspacing="0">
 		<tr>
@@ -320,7 +329,7 @@
 						<div style="display:{$display}" id="Lay20">
 						<table style="width:100%;border-collapse:collapse;border:0" cellpadding="0" cellspacing="0">
 		{/if}
-		{if $value['permname'] == 'i_client_modify_power'}
+		{if $build <= 12998 AND $value['permname'] == 'i_client_modify_power' OR $build > 12998 AND $value['permname'] == 'i_client_permission_modify_power'}
 						</table>
 						</div>
 						</td>
@@ -417,7 +426,7 @@
 					<input type='checkbox' {if $value['permvalue'] == 1}checked="checked"{/if} name="perm[{$value['permid']}][value]" value="1" />
 				{else}
 					<input {if $value['permname'] == 'i_icon_id'}id="iconid"{/if} type='text' size="1" name="perm[{$value['permid']}][value]" value="{$value['permvalue']}" />
-					{if $value['permname'] == 'i_icon_id'}<a href="javascript:oeffnefenster('site/showallicons.php?ip={$_SESSION['server_ip']}&amp;port={$port}');">{$lang['set']}</a>{/if}
+					{if $value['permname'] == 'i_icon_id'}<a href="javascript:oeffnefenster('site/showallicons.php?ip={$smarty.session.server_ip}&amp;port={$port}');">{$lang['set']}</a>{/if}
 				{/if}
 				</td>
 				<td class="{$td_col}" style="width:100px">
@@ -448,7 +457,7 @@
 			<input type="hidden" name="cid" value="{$smarty.post.cid}" />
 			<input type="hidden" name="cldbid" value="{$smarty.post.cldbid}" />
 			<input type="hidden" name="showmyperms" value="{$showmyperms}" />
-			<input type="submit" name="editall" value="Edit" />
+			<input type="submit" name="editall" value="{$lang['edit']}" />
 			</td>
 		</tr>
 </table>

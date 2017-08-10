@@ -60,7 +60,7 @@ if(isset($geticons) AND $geticons==1)
 		{
 		$ip=$_GET['ip'];
 		}
-		else
+		elseif(isset($_SESSION['server_ip']))
 		{
 		$ip=$_SESSION['server_ip'];
 		}

@@ -16,6 +16,279 @@ if(!defined("SECURECHECK")) {die($lang['error_file_alone']);}
 $error = '';
 $noerror = '';
 
+if(isset($_POST['sendmassmove']))
+	{
+	$clientlist=$ts3->clientList("-groups");
+	if($clientlist['success']!=false)
+		{
+		if(isset($_POST['moveall']) AND $_POST['moveall']==1)
+			{
+			foreach($clientlist['data'] AS $key=>$value)
+				{
+				if($value['client_type']!=1)
+					{
+					$client_move=$ts3->clientMove($value['clid'], $_POST['cid']);
+					}
+				}
+			}
+			else
+			{
+			$clients_to_move=array();
+			if(isset($_POST['movebysgroup']))
+				{
+				foreach($clientlist['data'] AS $key=>$value)
+					{
+					$client_sgroups=explode(",", $value['client_servergroups']);
+					foreach($_POST['movebysgroup'] AS $key2=>$value2)
+						{
+						if(!in_array($value['clid'], $clients_to_move))
+							{
+							if(in_array($value2, $client_sgroups))
+								{
+								if($value['client_type']!=1)
+									{
+									$clients_to_move[]=$value['clid'];
+									}
+								}
+							}
+						}
+					}
+				}
+				
+			if(isset($_POST['movebycgroup']))
+				{
+				foreach($clientlist['data'] AS $key=>$value)
+					{
+					if(!in_array($value['clid'], $clients_to_move))
+						{
+						if(in_array($value['client_channel_group_id'], $_POST['movebycgroup']))
+							{
+							if($value['client_type']!=1)
+								{
+								$clients_to_move[]=$value['clid'];
+								}
+							}
+						}
+					}
+				}
+			
+			if(isset($_POST['movebycid']))
+				{
+				foreach($clientlist['data'] AS $key=>$value)
+					{
+					if(!in_array($value['clid'], $clients_to_move))
+						{
+						if(in_array($value['cid'], $_POST['movebycid']))
+							{
+							if($value['client_type']!=1)
+								{
+								$clients_to_move[]=$value['clid'];
+								}
+							}
+						}
+					}
+				}
+			
+			foreach($clients_to_move AS $key=>$value)
+				{
+				$client_move=$ts3->clientMove($value, $_POST['cid']);
+				}
+			}
+		/**		
+		$debuglog=$ts3->getDebugLog();
+		if(!empty($debuglog))
+			{
+			foreach($debuglog AS $key=>$value)
+				{
+				$error.=$value."<br />";
+				}
+			} 
+		**/
+		}
+	}
+
+if(isset($_POST['sendmasskick']))
+	{
+	$clientlist=$ts3->clientList("-groups");
+	if($clientlist['success']!=false)
+		{
+		if(isset($_POST['kickall']) AND $_POST['kickall']==1)
+			{
+			foreach($clientlist['data'] AS $key=>$value)
+				{
+				if($value['client_type']!=1)
+					{
+					$client_kick=$ts3->clientKick($value['clid'], 'server', $_POST['kickmsg']);
+					}
+				}
+			}
+			else
+			{
+			$clients_to_kick=array();
+			if(isset($_POST['kickbysgroup']))
+				{
+				foreach($clientlist['data'] AS $key=>$value)
+					{
+					$client_sgroups=explode(",", $value['client_servergroups']);
+					foreach($_POST['kickbysgroup'] AS $key2=>$value2)
+						{
+						if(!in_array($value['clid'], $clients_to_kick))
+							{
+							if(in_array($value2, $client_sgroups))
+								{
+								if($value['client_type']!=1)
+									{
+									$clients_to_kick[]=$value['clid'];
+									}
+								}
+							}
+						}
+					}
+				}
+				
+			if(isset($_POST['kickbycgroup']))
+				{
+				foreach($clientlist['data'] AS $key=>$value)
+					{
+					if(!in_array($value['clid'], $clients_to_kick))
+						{
+						if(in_array($value['client_channel_group_id'], $_POST['kickbycgroup']))
+							{
+							if($value['client_type']!=1)
+								{
+								$clients_to_kick[]=$value['clid'];
+								}
+							}
+						}
+					}
+				}
+				
+			if(isset($_POST['kickbycid']))
+				{
+				foreach($clientlist['data'] AS $key=>$value)
+					{
+					if(!in_array($value['clid'], $clients_to_kick))
+						{
+						if(in_array($value['cid'], $_POST['kickbycid']))
+							{
+							if($value['client_type']!=1)
+								{
+								$clients_to_kick[]=$value['clid'];
+								}
+							}
+						}
+					}
+				}
+			
+			foreach($clients_to_kick AS $key=>$value)
+				{
+				$client_kick=$ts3->clientKick($value, 'server', $_POST['kickmsg']);
+				}
+			}
+		/**		
+		$debuglog=$ts3->getDebugLog();
+		if(!empty($debuglog))
+			{
+			foreach($debuglog AS $key=>$value)
+				{
+				$error.=$value."<br />";
+				}
+			} 
+		**/
+		}
+	}
+	
+if(isset($_POST['sendmassban']))
+	{
+	$clientlist=$ts3->clientList("-groups");
+	if($clientlist['success']!=false)
+		{
+		if(isset($_POST['banall']) AND $_POST['banall']==1)
+			{
+			foreach($clientlist['data'] AS $key=>$value)
+				{
+				if($value['client_type']!=1)
+					{
+					$client_ban=$ts3->banClient($value['clid'], $_POST['bantime'], $_POST['banmsg']);
+					}
+				}
+			}
+			else
+			{
+			$clients_to_ban=array();
+			if(isset($_POST['banbysgroup']))
+				{
+				foreach($clientlist['data'] AS $key=>$value)
+					{
+					$client_sgroups=explode(",", $value['client_servergroups']);
+					foreach($_POST['banbysgroup'] AS $key2=>$value2)
+						{
+						if(!in_array($value['clid'], $clients_to_ban))
+							{
+							if(in_array($value2, $client_sgroups))
+								{
+								if($value['client_type']!=1)
+									{
+									$clients_to_ban[]=$value['clid'];
+									}
+								}
+							}
+						}
+					}
+				}
+				
+			if(isset($_POST['banbycgroup']))
+				{
+				foreach($clientlist['data'] AS $key=>$value)
+					{
+					if(!in_array($value['clid'], $clients_to_ban))
+						{
+						if(in_array($value['client_channel_group_id'], $_POST['banbycgroup']))
+							{
+							if($value['client_type']!=1)
+								{
+								$clients_to_ban[]=$value['clid'];
+								}
+							}
+						}
+					}
+				}
+				
+			if(isset($_POST['banbycid']))
+				{
+				foreach($clientlist['data'] AS $key=>$value)
+					{
+					if(!in_array($value['clid'], $clients_to_ban))
+						{
+						if(in_array($value['cid'], $_POST['banbycid']))
+							{
+							if($value['client_type']!=1)
+								{
+								$clients_to_ban[]=$value['clid'];
+								}
+							}
+						}
+					}
+				}
+			
+			foreach($clients_to_ban AS $key=>$value)
+				{
+				$client_ban=$ts3->banClient($value, $_POST['bantime'], $_POST['banmsg']);
+				}
+			}
+		/**		
+		$debuglog=$ts3->getDebugLog();
+		if(!empty($debuglog))
+			{
+			foreach($debuglog AS $key=>$value)
+				{
+				$error.=$value."<br />";
+				}
+			} 
+		**/
+		}
+	}
+
 if(isset($_POST['sendkick']))
 	{
 	$client_kick=$ts3->clientKick($_POST['clid'], 'server', $_POST['kickmsg']);
@@ -82,6 +355,7 @@ if(isset($_POST['sendmove']))
 	
 if(isset($_POST['sendmsg']))
 	{
+	$_POST['msgtoserver']=str_replace("\\", "\\\\", $_POST['msgtoserver']);
 	$send_message=$ts3->sendMessage('3', $_POST['sid'], $_POST['msgtoserver']);
 	if($send_message['success']===false)
 		{

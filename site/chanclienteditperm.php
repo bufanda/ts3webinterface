@@ -14,9 +14,12 @@
 */
 if(!defined("SECURECHECK")) {die($lang['error_file_alone']);} 
 
+$serverinfo=$ts3->getElement('data', $ts3->serverInfo());
+$get_build=explode(' ', $serverinfo['virtualserver_version']);
+$get_build=str_replace(']', '', $get_build[2]);
+
 if(isset($_POST['cid']) AND isset($_POST['cldbid']))
 	{
-
 	$channelinfo=$ts3->getElement('data', $ts3->channelInfo($_POST['cid']));
 	$channelname=$channelinfo['channel_name'];
 	
@@ -96,57 +99,72 @@ if(isset($_POST['cid']) AND isset($_POST['cldbid']))
 		{
 		$allperms=$permissionlist;
 		}
-		
+
 	if($chanclientpermlist['success']===true)
 		{
 		foreach($chanclientpermlist['data'] AS $key => $value)
 			{
-			foreach($allperms AS $key2 => $value2)
+			if(!empty($allperms))
 				{
-				if($value['permid']==$value2['permid'])	
+				foreach($allperms AS $key2 => $value2)
 					{
-					$allperms[$key2]['available']=1;
-					$allperms[$key2]['permvalue']=$value['permvalue'];
-					}
-				elseif(!isset($allperms[$key2]['permvalue']))
-					{
-					$allperms[$key2]['available']=0;
-					$allperms[$key2]['permvalue']=0;
+					if($value['permid']==$value2['permid'])	
+						{
+						$allperms[$key2]['available']=1;
+						$allperms[$key2]['permvalue']=$value['permvalue'];
+						}
+					elseif(!isset($allperms[$key2]['permvalue']))
+						{
+						$allperms[$key2]['available']=0;
+						$allperms[$key2]['permvalue']=0;
+						}
 					}
 				}
 			}
 		}
 		elseif($chanclientpermlist['errors'][0]=='ErrorID: 1281 | Message: database empty result set')
 		{
-		foreach($allperms AS $key => $value)
+		if(!empty($allperms))
 			{
-			$allperms[$key]['available']=0;
-			$allperms[$key]['permvalue']=0;
+			foreach($allperms AS $key => $value)
+				{
+				$allperms[$key]['available']=0;
+				$allperms[$key]['permvalue']=0;
+				}
 			}
 		}
-		
-foreach($allperms AS $key=>$value)
-	{
-	foreach($allperms AS $key2=>$value2)
+
+	if(!empty($allperms))
 		{
-		if(substr($value2['permname'], 22) == substr($value['permname'], 2))
+		foreach($allperms AS $key=>$value)
 			{
-			$allperms[$key]['grant']=$value2['permvalue'];
-			$allperms[$key]['grantpermid']=$value2['permid'];
-			$allperms[$key]['grantav']=$value2['available'];
+			foreach($allperms AS $key2=>$value2)
+				{
+				if(substr($value2['permname'], 22) == substr($value['permname'], 2))
+					{
+					$allperms[$key]['grant']=$value2['permvalue'];
+					$allperms[$key]['grantpermid']=$value2['permid'];
+					$allperms[$key]['grantav']=$value2['available'];
+					}
+				}
 			}
 		}
-	}
-		
+		else
+		{
+		$error="The permissions can't show complete because you don't have the permission to see the list!<br />Needed Permission: b_serverinstance_permission_list";
+		}
+	
 	if(isset($_POST['searchperms']))
 		{
 		$smarty->assign("searchperms", trim($_POST['searchperms']));
 		}
 	
+	$smarty->assign("error", $error);
 	$smarty->assign("showmyperms", $showmyperms);
 	$smarty->assign("display", $display);
 	$smarty->assign("disp_pic", $disp_pic);
 	$smarty->assign("channelname", secure($channelname));
 	$smarty->assign("clientname", secure($clientname));
 	$smarty->assign("allperms", $allperms);
+	$smarty->assign("build", $get_build);
 	}

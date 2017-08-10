@@ -1,4 +1,24 @@
-//Bet 2.8.2
+//Beta 2.9.1
+- Fixed bug that the channelicons will not show in the public ts viewer
+- Fixed the problem with the permission edit if you use the beta31pre
++ Add a link on the mainbar for mass move/kick/ban function
+
+//Beta 2.9
+- Fixed bug that there will be some errors if you don't have the permission to see the permissions list on edit permissions
+- Fixed bug that the icons on the public webviewer not show if you not logged on the webinterface
+- Fixed notice message on the public webviewer
+- Fixed bug with set icon on edit permissions
+- Fixed bug with the template on interactive and filebrowser
+- Fixed bug that the filebrowser.php can open without login
+- Fixed bug that the chat messages was not escaped
+- Fixed bug with some language variable
+- Fixed bug that the chanbackup viewer not work correctly
++ Add a message of the day window to the login it will show the text from the motd.txt on the main folder of the interface use html for configure the text. You can turn it on/off on the config.php
++ Add the placeholder error to all *editperm.tpl
++ Add a mass move/kick/ban function to the viewer if you click on the Server Name it will be open a new window
+
+
+//Beta 2.8.2
 - Fixed bug that the interface not work with the Internet Explorer
 - Fixed some language bugs
 - Fixed the bug that the lang file load before the config load on the interactive.php

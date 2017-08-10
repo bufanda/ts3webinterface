@@ -195,7 +195,7 @@ require_once('site/footer.php');
 
 $footer=implode("", file('templates/'.$style.DS.'index.tpl'));
 
-if(md5($footer2)!='0b28bcf25426730a1db4a5830aa1e964' OR strpos($footer, '{$footer}')===false)
+if(md5($footer2)!='6fbde25ddd1a6f2db8a185b3e6d2bb42' OR strpos($footer, '{$footer}')===false)
 	{
 	die('Fatal error: There are a critical error on your system.');
 	}

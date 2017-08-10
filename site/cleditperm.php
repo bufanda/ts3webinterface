@@ -17,6 +17,10 @@ if($port===false OR empty($port)) { echo "<meta http-equiv=\"refresh\" content=\
 
 $clientname=$ts3->getElement('data', $ts3->clientGetNameFromDbid($cldbid));
 
+$serverinfo=$ts3->getElement('data', $ts3->serverInfo());
+$get_build=explode(' ', $serverinfo['virtualserver_version']);
+$get_build=str_replace(']', '', $get_build[2]);
+
 if(isset($_POST['showmyperms']) AND $_POST['showmyperms']==1)
 	{
 	$showmyperms=1;
@@ -101,35 +105,45 @@ if(!empty($clpermlist))
 	{
 	foreach($clpermlist AS $key => $value)
 		{
-		foreach($allperms AS $key2 => $value2)
+		if(!empty($allperms))
 			{
-			if(isset($value['permid']) AND $value['permid']==$value2['permid'])	
+			foreach($allperms AS $key2 => $value2)
 				{
-				$allperms[$key2]['available']=1;
-				$allperms[$key2]['permvalue']=$value['permvalue'];
-				$allperms[$key2]['permskip']=$value['permskip'];
-				}
-			elseif(!isset($allperms[$key2]['permvalue']))
-				{
-				$allperms[$key2]['available']=0;
-				$allperms[$key2]['permvalue']=0;
-				$allperms[$key2]['permskip']=0;
+				if(isset($value['permid']) AND $value['permid']==$value2['permid'])	
+					{
+					$allperms[$key2]['available']=1;
+					$allperms[$key2]['permvalue']=$value['permvalue'];
+					$allperms[$key2]['permskip']=$value['permskip'];
+					}
+				elseif(!isset($allperms[$key2]['permvalue']))
+					{
+					$allperms[$key2]['available']=0;
+					$allperms[$key2]['permvalue']=0;
+					$allperms[$key2]['permskip']=0;
+					}
 				}
 			}
 		}
 	}
 
-foreach($allperms AS $key=>$value)
+if(!empty($allperms))
 	{
-	foreach($allperms AS $key2=>$value2)
+	foreach($allperms AS $key=>$value)
 		{
-		if(substr($value2['permname'], 22) == substr($value['permname'], 2))
+		foreach($allperms AS $key2=>$value2)
 			{
-			$allperms[$key]['grant']=$value2['permvalue'];
-			$allperms[$key]['grantpermid']=$value2['permid'];
-			$allperms[$key]['grantav']=$value2['available'];
+			if(substr($value2['permname'], 22) == substr($value['permname'], 2))
+				{
+				$allperms[$key]['grant']=$value2['permvalue'];
+				$allperms[$key]['grantpermid']=$value2['permid'];
+				$allperms[$key]['grantav']=$value2['available'];
+				}
 			}
 		}
+	}
+	else
+	{
+	$error="The permissions can't show complete because you don't have the permission to see the list!<br />Needed Permission: b_serverinstance_permission_list";
 	}
 	
 if(isset($_POST['searchperms']))
@@ -137,11 +151,13 @@ if(isset($_POST['searchperms']))
 	$smarty->assign("searchperms", trim($_POST['searchperms']));
 	}
 	
+$smarty->assign("error", $error);
 $smarty->assign("showmyperms", $showmyperms);
 $smarty->assign("display", $display);
 $smarty->assign("disp_pic", $disp_pic);
 $smarty->assign("clientname", secure($clientname['name']));
 $smarty->assign("allperms", $allperms);
+$smarty->assign("build", $get_build);
 
 }
 ?>
