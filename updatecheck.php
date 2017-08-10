@@ -1,38 +1,21 @@
 <?php
-//Don't change this
+/*
+*Copyright (C) 2010-2011  Psychokiller
+*
+*This program is free software; you can redistribute it and/or modify it under the terms of 
+*the GNU General Public License as published by the Free Software Foundation; either 
+*version 3 of the License, or any later version.
+*
+*This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; 
+*without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+*See the GNU General Public License for more details.
+*
+*You should have received a copy of the GNU General Public License along with this program; if not, see <http://www.gnu.org/licenses/>. 
+*/
+if(!defined("SECURECHECK")) {die($lang['error_file_alone']);} 
 $wiversionurl="http://www.ts3.cs-united.de/ts3wi/wiversion.html";
 $seversionurl="http://www.ts3.cs-united.de/ts3wi/seversion.html";
+$getthedirtylist="http://www.ts3.cs-united.de/ts3wi/dirtylist.html";
 
-$wiversion="beta2.3.3";
-
-function check_wi_version($wiversion, $wiversionurl)
-	{
-	$file=@file_get_contents($wiversionurl);
-	$get_number=str_replace('beta', '', $wiversion);
-	$get_number2=str_replace('beta', '', $file);
-	if($wiversion==$file or $get_number>$get_number2)
-		{
-		return true;
-		}
-		else
-		{
-		return "<a class=\"warning\" href=\"http://www.ts3.cs-united.de/ts3wi/traffic.php?version=".$file."\" target=\"_blank\">".$file."</a>";
-		}
-	}
-	
-function check_server_version($serverversion, $seversionurl)
-	{
-	$file=@file_get_contents($seversionurl);
-	$get_build=explode(' ', $serverversion);
-	$get_build=str_replace(']', '', $get_build[2]);
-	$get_build2=explode(' ', $file);
-	$get_build2=str_replace(']', '', $get_build2[2]);
-	if ($serverversion==$file OR $get_build>$get_build2)
-		{
-		return true;
-		}
-		else
-		{
-		return "<a class=\"warning\" href=\"http://www.teamspeak.com\" target=\"_blank\">".$file."</a>";
-		}
-	}
+$wiversion="beta2.8.2";
+?>

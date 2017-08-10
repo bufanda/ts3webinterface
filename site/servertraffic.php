@@ -1,119 +1,48 @@
 <?php
+/*
+*Copyright (C) 2010-2011  Psychokiller
+*
+*This program is free software; you can redistribute it and/or modify it under the terms of 
+*the GNU General Public License as published by the Free Software Foundation; either 
+*version 3 of the License, or any later version.
+*
+*This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; 
+*without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+*See the GNU General Public License for more details.
+*
+*You should have received a copy of the GNU General Public License along with this program; if not, see <http://www.gnu.org/licenses/>. 
+*/
+if(!defined("SECURECHECK")) {die($lang['error_file_alone']);} 
 if(!isset($port))
 	{
-	$hostinfo=$ts3->hostInfo();
-	if(!isset($_GET['refresh']) OR $_GET['refresh']=='on')
+	$hostinfo=$ts3->getElement('data', $ts3->hostInfo());
+	if(!empty($hostinfo))
 		{
-	?>
-	<meta http-equiv="refresh" content="3; URL=index.php?site=servertraffic">
-<?php	} ?>
-	<table align="center" style="width:50%" class="border" cellpadding="1" cellspacing="0">
-		<tr>
-			<td style="width:100%" class="thead" colspan="3"><?php echo $lang['instancetraffic']; ?></td>
-		</tr>
-		<tr>
-			<td style="width:33%" class="thead"><?php echo $lang['description']; ?></td>
-			<td style="width:33%" class="thead"><?php echo $lang['incoming']; ?></td>
-			<td style="width:33%" class="thead"><?php echo $lang['outgoing']; ?></td>
-		</tr>
-		<tr>
-			<td class="green1"><?php echo $lang['packetstransfered']; ?></td>
-			<td class="green1 center"><?php echo $hostinfo['connection_packets_received_total']; ?></td>
-			<td class="green1 center"><?php echo $hostinfo['connection_packets_sent_total']; ?></td>
-		</tr>
-		<tr>
-			<td class="green2"><?php echo $lang['bytestransfered']; ?></td>
-			<td class="green2 center"><?php echo conv_traffic($hostinfo['connection_bytes_received_total']); ?></td>
-			<td class="green2 center"><?php echo conv_traffic($hostinfo['connection_bytes_sent_total']); ?></td>
-		</tr>
-		<tr>
-			<td class="green1"><?php echo $lang['bandwidthlastsecond']; ?></td>
-			<td class="green1 center"><?php echo conv_traffic($hostinfo['connection_bandwidth_received_last_second_total'])."/s"; ?></td>
-			<td class="green1 center"><?php echo conv_traffic($hostinfo['connection_bandwidth_sent_last_second_total'])."/s"; ?></td>
-		</tr>
-		<tr>
-			<td class="green2"><?php echo $lang['bandwidthlastminute']; ?></td>
-			<td class="green2 center"><?php echo conv_traffic($hostinfo['connection_bandwidth_received_last_minute_total'])."/s"; ?></td>
-			<td class="green2 center"><?php echo conv_traffic($hostinfo['connection_bandwidth_sent_last_minute_total'])."/s"; ?></td>
-		</tr>
-		<tr>
-			<td class="green1"><?php echo $lang['filetransferbandwidth']; ?></td>
-			<td class="green1 center"><?php echo conv_traffic($hostinfo['connection_filetransfer_bandwidth_received'])."/s"; ?></td>
-			<td class="green1 center"><?php echo conv_traffic($hostinfo['connection_filetransfer_bandwidth_sent'])."/s"; ?></td>
-		</tr>
-		<tr>
-			<td colspan="3">
-			<?php 
-			if(!isset($_GET['refresh']) OR $_GET['refresh']=='on')
-				{
-				echo "<a href=\"index.php?site=servertraffic&amp;refresh=off\">".$lang['stoprefresh']."</a>";
-				}
-				else
-				{
-				echo "<a href=\"index.php?site=servertraffic&amp;refresh=on\">".$lang['autorefresh']."</a>";
-				}
-			?>
-			</td>
-		</tr>
-	</table>
-<?php	
+		$hostinfo['connection_bytes_received_total']=conv_traffic($hostinfo['connection_bytes_received_total']);
+		$hostinfo['connection_bytes_sent_total']=conv_traffic($hostinfo['connection_bytes_sent_total']);
+		$hostinfo['connection_bandwidth_received_last_second_total']=conv_traffic($hostinfo['connection_bandwidth_received_last_second_total']);
+		$hostinfo['connection_bandwidth_sent_last_second_total']=conv_traffic($hostinfo['connection_bandwidth_sent_last_second_total']);
+		$hostinfo['connection_bandwidth_received_last_minute_total']=conv_traffic($hostinfo['connection_bandwidth_received_last_minute_total']);
+		$hostinfo['connection_bandwidth_sent_last_minute_total']=conv_traffic($hostinfo['connection_bandwidth_sent_last_minute_total']);
+		$hostinfo['connection_filetransfer_bandwidth_received']=conv_traffic($hostinfo['connection_filetransfer_bandwidth_received']);
+		$hostinfo['connection_filetransfer_bandwidth_sent']=conv_traffic($hostinfo['connection_filetransfer_bandwidth_sent']);
+		}
+	$smarty->assign("hostinfo", $hostinfo);
 	} 
 	else
 	{
-	$serverinfo=$ts3->serverInfo();
-	if(!isset($_GET['refresh']) OR $_GET['refresh']=='on')
+	$serverinfo=$ts3->getElement('data', $ts3->serverInfo());
+	if(!empty($serverinfo))
 		{
-	?>
-	<meta http-equiv="refresh" content="3; URL=index.php?site=servertraffic&amp;port=<?php echo $port; ?>">
-<?php	} ?>
-	<table align="center" style="width:50%" class="border" cellpadding="1" cellspacing="0">
-		<tr>
-			<td style="width:100%" class="thead" colspan="3"><?php echo $lang['virtualtraffic']; ?></td>
-		</tr>
-		<tr>
-			<td style="width:33%" class="thead"><?php echo $lang['description']; ?></td>
-			<td style="width:33%" class="thead"><?php echo $lang['incoming']; ?></td>
-			<td style="width:33%" class="thead"><?php echo $lang['outgoing']; ?></td>
-		</tr>
-		<tr>
-			<td class="green1"><?php echo $lang['packetstransfered']; ?></td>
-			<td class="green1 center"><?php echo $serverinfo['connection_packets_received_total']; ?></td>
-			<td class="green1 center"><?php echo $serverinfo['connection_packets_sent_total']; ?></td>
-		</tr>
-		<tr>
-			<td class="green2"><?php echo $lang['bytestransfered']; ?></td>
-			<td class="green2 center"><?php echo conv_traffic($serverinfo['connection_bytes_received_total']); ?></td>
-			<td class="green2 center"><?php echo conv_traffic($serverinfo['connection_bytes_sent_total']); ?></td>
-		</tr>
-		<tr>
-			<td class="green1"><?php echo $lang['bandwidthlastsecond']; ?></td>
-			<td class="green1 center"><?php echo conv_traffic($serverinfo['connection_bandwidth_received_last_second_total'])."/s"; ?></td>
-			<td class="green1 center"><?php echo conv_traffic($serverinfo['connection_bandwidth_sent_last_second_total'])."/s"; ?></td>
-		</tr>
-		<tr>
-			<td class="green2"><?php echo $lang['bandwidthlastminute']; ?></td>
-			<td class="green2 center"><?php echo conv_traffic($serverinfo['connection_bandwidth_received_last_minute_total'])."/s"; ?></td>
-			<td class="green2 center"><?php echo conv_traffic($serverinfo['connection_bandwidth_sent_last_minute_total'])."/s"; ?></td>
-		</tr>
-		<tr>
-			<td class="green1"><?php echo $lang['filetransferbandwidth']; ?></td>
-			<td class="green1 center"><?php echo conv_traffic($serverinfo['connection_filetransfer_bandwidth_received'])."/s"; ?></td>
-			<td class="green1 center"><?php echo conv_traffic($serverinfo['connection_filetransfer_bandwidth_sent'])."/s"; ?></td>
-		</tr>
-		<tr>
-			<td colspan="3">
-			<?php 
-			if(!isset($_GET['refresh']) OR $_GET['refresh']=='on')
-				{
-				echo "<a href=\"index.php?site=servertraffic&amp;port=".$port."&amp;refresh=off\">".$lang['stoprefresh']."</a>";
-				}
-				else
-				{
-				echo "<a href=\"index.php?site=servertraffic&amp;port=".$port."&amp;refresh=on\">".$lang['autorefresh']."</a>";
-				}
-			?>
-			</td>
-		</tr>
-	</table>
-<?php	
-	} ?>
+		$serverinfo['connection_bytes_received_total']=conv_traffic($serverinfo['connection_bytes_received_total']);
+		$serverinfo['connection_bytes_sent_total']=conv_traffic($serverinfo['connection_bytes_sent_total']);
+		$serverinfo['connection_bandwidth_received_last_second_total']=conv_traffic($serverinfo['connection_bandwidth_received_last_second_total']);
+		$serverinfo['connection_bandwidth_sent_last_second_total']=conv_traffic($serverinfo['connection_bandwidth_sent_last_second_total']);
+		$serverinfo['connection_bandwidth_received_last_minute_total']=conv_traffic($serverinfo['connection_bandwidth_received_last_minute_total']);
+		$serverinfo['connection_bandwidth_sent_last_minute_total']=conv_traffic($serverinfo['connection_bandwidth_sent_last_minute_total']);
+		$serverinfo['connection_filetransfer_bandwidth_received']=conv_traffic($serverinfo['connection_filetransfer_bandwidth_received']);
+		$serverinfo['connection_filetransfer_bandwidth_sent']=conv_traffic($serverinfo['connection_filetransfer_bandwidth_sent']);
+		}
+	$smarty->assign("serverinfo", $serverinfo);
+	}
+?>

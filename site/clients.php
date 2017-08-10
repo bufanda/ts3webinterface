@@ -1,10 +1,28 @@
-<?php if(!defined("SECURECHECK")) {die($lang['error_file_alone']);} 
+<?php 
+/*
+*Copyright (C) 2010-2011  Psychokiller
+*
+*This program is free software; you can redistribute it and/or modify it under the terms of 
+*the GNU General Public License as published by the Free Software Foundation; either 
+*version 3 of the License, or any later version.
+*
+*This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; 
+*without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+*See the GNU General Public License for more details.
+*
+*You should have received a copy of the GNU General Public License along with this program; if not, see <http://www.gnu.org/licenses/>. 
+*/
+if(!defined("SECURECHECK")) {die($lang['error_file_alone']);} 
 if($port===false OR empty($port)) { echo "<meta http-equiv=\"refresh\" content=\"0; URL=index.php?site=server\">";} else {
+
+$sortby="cldbid";
+$sorttype=SORT_ASC;
 
 if(empty($duration))
 	{
 	$duration=25;
 	}
+	
 if(isset($_GET['start']))
 	{
 	$start=$_GET['start'];
@@ -17,24 +35,87 @@ if(($start-$duration)<0)
 	{
 	$start=0;
 	}
-?>
-<table style="width:100%" class="border" cellpadding="1" cellspacing="0">
-<?php
-if(isset($_POST['clientdel']))
+	
+if(isset($_GET['sortby']))
 	{
-	if($ts3->clientDbDelete($_POST['cldbid']))
+	if($_GET['sortby']=="cldbid")
 		{
-		echo "<tr><td class=\"green1\" colspan=\"8\">".$lang['clientdeletedok']."</td></tr>";
+		$sortby="cldbid";
+		}
+		elseif($_GET['sortby']=="status")	
+		{
+		$sortby="clid";
+		}
+		elseif($_GET['sortby']=="name")
+		{
+		$sortby="client_nickname";
+		}
+		elseif($_GET['sortby']=="unique")
+		{
+		$sortby="client_unique_identifier";
+		}
+		elseif($_GET['sortby']=="created")
+		{
+		$sortby="client_created";
+		}
+		elseif($_GET['sortby']=="lastcon")
+		{
+		$sortby="client_lastconnected";
 		}
 		else
 		{
-		echo "<tr><td class=\"green1\" colspan=\"8\">".$ts3->getDebugLog()."</td></tr>";
+		$sortby="cldbid";
 		}
 	}
 
+if(isset($_GET['sorttype']))
+	{
+	if($_GET['sorttype']=="asc")
+		{
+		$sorttype=SORT_ASC;
+		}
+	elseif($_GET['sorttype']=="desc")
+		{
+		$sorttype=SORT_DESC;
+		}
+	}
 
-$clientdblist=$ts3->clientDbList("start=".$start." duration=".$duration);
-$clientlist=$ts3->clientList();
+if(isset($_POST['clientdel']))
+	{
+	$client_delete=$ts3->clientDbDelete($_POST['cldbid']);
+	if($client_delete['succes']!==false)
+		{
+		echo "<tr><td colspan=\"4\" class=\"green1\">".$lang['clientdeletedok']."</td></tr>";
+		}
+		else
+		{
+		echo "<tr><td colspan=\"4\" class=\"green1\">";
+		for($i=0; $i+1==count($client_delete['errors']); $i++)
+			{
+			echo $client_delete['errors'][$i]."<br />";
+			}
+		echo "</td></tr>";
+		}
+	}
+
+$clientdblist=array();
+while($getclientdblist=$ts3->getElement('data', $ts3->clientDbList($start, $duration)))
+	{
+	$clientdblist=array_merge($clientdblist, $getclientdblist);
+	$start=$start+$duration;
+	}
+
+
+$clientlist=$ts3->getElement('data', $ts3->clientList());
+$countclients=count($clientdblist);
+
+$pages=$countclients/$duration;
+if(floor($pages)!=0)
+	{
+	$pages=ceil($pages);
+	}
+	
+
 if(isset($_POST['searchby']) AND $_POST['searchby']=='cldbid' AND  !empty($_POST['search']))
 	{
 	foreach ($clientdblist AS $key => $value)
@@ -75,103 +156,69 @@ if(!empty($clientdblist))
 			}
 		}
 	}
-/**	
-	<tr>
-		<td class="thead" colspan="7"><?php echo $lang['searchfor'].$lang['client']; ?></td>
-	</tr>
-	<tr>
-		<form method="post" action="index.php?site=clients&amp;&port=<?php echo $port; ?>">
-		<td class="green1">
-		<select name="searchby">
-		<option value="cldbid"><?php echo $lang['cldbid']; ?></option>
-		<option value="name"><?php echo $lang['name']; ?></option>
-		</select>
-		</td>
-		<td class="green1" colspan="6">
-		<input type="text" name="search" value="" />
-		<input type="submit" name="sendsearch" value="<?php echo $lang['search']; ?>" />
-		</td>
-		</form>
-	</tr>
-**/ 
-?>
-	<tr>
-		<td class="thead" colspan="8">
-		<?php 
-		if($start!=0 or !empty($start))
-			{
-			echo "<a class=\"paging\" href=\"index.php?site=clients&amp;port=".$port."&amp;start=".($start-$duration)."\">&lt;&lt;&lt;".$lang['last']."</a> ";
-			}
-			echo $lang['clients']; 
-			if($ts3->clientDbList("start=".($start+$duration)." duration=".$duration)!==false)
-				{
-				echo " <a class=\"paging\" href=\"index.php?site=clients&amp;port=".$port."&amp;start=".($start+$duration)."\">".$lang['next']."&gt;&gt;&gt;</a>";
-				}
-			?></td>
-	</tr>
-	<tr>
-		<td class="thead"><?php echo $lang['dbid']; ?></td>
-		<td class="thead"><?php echo $lang['uniqueid']; ?></td>
-		<td class="thead"><?php echo $lang['nickname']; ?></td>
-		<td class="thead"><?php echo $lang['created']; ?></td>
-		<td class="thead"><?php echo $lang['lastonline']; ?></td>
-		<td class="thead"><?php echo $lang['status']; ?></td>
-		<td class="thead"><?php echo $lang['option']; ?></td>
-	</tr>
-	<?php
-	$change_col=1;
-	if(!empty($clientdblist))
-	{
-	foreach($clientdblist AS $value)
+
+$countstarted=0;
+$print_pages=1;
+if(!isset($_GET['getstart']))
 		{
-		($change_col%2) ? $td_col="green1":$td_col="green2";
-		?>
-		<tr>
-			<td class="<?php echo $td_col; ?> center"><?php echo $value['cldbid']; ?></td>
-			<td class="<?php echo $td_col; ?> center"><?php echo $value['client_unique_identifier']; ?></td>
-			<td class="<?php echo $td_col; ?> center"><?php echo $value['client_nickname']; ?></td>
-			<td class="<?php echo $td_col; ?> center"><?php echo date("d.m.Y", $value['client_created']); ?></td>
-			<td class="<?php echo $td_col; ?> center"><?php echo date("d.m.Y", $value['client_lastconnected']); ?></td>
-			<td class="<?php echo $td_col; ?> center">
-			<?php
-			if(isset($value['clid']))
-				{
-				echo "<span class=\"online\">".$lang['online']."</span>";
-				}
-				else
-				{
-				echo "<span class=\"offline\">".$lang['offline']."</span>";
-				}
-			?>
-			</td>
-			<td class="<?php echo $td_col; ?> center">
-			<form method="post" action="index.php?site=cleditperm&amp;port=<?php echo $port; ?>&amp;cldbid=<?php echo $value['cldbid']; ?>">
-			<input type="submit" class="eperms" name="editperms" value="" title="<?php echo $lang['editperms']; ?>" />
-			</form>
-			<form method="post" action="index.php?site=clients&amp;port=<?php echo $port; ?>">
-			<input type="hidden" name="cldbid" value="<?php echo $value['cldbid']; ?>" />
-			<input type="submit" class="delete" name="clientdel" value="" title="<?php echo $lang['delete']; ?>" onclick="return confirm('<?php echo $lang['deletemsgclient']; ?>')" />
-			</form>
-			</td>
-		</tr>
-		
-<?php	$change_col++;
+		$getstart=0;
+		}
+		else
+		{
+		$getstart=$_GET['getstart'];
 		}
 		
-	?>
-	<tr>
-		<td class="thead" colspan="8">
-		<?php 
-		if($start!=0 or !empty($start))
+if(isset($_POST['searchby']) AND $_POST['searchby']=='cldbid' AND  !empty($_POST['search']) AND !empty($clientdblist))
+	{
+	foreach ($clientdblist AS $key => $value)
+		{
+		if($_POST['search']!=$value['cldbid'])
 			{
-			echo "<a class=\"paging\" href=\"index.php?site=clients&amp;port=".$port."&amp;start=".($start-$duration)."\">&lt;&lt;&lt;".$lang['last']."</a> ";
+			unset($clientdblist[$key]);
 			}
-			echo ' '; 
-			if($ts3->clientDbList("start=".($start+$duration)." duration=".$duration)!==false)
-				{
-				echo " <a class=\"paging\" href=\"index.php?site=clients&amp;port=".$port."&amp;start=".($start+$duration)."\">".$lang['next']."&gt;&gt;&gt;</a>";
-				}
-			?></td>
-	</tr>
-</table>
-<?php }} ?>
+		}
+	}
+elseif(isset($_POST['searchby']) AND $_POST['searchby']=='name' AND !empty($_POST['search']) AND !empty($clientdblist))
+	{
+	foreach ($clientdblist AS $key => $value)
+		{
+		if(strpos(strtolower($value['client_nickname']),strtolower($_POST['search']))===false)
+			{
+			unset($clientdblist[$key]);
+			}
+		}
+	}
+elseif(isset($_POST['searchby']) AND $_POST['searchby']=='uniqueid' AND !empty($_POST['search']) AND !empty($clientdblist))
+	{
+	foreach ($clientdblist AS $key => $value)
+		{
+		if($value['client_unique_identifier']!=$_POST['search'])
+			{
+			unset($clientdblist[$key]);
+			}
+		}
+	}
+$showclients=1;
+if(!empty($clientdblist))
+	{
+	foreach($clientdblist AS $key=>$value)
+		{
+		$clientdblist[$key]=secure($clientdblist[$key]);
+		
+		$sort[]=$value[$sortby];
+		}
+
+	array_multisort($sort, $sorttype, $clientdblist);
+	}
+}
+
+$smarty->assign("sortby", $sortby);
+$smarty->assign("sorttype", $sorttype);
+$smarty->assign("duration", $duration);
+$smarty->assign("pages", $pages);
+$smarty->assign("getstart", $getstart);
+$smarty->assign("countstarted", $countstarted);
+$smarty->assign("showclients", $showclients);
+$smarty->assign("print_pages", $print_pages);
+$smarty->assign("clientdblist", $clientdblist);
+?>

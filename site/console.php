@@ -1,9 +1,25 @@
 <?php 
+/*
+*Copyright (C) 2010-2011  Psychokiller
+*
+*This program is free software; you can redistribute it and/or modify it under the terms of 
+*the GNU General Public License as published by the Free Software Foundation; either 
+*version 3 of the License, or any later version.
+*
+*This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; 
+*without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+*See the GNU General Public License for more details.
+*
+*You should have received a copy of the GNU General Public License along with this program; if not, see <http://www.gnu.org/licenses/>. 
+*/
+if(!defined("SECURECHECK")) {die($lang['error_file_alone']);} 
+
+$showOutput='';
+$getOutput='';
 if(isset($_POST['command']))
 	{
-	$data=strtr($_POST['command'], array("\r\n" => '\n', "\r" => '\n', "\n" => '\n'));
+	$data=strtr($_POST['command'], array("\n\n" => '\n', "\r\n" => '\n', "\r" => '\n', "\n" => '\n'));
 	$commands=explode('\n', $data);
-	$getOutput='';
 	$use_error=0;
 	if($serverhost===true AND $hoststatus===false)
 		{
@@ -21,39 +37,27 @@ if(isset($_POST['command']))
 			{
 			if(!empty($value))
 				{
-				$getOutput.=$ts3->executeConsole($value);
+				$getOutput=$ts3->execOwnCommand(3, $value);
+				
+				if(!empty($getOutput['errors']))
+					{
+					$get_errorid=explode('ErrorID: ', $getOutput['errors'][0]);
+					$get_errorid=explode(' | Message: ', $get_errorid[1]);
+					$errormsg="error id=".$get_errorid[0]." msg=".$get_errorid[1]."\n";
+					}
+					else
+					{
+					$errormsg="error id=0 msg=ok\n";
+					}
+				$showOutput.=$getOutput['data'].$errormsg;
 				}
 			}
 		}
 		else
 		{
-		$getOutput=$lang['nouse'];
+		$showOutput .= $lang['nouse'];
 		}
 	}
+
+$smarty->assign("showOutput", str_replace('<br>', "\n", $showOutput));
 ?>
-<table class="border" cellpadding="0" cellspacing="0">
-<form method="post" action="index.php?site=console&amp;port=<?php echo $port; ?>">
-	<tr>
-		<td class="thead"><?php echo $lang['queryconsole']; ?></td>
-	</tr>
-	<tr>
-		<td><?php echo $lang['inputbox']; ?></td>
-	</tr>
-	<tr>
-		<td>
-			<textarea name="command" cols="50" rows="10"></textarea>	
-		</td>
-	</tr>
-	<tr>
-		<td><input class="button" type="submit" name="execute" value="<?php echo $lang['execute']; ?>" /><br /><br /></td>
-	</tr>
-	</form>
-	<tr>
-		<td><?php echo $lang['outputbox']; ?></td>
-	</tr>
-	<tr>
-		<td>
-			<textarea name="output" cols="80" rows="20" readonly="readonly"><?php echo str_replace('<br>', "\n", $getOutput); ?></textarea>	
-		</td>
-	</tr>
-</table>

@@ -1,144 +1,50 @@
 <?php
+/*
+*Copyright (C) 2010-2011  Psychokiller
+*
+*This program is free software; you can redistribute it and/or modify it under the terms of 
+*the GNU General Public License as published by the Free Software Foundation; either 
+*version 3 of the License, or any later version.
+*
+*This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; 
+*without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+*See the GNU General Public License for more details.
+*
+*You should have received a copy of the GNU General Public License along with this program; if not, see <http://www.gnu.org/licenses/>. 
+*/
+error_reporting(E_ALL & ~E_NOTICE);
 session_start();
+define("SECURECHECK", 1);
 require('../config.php');
-require('../ts3admin.class.php');
 require('lang.php');
+require('../ts3admin.class.php');
+require('../functions.inc.php');
+require_once('../libs/Smarty/libs/Smarty.class.php');
+
+$smarty=new Smarty();
+
+$smarty->template_dir = '..'.DS.'templates/';
+$smarty->compile_dir = '..'.DS.'templates_c/';
+$smarty->config_dir = '..'.DS.'configs/';
+$smarty->cache_dir = '..'.DS.'cache/'; 
+
+if(!file_exists('..'.DS.'templates'.DS.$style))
+	{
+	$style="default";
+	}
+
+$smarty->assign("tmpl", $style);
 
 $ts3=new ts3admin($_SESSION['server_ip'], $_SESSION['server_tport']);
 $ts3->connect();
 $ts3->login($_SESSION['loginuser'], $_SESSION['loginpw']);
-$ts3->selectServerByPort($_GET['port']);
+$ts3->selectServer($_GET['port']);
 
-$channellist=$ts3->channelList("-limits");
+$channellist=$ts3->getElement('data', $ts3->channelList("-limits"));
+
+$smarty->assign("lang", $lang);
+
+$smarty->assign("channellist", $channellist);
+
+$smarty->display($style.DS.'interactive.tpl');
 ?>
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link rel="stylesheet" href="../gfx/<?php echo $style; ?>/style.css" type="text/css" media="screen" />
-</head>
-<body>
-
-	<form method="post" name="f1" action="interactive.php?port=<?php echo $_GET['port']; ?>&clid=<?php echo $_GET['clid']; ?>&nick=<?php echo $_GET['nick']; ?>">
-	<table class="border" cellpadding="1" cellspacing="0">
-		<tr>
-			<td class="maincat" colspan="2"><?php echo $_GET['nick']; ?></td>
-		</tr>
-		<tr>
-			<td class="green1"><?php echo $lang['select']; ?>:</td>
-			<td class="green1">
-			<select name="action" onChange="submit()">
-				<option value=""><?php echo $lang['select']; ?></option>
-				<option value="kick"><?php echo $lang['kick']; ?></option>
-				<option value="ban"><?php echo $lang['ban']; ?></option>
-				<option value="poke"><?php echo $lang['poke']; ?></option>
-				<option value="move"><?php echo $lang['move']; ?></option>
-			</select>
-			</td>
-		</tr>
-	</table>
-	</form>
-	<br />
-<?php 
-
-if($_POST['action']=='kick')
-	{?>
-<form method="post" name="f1" target="opener" action="../index.php?site=serverview&port=<?php echo $_GET['port']; ?>">
-<table class="border" cellpadding="1" cellspacing="0">
-	<tr>
-		<td class="maincat" colspan="2"><?php echo $lang['kick']." ".$_GET['nick']; ?></td>
-	</tr>
-	<tr>
-		<td class="green1"><?php echo $lang['kickmsg']; ?>:</td>
-		<td class="green1"><input type="text" name="kickmsg" value="" /></td>
-	<tr>
-		<td class="green2"><?php echo $lang['option']; ?>:</td>
-		<td class="green2">
-		<input type="hidden" name="clid" value="<?php echo $_GET['clid']; ?>" />
-		<input class="button" type="submit" name="sendkick" value="<?php echo $lang['kick']; ?>" onclick="self.close()">
-		</td>
-	</tr>
-</table>
-</form>
-<?php } 
-
-if($_POST['action']=='ban')
-	{?>
-<form method="post" name="f1" target="opener" action="../index.php?site=serverview&port=<?php echo $_GET['port']; ?>">
-<table class="border" cellpadding="1" cellspacing="0">
-	<tr>
-		<td class="maincat" colspan="2"><?php echo $lang['ban']." ".$_GET['nick']; ?></td>
-	</tr>
-	<tr>
-		<td class="green1"><?php echo $lang['banmsg']; ?>:</td>
-		<td class="green1">
-		<input type="text" name="banmsg" value=""></td>
-	<tr>
-	<tr>
-		<td class="green2"><?php echo $lang['bantime']; ?>:</td>
-		<td class="green2">
-		<input type="text" name="bantime" value=""><?php echo $lang['seconds']; ?></td>
-	<tr>
-		<td class="green1"><?php echo $lang['option']; ?>:</td>
-		<td class="green1">
-		<input type="hidden" name="clid" value="<?php echo $_GET['clid']; ?>" />
-		<input class="button" type="submit" name="sendban" value="<?php echo $lang['ban']; ?>" onclick="self.close()">
-		</td>
-	</tr>
-</table>
-</form>
-<?php } 
-
-if($_POST['action']=='poke')
-	{?>
-<form method="post" name="f1" target="opener" action="../index.php?site=serverview&port=<?php echo $_GET['port']; ?>">
-<table class="border" cellpadding="1" cellspacing="0">
-	<tr>
-		<td class="maincat" colspan="2"><?php echo $lang['poke']." ".$_GET['nick']; ?></td>
-	</tr>
-	<tr>
-		<td class="green1"><?php echo $lang['pokemsg']; ?>:</td>
-		<td class="green1">
-		<input type="text" name="pokemsg" value=""></td>
-	<tr>
-		<td class="green2"><?php echo $lang['option']; ?>:</td>
-		<td class="green2">
-		<input type="hidden" name="clid" value="<?php echo $_GET['clid']; ?>" />
-		<input class="button" type="submit" name="sendpoke" value="<?php echo $lang['poke']; ?>" onclick="self.close()">
-		</td>
-	</tr>
-</table>
-</form>
-<?php }
-
-if($_POST['action']=='move')
-	{?>
-<form method="post" name="f1" target="opener" action="../index.php?site=serverview&port=<?php echo $_GET['port']; ?>">
-<table class="border" cellpadding="1" cellspacing="0">
-	<tr>
-		<td class="maincat" colspan="2"><?php echo $lang['move']." ".$_GET['nick']; ?></td>
-	</tr>
-	<tr>
-		<td class="green1"><?php echo $lang['move']; ?>:</td>
-		<td class="green1">
-		<select name="cid">
-		<?php
-		foreach($channellist AS $value)
-			{
-			echo "<option value=\"".$value['cid']."\">".htmlentities($value['channel_name'], ENT_QUOTES, "UTF-8")."</option>";
-			}
-		?>
-		</select>
-		</td>
-	<tr>
-		<td class="green2"><?php echo $lang['option']; ?>:</td>
-		<td class="green2">
-		<input type="hidden" name="clid" value="<?php echo $_GET['clid']; ?>" />
-		<input class="button" type="submit" name="sendmove" value="<?php echo $lang['move']; ?>" onclick="self.close()">
-		</td>
-	</tr>
-</table>
-</form>
-<?php }
-?>
-</body>
-</html>

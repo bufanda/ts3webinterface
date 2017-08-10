@@ -1,86 +1,78 @@
-<table class="border" cellpadding="1" cellspacing="0">
 <?php
+/*
+*Copyright (C) 2010-2011  Psychokiller
+*
+*This program is free software; you can redistribute it and/or modify it under the terms of 
+*the GNU General Public License as published by the Free Software Foundation; either 
+*version 3 of the License, or any later version.
+*
+*This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; 
+*without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+*See the GNU General Public License for more details.
+*
+*You should have received a copy of the GNU General Public License along with this program; if not, see <http://www.gnu.org/licenses/>. 
+*/
+if(!defined("SECURECHECK")) {die($lang['error_file_alone']);} 
+
+$error='';
+$noerror='';
+
 if(isset($_POST['addgroup']))
 	{
 	if(!empty($_POST['name']))
 		{
 		if(!empty($_POST['copyfrom']))
 			{
-			$creategroup=$ts3->channelGroupAdd($_POST['name']);
-			if($creategroup!==false)
+			empty($_POST['type']) ? $type=0:$type=$_POST['type'];
+			$creategroup=$ts3->channelGroupCopy($_POST['copyfrom'], $_POST['overwrite'], $_POST['name'], $type);
+			if($creategroup['success']!==false)
 				{
-				$editperms='';
-				$cgrouppermlist=$ts3->channelGroupPermList($_POST['copyfrom']);
-				foreach($cgrouppermlist AS $key => $value)
-					{
-					$editperms[$value['permid']]['value']=$value['permvalue'];
-					$editperms[$value['permid']]['skip']=$value['permskip'];
-					$editperms[$value['permid']]['negated']=$value['permnegated'];
-					}
-				$ts3->channelGroupAddPerm($creategroup, $editperms);
-				echo "<tr><td class='green1' colspan='2'>".$ts3->getDebugLog()."</td></tr>";
-				echo "<tr><td class='green1' colspan='2'>".$lang['groupcreatedok']."</td></tr>";
+				$noerror .= $lang['groupcreatedok']."<br />";
 				}
 				else
 				{
-				echo "<tr><td class='green1' colspan='2'>".$ts3->getDebugLog()."</td></tr>";
+				for($i=0; $i+1==count($creategroup['errors']); $i++)
+					{
+					$error .= $creategroup['errors'][$i]."<br />";
+					}
 				}
 			}
 			else
 			{
-			if($ts3->channelGroupAdd($_POST['name']))
+			$creategroup=$ts3->channelGroupAdd($_POST['name']);
+			if($creategroup['success']!==false)
 				{
-				echo "<tr><td class='green1' colspan='2'>".$lang['groupcreatedok']."</td></tr>";
+				$noerror .= $lang['groupcreatedok']."<br />";
 				}
 				else
 				{
-				echo "<tr><td class='green1' colspan='2'>".$ts3->getDebugLog()."</td></tr>";
+				for($i=0; $i+1==count($creategroup['errors']); $i++)
+					{
+					$error .= $creategroup['errors'][$i]."<br />";
+					}
 				}
 			}
 		}
 		else
 		{
-		echo "<tr><td class='green1' colspan='2'>".$lang['groupnameempty']."</td></tr>";
+		$error .= $lang['groupnameempty']."<br />";
 		}
 	}
 
-$channelgroups=$ts3->channelGroupList();
-foreach($channelgroups AS $key => $value)
+$channelgroups=$ts3->getElement('data', $ts3->channelGroupList());
+if(!empty($channelgroups))
 	{
-	if ($hoststatus===false AND $serverhost===true AND $value['type']=='0')
+	foreach($channelgroups AS $key => $value)
 		{
-		unset($channelgroups[$key]);
-		}
-	}	
-	
+		$channelgroups[$key]=secure($channelgroups[$key]);
+		if ($hoststatus===false AND $serverhost===true AND $value['type']=='0')
+			{
+			unset($channelgroups[$key]);
+			}
+		}	
+	}
+
+$smarty->assign("error", $error);
+$smarty->assign("noerror", $noerror);
+$smarty->assign("channelgroups", $channelgroups);
 ?>
-<form method="post" action="index.php?site=cgroupadd&amp;port=<?php echo $port; ?>">
-	<tr>
-		<td colspan="2" class="thead"><?php echo $lang['addchannelgroup']; ?></td>
-	</tr>
-	<tr>
-		<td class="green1"><?php echo $lang['name']; ?></td>
-		<td class="green1">
-		<input type="text" name="name" value="" />
-		</td>
-	</tr>
-	<tr>
-		<td class="green1"><?php echo $lang['copypermsfrom']; ?>:</td>
-		<td class="green1">
-		<select name="copyfrom">
-		<option value=""></option>
-		<?php
-		foreach($channelgroups AS $key=>$value)
-			{?>
-			<option value="<?php echo $value['cgid']; ?>"><?php echo $value['name']; ?></option>
-<?php		}
-		?>
-		</select>
-		</td>
-	</tr>
-	<tr>
-		<td class="green2"><?php echo $lang['option']; ?></td>
-		<td class="green2"><input class="button" type="submit" name="addgroup" value="<?php echo $lang['add']; ?>" /></td>
-	</tr>
-</table>
-</form>

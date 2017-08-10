@@ -1,55 +1,51 @@
-<?php if(!defined("SECURECHECK")) {die($lang['error_file_alone']);} 
+<?php 
+/*
+*Copyright (C) 2010-2011  Psychokiller
+*
+*This program is free software; you can redistribute it and/or modify it under the terms of 
+*the GNU General Public License as published by the Free Software Foundation; either 
+*version 3 of the License, or any later version.
+*
+*This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; 
+*without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+*See the GNU General Public License for more details.
+*
+*You should have received a copy of the GNU General Public License along with this program; if not, see <http://www.gnu.org/licenses/>. 
+*/
+if(!defined("SECURECHECK")) {die($lang['error_file_alone']);} 
 if($port===false OR empty($port)) { echo "<meta http-equiv=\"refresh\" content=\"0; URL=index.php?site=server\">";} else {
-?>
-<table style="width:100%" class="border" cellpadding="1" cellspacing="0">
-<?php
+
+$error='';
+$noerror='';
 if(isset($_POST['delete']))
 	{
-	if($ts3->channelDelete($_POST['cid']))
+	$force=isset($_POST['force']) ? 1:0;
+	$channel_delete=$ts3->channelDelete($_POST['cid'], $force);
+	if($channel_delete['success']!==false)
 		{
-		echo "<tr><td colspan=\"4\" class=\"green1\">".$lang['channeldelok']."</td></tr>";
+		$noerror .= $lang['channeldelok']."<br />";
 		}
 		else
 		{
-		echo "<tr><td colspan=\"4\" class=\"green1\">".$ts3->getDebugLog()."</td></tr>";
+		for($i=0; $i+1==count($channel_delete['errors']); $i++)
+			{
+			$error .= $channel_delete['errors'][$i]."<br />";
+			}
 		}
 	}
-$channellist=$ts3->channelList("-topic -flags -voice -limits");
-?>
-	<tr>
-		<td class="thead" colspan="4"><?php echo $lang['channel']; ?></td>
-	</tr>
-	<tr>
-		<td class="thead"><?php echo $lang['id']; ?></td>
-		<td class="thead"><?php echo $lang['pid']; ?></td>
-		<td class="thead"><?php echo $lang['name']; ?></td>
-		<td class="thead"><?php echo $lang['option']; ?></td>
-	</tr>
-<?php
-$change_col=1;
-foreach ($channellist AS $key=>$value)
+	
+$channellist=$ts3->getElement('data', $ts3->channelList("-topic -flags -voice -limits -icon"));
+
+if(!empty($channellist))
 	{
-	($change_col%2) ? $td_col="green1" : $td_col="green2"
-	?>
-	<tr>
-		<td class="<?php echo $td_col; ?> center"><?php echo $value['cid']; ?></td>
-		<td class="<?php echo $td_col; ?> center"><?php echo $value['pid']; ?></td>
-		<td class="<?php echo $td_col; ?> center"><?php echo $value['channel_name']; ?></td>
-		<td class="<?php echo $td_col; ?> center">
-		<form method="post" action="index.php?site=channelview&amp;port=<?php echo $port ?>&amp;cid=<?php echo $value['cid']; ?>">
-		<input type="submit" class="select" name="select" value="" title="<?php echo $lang['select']; ?>" />
-		</form>
-		<form method="post" action="index.php?site=channeleditperm&amp;port=<?php echo $port ?>&amp;cid=<?php echo $value['cid']; ?>">
-		<input type="submit" class="eperms" name="editperms" value="" title="<?php echo $lang['editperms']; ?>" />
-		</form>
-		<form method="post" action="index.php?site=channel&amp;port=<?php echo $port ?>">
-		<input type="hidden" name="cid" value="<?php echo $value['cid']; ?>" />
-		<input type="submit" class="delete" name="delete" value="" title="<?php echo $lang['delete']; ?>" onclick="return confirm('<?php echo $lang['deletemsgchannel']; ?>')" />
-		</form>
-		</td>
-	</tr>
-	<?php 
-	$change_col++;
-	} ?>
-</table>
-<?php } ?>
+	foreach($channellist AS $key=>$value)
+		{
+		$channellist[$key]=secure($channellist[$key]);
+		}
+	}
+
+$smarty->assign("error", $error);
+$smarty->assign("noerror", $noerror);
+$smarty->assign("channellist", $channellist);
+}
+?>

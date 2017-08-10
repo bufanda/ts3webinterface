@@ -1,29 +1,36 @@
-<?php if(!defined("SECURECHECK")) {die($lang['error_file_alone']);}?>
-<table class="border" style="width:100%" cellpadding="1" cellspacing="0">
-<?php
+<?php 
+/*
+*Copyright (C) 2010-2011  Psychokiller
+*
+*This program is free software; you can redistribute it and/or modify it under the terms of 
+*the GNU General Public License as published by the Free Software Foundation; either 
+*version 3 of the License, or any later version.
+*
+*This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; 
+*without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+*See the GNU General Public License for more details.
+*
+*You should have received a copy of the GNU General Public License along with this program; if not, see <http://www.gnu.org/licenses/>. 
+*/
+if(!defined("SECURECHECK")) {die($lang['error_file_alone']);}
+
 if($port===false OR empty($port)) { echo "<meta http-equiv=\"refresh\" content=\"0; URL=index.php?site=server\">";} else {
-$banlist=$ts3->banList();
-?>
-	<tr>
-		<td class="thead" colspan="9"><?php echo $lang['bansexport'];?></td>
-	</tr>
-	<tr>
-		<td colspan="9"><?php echo $lang['bansexportdesc'];?></td>
-	</tr>
-<?php
+$banlist=$ts3->getElement('data', $ts3->banList());
+
+$banexport='';
 if(!empty($banlist))
 	{
 	foreach($banlist AS $value)
 		{
-		if(isset($value['ip']))
+		if(isset($value['ip']) AND !empty($value['ip']))
 			{
 			$bantype="ip=".$value['ip'];
 			}
-		elseif(isset($value['name']))
+		elseif(isset($value['name']) AND !empty($value['name']))
 			{
 			$bantype="name=".$value['name'];
 			}
-		elseif(isset($value['uid']))
+		elseif(isset($value['uid']) AND !empty($value['uid']))
 			{
 			$bantype="uid=".$value['uid'];
 			}
@@ -37,15 +44,11 @@ if(!empty($banlist))
 			$banlength=$value['duration'];
 			}
 			
-		$banexport.="banadd ".$bantype." time=".$banlength." banreason=".$value['reason']."\n";
-		?>
+		$banexport.="banadd ".$bantype." time=".$banlength." banreason=".str_replace(' ', '\s', $value['reason'])."\n";
 	
-<?php	}?>
-	<tr>
-			<td>
-			<textarea rows="10" cols="70" readonly="readonly"><?php echo $banexport; ?></textarea>
-			</td>
-		</tr>
-<?php	} ?>
-</table>
-<?php } ?>
+		}
+	} 
+	
+$smarty->assign("banexport", secure($banexport));
+}
+?>

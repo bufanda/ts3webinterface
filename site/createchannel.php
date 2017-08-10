@@ -1,129 +1,68 @@
-<?php if(!defined("SECURECHECK")) {die($lang['error_file_alone']);} 
+<?php 
+/*
+*Copyright (C) 2010-2011  Psychokiller
+*
+*This program is free software; you can redistribute it and/or modify it under the terms of 
+*the GNU General Public License as published by the Free Software Foundation; either 
+*version 3 of the License, or any later version.
+*
+*This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; 
+*without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+*See the GNU General Public License for more details.
+*
+*You should have received a copy of the GNU General Public License along with this program; if not, see <http://www.gnu.org/licenses/>. 
+*/
+if(!defined("SECURECHECK")) {die($lang['error_file_alone']);} 
 if($port===false OR empty($port)) { echo "<meta http-equiv=\"refresh\" content=\"0; URL=index.php?site=server\">";} else {
-?>
-<table class="border" cellpadding="1" cellspacing="0">
-<?php
+
+$error='';
+$noerror='';
+
 $settings=array();
 if(isset($_POST['createchannel']))
 	{
-	$settings[]=array('name', $_POST['name']);
-	$settings[]=array('topic', $_POST['topic']);
-	$settings[]=array('description', $_POST['description']);
-	$settings[]=array('codec', $_POST['codec']);
-	$settings[]=array('codec_quality', $_POST['codecquali']);
-	$settings[]=array('maxclients', $_POST['maxclients']);
-	$settings[]=array('maxfamilyclients', $_POST['maxfamclients']);
 	if($_POST['chantyp']=='1')
 		{
-		$settings[]=array('flag_permanent', '0');
-		$settings[]=array('flag_semi_permanent', '1');
+		$_POST['settings']['channel_flag_permanent']=0;
+		$_POST['settings']['channel_flag_semi_permanent']=1;
 		}
 	elseif($_POST['chantyp']=='2')
 		{
-		$settings[]=array('flag_permanent', '1');
-		$settings[]=array('flag_semi_permanent', '0');
+		$_POST['settings']['channel_flag_permanent']=1;
+		$_POST['settings']['channel_flag_semi_permanent']=0;
 		}
 	elseif($_POST['chantyp']=='3')
 		{
-		$settings[]=array('flag_permanent', '1');
-		$settings[]=array('flag_semi_permanent', '0');
-		$settings[]=array('flag_default', '1');
+		$_POST['settings']['channel_flag_permanent']=1;
+		$_POST['settings']['channel_flag_semi_permanent']=0;
+		$_POST['settings']['channel_flag_default']=1;
 		}
-	$settings[]=array('flag_maxfamilyclients_inherited', $_POST['inherited']);
-	$settings[]=array('needed_talk_power', $_POST['talkpower']);
-	$settings[]=array('name_phonetic', $_POST['phonetic']);
-	$ts3->channelCreate($settings);
-	if(strpos($ts3->getDebugLog(), 'cid=')!==false)
+	$channel_create=$ts3->channelCreate($_POST['settings']);
+	if($channel_create['success']!==false)
 		{
-		echo "<tr><td colspan=\"2\" class=\"green1\">".$lang['channelcreatedok']."</td></tr>";
+		$noerror .= $lang['channelid'].": ".$channel_create['data']['cid']."<br />";
+		$noerror .= $lang['channelcreatedok'];
 		}
 		else
 		{
-		echo "<tr><td colspan=\"2\" class=\"green1\">".$ts3->getDebugLog()."</td></tr>";
+		for($i=0; $i+1==count($channel_create['errors']); $i++)
+			{
+			$error .= $channel_create['errors'][$i]."<br />";
+			}
 		}
 	}
-$channellist=$ts3->channelList();
-?>
+	
+$channellist=$ts3->getElement('data', $ts3->channellist());
 
-		<form method="post" action="index.php?site=createchannel&amp;port=<?php echo $port; ?>">
-			<tr>
-				<td colspan="2" class="thead"><?php echo $lang['createachannel']; ?></td>
-			</tr>
-			<tr>
-				<td class="green1"><?php echo $lang['name']; ?>:</td>
-				<td class="green1"><input type="text" name="name" value="" /></td>
-			</tr>
-			<tr>
-				<td class="green2"><?php echo $lang['topic']; ?>:</td>
-				<td class="green2"><input type="text" name="topic" value="" /></td>
-			</tr>
-			<tr>
-				<td class="green1"><?php echo $lang['description']; ?>:</td>
-				<td class="green1"><input type="text" name="description" value="" /></td>
-			</tr>
-			<tr>
-				<td class="green1"><?php echo $lang['codec']; ?>:</td>
-				<td class="green1">
-				<select name="codec">
-				<option value="0"><?php echo $lang['codec0']; ?></option>
-				<option value="1"><?php echo $lang['codec1']; ?></option>
-				<option value="2"><?php echo $lang['codec2']; ?></option>
-				<option value="3"><?php echo $lang['codec3']; ?></option>
-				</select>
-			</tr>
-			<tr>
-				<td class="green2"><?php echo $lang['codecquality']; ?>:</td>
-				<td class="green2">
-				<select name="codecquali">
-				<option value="0">0</option>
-				<option value="1">1</option>
-				<option value="2">2</option>
-				<option value="3">3</option>
-				<option value="4">4</option>
-				<option value="5">5</option>
-				<option value="6">6</option>
-				<option value="7">7</option>
-				<option value="8">8</option>
-				<option value="9">9</option>
-				<option value="10">10</option>
-				</select>
-			</tr>
-			<tr>
-				<td class="green1"><?php echo $lang['maxclients']; ?>:</td>
-				<td class="green1"><input type="text" name="maxclients" value="-1" /></td>
-			</tr>
-			<tr>
-				<td class="green2"><?php echo $lang['maxfamilyclients']; ?>:</td>
-				<td class="green2"><input type="text" name="maxfamclients" value="-1" /></td>
-			</tr>
-			<tr>
-				<td class="green2"><?php echo $lang['type']; ?>:</td>
-				<td class="green2">
-				<?php echo $lang['semipermanent']; ?> <input type="radio" name="chantyp" value="1" checked="checked" /><br/>
-				<?php echo $lang['permanent']; ?> <input type="radio" name="chantyp" value="2" /><br />
-				<?php echo $lang['default']; ?> <input type="radio" name="chantyp" value="3" />
-				</td>
-			</tr>
-			<tr>
-				<td class="green1"><?php echo $lang['maxfamilyclientsinherited']; ?>:</td>
-				<td class="green1">
-				<select name="inherited">
-				<option value="0">0</option>
-				<option value="1">1</option>
-				</select>
-			</tr>
-			<tr>
-				<td class="green2"><?php echo $lang['neededtalkpower']; ?>:</td>
-				<td class="green2"><input type="text" name="talkpower" value="0" /></td>
-			</tr>
-			<tr>
-				<td class="green1"><?php echo $lang['phoneticname']; ?>:</td>
-				<td class="green1"><input type="text" name="phonetic" value="" /></td>
-			</tr>
-			<tr>
-				<td class="green2"><?php echo $lang['option']; ?>:</td>
-				<td class="green2"><input type="submit" name="createchannel" value="<?php echo $lang['create']; ?>" /></td>
-			</tr>
-			</form>
-		</table>
-<?php } ?>
+if(!empty($channellist))
+	{
+	foreach($channellist AS $key=>$value)
+		{
+		$channellist[$key]=secure($channellist[$key]);
+		}
+	}
+
+$smarty->assign("error", $error);
+$smarty->assign("noerror", $noerror);	
+$smarty->assign("channellist", $channellist);
+} ?>

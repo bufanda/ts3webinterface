@@ -1,57 +1,53 @@
-<table class="border" cellpadding="0" cellspacing="0">
-<?php
+<?php 
+/*
+*Copyright (C) 2010-2011  Psychokiller
+*
+*This program is free software; you can redistribute it and/or modify it under the terms of 
+*the GNU General Public License as published by the Free Software Foundation; either 
+*version 3 of the License, or any later version.
+*
+*This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; 
+*without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+*See the GNU General Public License for more details.
+*
+*You should have received a copy of the GNU General Public License along with this program; if not, see <http://www.gnu.org/licenses/>. 
+*/
+if(!defined("SECURECHECK")) {die($lang['error_file_alone']);}
+if($port===false OR empty($port)) { echo "<meta http-equiv=\"refresh\" content=\"0; URL=index.php?site=server\">";} else {
+
+$error='';
+$noerror='';
+
 if (isset($_POST['addban']))
 	{
 	if(isset($_POST['banip']) AND !empty($_POST['banip']))
 		{
-		if($ts3->BanAddByIp($_POST['banip'], $_POST['bantime'], $_POST['reason']))
-			{
-			echo "<tr><td colspan=\"2\" class=\"green1\">".$lang['banaddok']."</td></tr>";
-			}
+		$ban_add=$ts3->BanAddByIp($_POST['banip'], $_POST['bantime'], $_POST['reason']);
 		}
 	if(isset($_POST['banuid']) AND !empty($_POST['banuid']))
 		{
-		if($ts3->BanAddByUid($_POST['banuid'], $_POST['bantime'], $_POST['reason']))
-			{
-			echo "<tr><td colspan=\"2\" class=\"green1\">".$lang['banaddok']."</td></tr>";
-			}
+		$ban_add=$ts3->BanAddByUid($_POST['banuid'], $_POST['bantime'], $_POST['reason']);
 		}
 	if(isset($_POST['banname']) AND !empty($_POST['banname']))
 		{
-		if($ts3->BanAddByName($_POST['banname'], $_POST['bantime'], $_POST['reason']))
+		$ban_add=$ts3->BanAddByName($_POST['banname'], $_POST['bantime'], $_POST['reason']);
+		}
+	if(isset($ban_add))
+		{
+		if($ban_add['success']!==false)
 			{
-			echo "<tr><td colspan=\"2\" class=\"green1\">".$lang['banaddok']."</td></tr>";
+			$noerror .= $lang['banaddok']."<br />";
+			}
+			else
+			{
+			for($i=0; $i+1==count($ban_add['errors']); $i++)
+				{
+				$error .= $ban_add['errors'][$i]."<br />";
+				}
 			}
 		}
 	}
+$smarty->assign("error", $error);
+$smarty->assign("noerror", $noerror);
+}
 ?>
-<form method="post" action="index.php?site=banadd&amp;port=<?php echo $port; ?>">
-	<tr>
-		<td class="thead" colspan="2"><?php echo $lang['addban']; ?></td>
-	</tr>
-	<tr>
-		<td class="green1"><?php echo $lang['ip']; ?></td>
-		<td class="green1"><input type="text" name="banip" value="" /></td>
-	</tr>
-	<tr>
-		<td class="green2"><?php echo $lang['name']; ?></td>
-		<td class="green2"><input type="text" name="banname" value="" /></td>
-	</tr>
-	<tr>
-		<td class="green1"><?php echo $lang['uniqueid']; ?></td>
-		<td class="green1"><input type="text" name="banuid" value="" /></td>
-	</tr>
-	<tr>
-		<td class="green2"><?php echo $lang['reason']; ?></td>
-		<td class="green2"><input type="text" name="reason" value="" /></td>
-	</tr>
-	<tr>
-		<td class="green1"><?php echo $lang['bantime']; ?></td>
-		<td class="green1"><input type="text" name="bantime" value="" /><?php echo $lang['seconds']; ?></td>
-	</tr>
-	<tr>
-		<td class="green2"><?php echo $lang['option']; ?></td>
-		<td class="green2"><input class="button" type="submit" name="addban" value="<?php echo $lang['ban']; ?>" /></td>
-	</tr>
-</table>
-</form>

@@ -1,34 +1,29 @@
-
 <?php
-if($fastswitch==true AND $serverhost==true AND $hoststatus==true AND $loginstatus!==false AND $site!="server" AND $site!="login" OR $fastswitch==true AND $serverhost==false AND $loginstatus!==false AND $site!="server" AND $site!="server" AND $site!="login")
+/*
+*Copyright (C) 2010-2011  Psychokiller
+*
+*This program is free software; you can redistribute it and/or modify it under the terms of 
+*the GNU General Public License as published by the Free Software Foundation; either 
+*version 3 of the License, or any later version.
+*
+*This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; 
+*without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+*See the GNU General Public License for more details.
+*
+*You should have received a copy of the GNU General Public License along with this program; if not, see <http://www.gnu.org/licenses/>. 
+*/
+if(!defined("SECURECHECK")) {die($lang['error_file_alone']);} 
+if($fastswitch==true AND $serverhost==true AND $hoststatus==true AND $loginstatus!==false AND !empty($port) OR $fastswitch==true AND $serverhost==false AND $loginstatus!==false AND !empty($port))
 	{
-$serverlist=$ts3->serverList();
-?>
-<form method="get" action="index.php?site=serverview">
-<?php
-if(strpos($site, 'edit')==false OR $site=='serveredit')
-	{
-	echo "<input type=\"hidden\" name=\"site\" value=\"$site\" />";
-	}
-	else
-	{
-	echo "<input type=\"hidden\" name=\"site\" value=\"serverview\" />";
-	}
-?>
-<select name="port" onChange="submit()">
-<?php
-foreach($serverlist AS $server)
-	{
-	if($port==$server['virtualserver_port'])
+	$serverlist=$ts3->getElement('data', $ts3->serverList());
+	if(!empty($serverlist))
 		{
-		echo "<option selected=\"selected\" value=\"".$server['virtualserver_port']."\">".$server['virtualserver_name']."-".$server['virtualserver_port'];
+		foreach($serverlist AS $key=>$value)
+			{
+			$serverlist[$key]=secure($serverlist[$key]);
+			}
 		}
-		else
-		{
-		echo "<option value=\"".$server['virtualserver_port']."\">".$server['virtualserver_name']."-".$server['virtualserver_port'];
-		}
-	}
+	$smarty->assign("fastswitch", true);
+	$smarty->assign("serverlist", $serverlist);
+	} 
 ?>
-</select>
-</form>
-<?php } ?>

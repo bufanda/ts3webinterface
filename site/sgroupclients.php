@@ -1,34 +1,56 @@
-<?php if(!defined("SECURECHECK")) {die($lang['error_file_alone']);} 
+<?php 
+/*
+*Copyright (C) 2010-2011  Psychokiller
+*
+*This program is free software; you can redistribute it and/or modify it under the terms of 
+*the GNU General Public License as published by the Free Software Foundation; either 
+*version 3 of the License, or any later version.
+*
+*This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; 
+*without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+*See the GNU General Public License for more details.
+*
+*You should have received a copy of the GNU General Public License along with this program; if not, see <http://www.gnu.org/licenses/>. 
+*/
+if(!defined("SECURECHECK")) {die($lang['error_file_alone']);} 
 if($port===false OR empty($port)) { echo "<meta http-equiv=\"refresh\" content=\"0; URL=index.php?site=server\">";} else {
-?>
-<table style="width:100%" class="border" cellpadding="1" cellspacing="0">
-<?php
+
+$error='';
+$noerror='';
+
 if(isset($_POST['kickclient']))
 	{
-	if($ts3->serverGroupDeleteClient($sgid, $_POST['cldbid']))
+	$sgroup_del_client=$ts3->serverGroupDeleteClient($sgid, $_POST['cldbid']);
+	if($sgroup_del_client['success']!==false)
 		{
-		echo "<tr><td class='green1' colspan='6'>".$lang['clientremoveok']."</td></tr>";
+		$noerror .= $lang['clientremoveok']."<br />";
 		}
 		else
 		{
-		echo "<tr><td class='green1' colspan='6'>".$ts3->getDebugLog()."</td></tr>";
+		for($i=0; $i+1==count($sgroup_del_client['errors']); $i++)
+			{
+			$error .= $sgroup_del_client['errors'][$i]."<br />";
+			}
 		}
 	}
 if(isset($_POST['addclient']))
 	{
-	if($ts3->serverGroupAddClient($sgid, $_POST['cldbid']))
+	$sgroup_add_client=$ts3->serverGroupAddClient($sgid, $_POST['cldbid']);
+	if($sgroup_add_client['success']!==false)
 		{
-		echo "<tr><td class='green1' colspan='6'>".$lang['clientaddok']."</td></tr>";
+		$noerror .= $lang['clientaddok']."<br />";
 		}
 		else
 		{
-		echo "<tr><td class='green1' colspan='6'>".$ts3->getDebugLog()."</td></tr>";
+		for($i=0; $i+1==count($sgroup_add_client['errors']); $i++)
+			{
+			$error .= $sgroup_add_client['errors'][$i]."<br />";
+			}
 		}
 	}
-$servergroups=$ts3->serverGroupList();
+$servergroups=$ts3->getElement('data', $ts3->serverGroupList());
 
-$groupclients=$ts3->serverGroupClientList($sgid, "-names");
-
+$groupclients=$ts3->getElement('data', $ts3->serverGroupClientList($sgid, true));
 foreach($servergroups AS $value)
 	{
 	if($sgid==$value['sgid'])
@@ -39,26 +61,33 @@ foreach($servergroups AS $value)
 	}
 $start_while=0;
 $duration_while=100;
-while($clientdblist=$ts3->clientDbList("start=".$start_while." duration=".$duration_while))
+if(!isset($groupclients[0]['']) AND !empty($groupclients))
 	{
-	foreach($groupclients AS $key=>$value)
+	while($clientdblist=$ts3->getElement('data', $ts3->clientDbList($start_while, $duration_while)))
 		{
-		foreach($clientdblist AS $value2)	
+		foreach($groupclients AS $key=>$value)
 			{
-			if($value['cldbid']==$value2['cldbid'])
+			foreach($clientdblist AS $value2)	
 				{
-				$groupclients[$key]['client_unique_identifier']=$value2['client_unique_identifier'];
-				$groupclients[$key]['client_nickname']=$value2['client_nickname'];
-				$groupclients[$key]['client_created']=$value2['client_created'];
-				$groupclients[$key]['client_lastconnected']=$value2['client_lastconnected'];
+				if($value['cldbid']==$value2['cldbid'])
+					{
+					$groupclients[$key]['client_unique_identifier']=$value2['client_unique_identifier'];
+					$groupclients[$key]['client_nickname']=secure($value2['client_nickname']);
+					$groupclients[$key]['client_created']=$value2['client_created'];
+					$groupclients[$key]['client_lastconnected']=$value2['client_lastconnected'];
+					}
 				}
+
 			}
-
+		$start_while=$start_while+$duration_while;
 		}
-	$start_while=$start_while+$duration_while;
 	}
+	elseif(isset($groupclients[0]['']))
+		{
+		unset ($groupclients);
+		}
 
-if(isset($_POST['searchby']) AND $_POST['searchby']=='cldbid' AND  !empty($_POST['search']))
+if(isset($_POST['searchby']) AND $_POST['searchby']=='cldbid' AND  !empty($_POST['search']) AND !empty($groupclients))
 	{
 	foreach ($groupclients AS $key => $value)
 		{
@@ -68,7 +97,7 @@ if(isset($_POST['searchby']) AND $_POST['searchby']=='cldbid' AND  !empty($_POST
 			}
 		}
 	}
-elseif(isset($_POST['searchby']) AND $_POST['searchby']=='name' AND !empty($_POST['search']))
+elseif(isset($_POST['searchby']) AND $_POST['searchby']=='name' AND !empty($_POST['search']) AND !empty($groupclients))
 	{
 	foreach ($groupclients AS $key => $value)
 		{
@@ -78,77 +107,12 @@ elseif(isset($_POST['searchby']) AND $_POST['searchby']=='name' AND !empty($_POS
 			}
 		}
 	}	
+}
 
+
+$smarty->assign("error", $error);
+$smarty->assign("noerror", $noerror);
+$smarty->assign("sgroupid", $sgroupid);
+$smarty->assign("sgroupname", secure($sgroupname));
+$smarty->assign("groupclients", $groupclients);
 ?>
-	<tr>
-		<td class="thead" colspan="7"><?php echo $lang['searchfor'].$lang['client']; ?></td>
-	</tr>
-	<tr>
-		<form method="post" action="index.php?site=sgroupclients&amp;port=<?php echo $port; ?>&amp;sgid=<?php echo $sgid; ?>">
-		<td class="green1">
-		<select name="searchby">
-		<option value="cldbid"><?php echo $lang['cldbid']; ?></option>
-		<option value="name"><?php echo $lang['name']; ?></option>
-		</select>
-		</td>
-		<td class="green1" colspan="6">
-		<input type="text" name="search" value="" />
-		<input type="submit" name="sendsearch" value="<?php echo $lang['search']; ?>" />
-		</td>
-		</form>
-	</tr>
-	<tr>
-		<td class="thead" colspan="6"><?php echo "(".$sgroupid.")".$sgroupname." ".$lang['groupmember']; ?></td>
-	</tr>
-	<tr>
-		<td class="thead"><?php echo $lang['uniqueid']; ?></td>
-		<td class="thead"><?php echo $lang['dbid']; ?></td>
-		<td class="thead"><?php echo $lang['name']; ?></td>
-		<td class="thead"><?php echo $lang['created']; ?></td>
-		<td class="thead"><?php echo $lang['lastonline']; ?></td>
-		<td class="thead"><?php echo $lang['option']; ?></td>
-	</tr>
-	<?php
-	if(!empty($groupclients))
-		{
-	$change_col=1;
-	foreach($groupclients AS $value)
-		{
-		($change_col%2) ? $td_col="green1" : $td_col="green2"
-		
-		?>
-		<form method="post" action="index.php?site=sgroupclients&amp;port=<?php echo $port; ?>&amp;sgid=<?php echo $sgid; ?>">
-		<tr>
-			<td class="<?php echo $td_col; ?> center"><?php echo $value['client_unique_identifier']; ?></td>
-			<td class="<?php echo $td_col; ?> center"><?php echo $value['cldbid']; ?></td>
-			<td class="<?php echo $td_col; ?> center"><?php echo $value['client_nickname']; ?></td>
-			<td class="<?php echo $td_col; ?> center"><?php echo date("d.m.Y", $value['client_created']); ?></td>
-			<td class="<?php echo $td_col; ?> center"><?php echo date("d.m.Y", $value['client_lastconnected']); ?></td>
-			<td class="<?php echo $td_col; ?> center">
-			<input type="hidden" name="cldbid" value="<?php echo $value['cldbid']; ?>" />
-			<input type="submit" class="delete" name="kickclient" value="" title="kick"/>
-			</td>
-		</tr>
-		</form>
-	<?php 
-		$change_col++;
-		} }?>
-		
-</table>
-<br />
-<form method="post" action="index.php?site=sgroupclients&amp;port=<?php echo $port; ?>&amp;sgid=<?php echo $sgid; ?>">
-<table class="border" cellpadding="1" cellspacing="0">
-	<tr>
-		<td colspan="2" class="thead"><?php echo $lang['addclient']; ?></td>
-	</tr>
-	<tr>
-		<td class="green1"><?php echo $lang['cldbid']; ?></td>
-		<td class="green1"><input type="text" name="cldbid" value="" /></td>
-	</tr>
-	<tr>
-		<td class="green2"><?php echo $lang['options']; ?></td>
-		<td class="green2"><input type="submit" name="addclient" value="<?php echo $lang['add']; ?>" /></td>
-	</tr>
-</table>
-</form>
-<?php } ?>

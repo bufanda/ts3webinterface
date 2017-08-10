@@ -1,66 +1,78 @@
 <?php
+/*
+*Copyright (C) 2010-2011  Psychokiller
+*
+*This program is free software; you can redistribute it and/or modify it under the terms of 
+*the GNU General Public License as published by the Free Software Foundation; either 
+*version 3 of the License, or any later version.
+*
+*This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; 
+*without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+*See the GNU General Public License for more details.
+*
+*You should have received a copy of the GNU General Public License along with this program; if not, see <http://www.gnu.org/licenses/>. 
+*/
+if(!defined("SECURECHECK")) {die($lang['error_file_alone']);} 
+if($hoststatus===false AND $serverhost===true) { echo $lang['nohoster']; } else { 
+$error = '';
+$noerror = '';
+$files='';
+$serverlist=$ts3->serverList();
+
+if(isset($_POST['hostbackup']))
+		{
+		$path="site/backups/server/hostbackups/";
+		}
+		else
+		{
+		$path="site/backups/server/";
+		}
+
 if(isset($_POST['create']))
 	{
-	if(isset($_POST['hostbackup']))
+	$serversnapshot=$ts3->serverSnapshotCreate();
+	if($serversnapshot['success']!==false)
 		{
-		$path="site/backups/server/hostbackups/";
+		$handler=fopen($path."server_".time()."_".$_SESSION['server_ip']."-".$port.".txt", "a+");
+		fwrite($handler, $serversnapshot['data']);
+		fclose($handler);
+		$noerror .= sprintf($lang['serverbackupok'], $_SESSION['server_ip'], $port)."<br />";
 		}
 		else
 		{
-		$path="site/backups/server/";
+		$error .= sprintf($lang['serverbackuperr'], $_SESSION['server_ip'], $port)."<br />";
 		}
-	$serverinfo=$ts3->serverInfo();
-	$handler=fopen($path."server_".time()."_".$_SESSION['server_ip']."-".$port.".txt", "a+");
-	$serversnapshot=$ts3->serverSnapshotCreate();
-	fwrite($handler, $serversnapshot);
-	fclose($handler);
-	}
-	
+	}		
+
 if(isset($_POST['deploy']))
 	{
-	if(isset($_POST['hostbackup']))
+	$handler=file($path."server_".$_POST['backupid']."_".$_POST['fileport'].".txt");
+	$snapshot_deploy=$ts3->serverSnapshotDeploy($handler[0]);
+	if($snapshot_deploy['success']===false)
 		{
-		$path="site/backups/server/hostbackups/";
+		for($i=0; $i+1==count($snapshot_deploy['errors']); $i++)
+			{
+			echo $snapshot_deploy['errors'][$i]."<br />";
+			}
 		}
 		else
 		{
-		$path="site/backups/server/";
+		$noerror .= $lang['serverbackdeployok']."<br />";
 		}
-	$handler=file($path."server_".$_POST['backupid']."_".$_POST['fileport'].".txt");
-	$ts3->serverSnapshotDeploy($handler[0]);
-	echo $ts3->getDebugLog();
 	}
 	
 if(isset($_POST['delete']))
 	{
-	if(isset($_POST['hostbackup']))
+	if(@unlink($path."server_".$_POST['backupid']."_".$_POST['fileport'].".txt"))
 		{
-		$path="site/backups/server/hostbackups/";
+		$noerror .= $lang['serverbackdelok']."<br />";
 		}
 		else
 		{
-		$path="site/backups/server/";
+		$error .= $lang['serverbackdelerr']."<br />";
 		}
-	@unlink($path."server_".$_POST['backupid']."_".$_POST['fileport'].".txt");
 	}
-?>
-<table class="border" cellpadding="1" cellspacing="0">
-	<tr>
-		<td style="font-size:12px" colspan="3"><?php echo $lang['servbackdesc']; ?></td>
-	</tr>
-	<tr>
-		<td class="warning" style="font-size:12px" colspan="3"><?php echo $lang['snapwarning']; ?></td>
-	</tr>
-	<tr>
-		<td class="thead" colspan="3"><?php echo $lang['serverbackups']; ?></td>
-	</tr>
-	<tr>
-		<td class="thead"><?php echo $lang['created']; ?></td>
-		<td class="thead"><?php echo $lang['server']; ?></td>
-		<td class="thead"><?php echo $lang['options']; ?></td>
-	</tr>
-<?php
-$change_col=1;
+
 $handler=opendir("site/backups/server");
 while($datei=readdir($handler))
 	{
@@ -68,45 +80,10 @@ while($datei=readdir($handler))
 		{
 		$datei=str_replace('.txt', '', $datei);
 		$datei_info=explode('_', $datei);
-		if($serverhost===true AND $hoststatus===false AND $datei_info[2]==$_SESSION['server_ip']."-".$port OR $serverhost===false OR $hoststatus===true)
-			{
-			if($change_col%2) { $td_col="green1";} else {$td_col="green2";}
-			?>
-			<tr>
-				<td class="<?php echo $td_col; ?> center"><?php echo date("d.m.Y - H:i", $datei_info[1]); ?></td>
-				<td class="<?php echo $td_col; ?> center"><?php echo $datei_info[2]; ?></td>
-				<td class="<?php echo $td_col; ?> center">
-				<form method="post" action="index.php?site=serverbackup&amp;port=<?php echo $port; ?>">
-				<input type="hidden" name="backupid" value="<?php echo $datei_info[1]; ?>" />
-				<input type="hidden" name="fileport" value="<?php echo $datei_info[2]; ?>" />
-				<input class="start" type="submit" name="deploy" value="" title="<?php echo $lang['deploy']; ?>" />
-				</form>
-				<form method="post" action="index.php?site=serverbackup&amp;port=<?php echo $port; ?>">
-				<input type="hidden" name="backupid" value="<?php echo $datei_info[1]; ?>" />
-				<input type="hidden" name="fileport" value="<?php echo $datei_info[2]; ?>" />
-				<input class="delete" type="submit" name="delete" value="" title="<?php echo $lang['delete']; ?>" />
-				</form>
-				</td>
-			</tr>
-		<?php
-			$change_col++;
-			}
+		$files[0][]=array("timestamp"=>$datei_info[1], "server"=>$datei_info[2]);
 		}
 	}	
-?>
-</table>
-<br />
-<table style="width:100%" class="border" cellpadding="1" cellspacing="0">
-	<tr>
-		<td class="thead" colspan="3"><?php echo $lang['host']." ".$lang['serverbackups']; ?></td>
-	</tr>
-	<tr>
-		<td class="thead"><?php echo $lang['created']; ?></td>
-		<td class="thead"><?php echo $lang['server']; ?></td>
-		<td class="thead"><?php echo $lang['options']; ?></td>
-	</tr>
-<?php
-$change_col=1;
+
 $handler=opendir("site/backups/server/hostbackups");
 while($datei=readdir($handler))
 	{
@@ -114,51 +91,13 @@ while($datei=readdir($handler))
 		{
 		$datei=str_replace('.txt', '', $datei);
 		$datei_info=explode('_', $datei);
-		if($serverhost===true AND $hoststatus===false AND $datei_info[2]==$_SESSION['server_ip']."-".$port OR $serverhost===false OR $hoststatus===true)
-			{
-			if($change_col%2) { $td_col="green1";} else {$td_col="green2";}
-			?>
-			<tr>
-				<td class="<?php echo $td_col; ?> center"><?php echo date("d.m.Y - H:i", $datei_info[1]); ?></td>
-				<td class="<?php echo $td_col; ?> center"><?php echo $datei_info[2]; ?></td>
-				<td class="<?php echo $td_col; ?> center">
-				<form method="post" action="index.php?site=serverbackup&amp;port=<?php echo $port; ?>">
-				<input type="hidden" name="hostbackup" value="1" />
-				<input type="hidden" name="backupid" value="<?php echo $datei_info[1]; ?>" />
-				<input type="hidden" name="fileport" value="<?php echo $datei_info[2]; ?>" />
-				<input class="start" type="submit" name="deploy" value="" title="<?php echo $lang['deploy']; ?>" />
-				</form>
-				<form method="post" action="index.php?site=serverbackup&amp;port=<?php echo $port; ?>">
-				<input type="hidden" name="hostbackup" value="1" />
-				<input type="hidden" name="backupid" value="<?php echo $datei_info[1]; ?>" />
-				<input type="hidden" name="fileport" value="<?php echo $datei_info[2]; ?>" />
-				<input class="delete" type="submit" name="delete" value="" title="<?php echo $lang['delete']; ?>" />
-				</form>
-				</td>
-			</tr>
-		<?php
-			$change_col++;
-			}
+		$files[1][]=array("timestamp"=>$datei_info[1], "server"=>$datei_info[2]);
 		}
-	}	
+	}
+
+$smarty->assign("error", $error);
+$smarty->assign("noerror", $noerror);
+$smarty->assign("files", $files);
+$smarty->assign("getserverip", $_SESSION['server_ip']."-".$port);
+}
 ?>
-</table>
-<br />
-<table class="border" cellpadding="1" cellspacing="0">
-<tr>
-	<td class="thead" colspan="2"><?php echo $lang['createserverbackup']; ?></td>
-</tr>
-<tr>
-	<td class="green1 center">
-	<form method="post" action="index.php?site=serverbackup&amp;port=<?php echo $port; ?>">
-	<input class="button" type="submit" name="create" value="<?php echo $lang['create']; ?>" />
-	</form>
-	</td>
-	<td class="green1 center">
-	<form method="post" action="index.php?site=serverbackup&amp;port=<?php echo $port; ?>">
-	<input type="hidden" name="hostbackup" value="1" />
-	<input class="button" type="submit" name="create" value="<?php echo $lang['host']." ".$lang['create']; ?>" />
-	</form>
-	</td>
-</tr>
-</table>
