@@ -28,7 +28,7 @@
 	</tr>
 	<tr>
 		<td class="green1" colspan="7">
-		<form method="post" action="index.php?site=cgroupclients&amp;port={$port}&amp;cgid={$cgid}">
+		<form method="post" action="index.php?site=cgroupclients&amp;sid={$sid}&amp;cgid={$cgid}">
 		<select name="searchby">
 		<option value="cldbid">{$lang['cldbid']}</option>
 		<option value="name">{$lang['name']}</option>
@@ -61,7 +61,7 @@
 				<td class="{$td_col} center">{$value['client_created']}</td>
 				<td class="{$td_col} center">{$value['client_lastconnected']}</td>
 				<td class="{$td_col} center">
-				<form method="post" action="index.php?site=cgroupclients&amp;port={$port}&amp;cgid={$cgid}">
+				<form method="post" action="index.php?site=cgroupclients&amp;sid={$sid}&amp;cgid={$cgid}">
 				<select name="cgid">
 				{foreach key=key2 item=value2 from=$channelgroups}
 					{if $value2['cgid'] != $cgroupid AND $value2['type'] != '0'}
@@ -81,7 +81,7 @@
 	{/if}
 </table>
 <br />
-<form method="post" action="index.php?site=cgroupclients&amp;port={$port}&amp;cgid={$cgid}">
+<form method="post" action="index.php?site=cgroupclients&amp;sid={$sid}&amp;cgid={$cgid}">
 <table class="border" cellpadding="1" cellspacing="0">
 	<tr>
 		<td colspan="2" class="thead">{$lang['addclient']}</td>

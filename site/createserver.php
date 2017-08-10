@@ -19,27 +19,20 @@ include('screate_config.php');
 
 $error = '';
 $noerror = '';
+
 if(isset($_POST['createserver']))
 	{
-	if(!empty($_POST['newsettings']['virtualserver_name']))
-		{	
-		$token=$ts3->serverCreate($_POST['newsettings']);
-		if($token['success']===false)
+	$token=$ts3->serverCreate($_POST['newsettings']);
+	if($token['success']===false)
+		{
+		for($i=0; $i+1==count($token['errors']); $i++)
 			{
-			for($i=0; $i+1==count($token['errors']); $i++)
-				{
-				$error .= $token['errors'][$i]."<br />";
-				}
-			}
-			else
-			{
-			$noerror = $lang['serverid'].": ".$token['data']['sid']."<br />".$lang['port'].": ".$token['data']['virtualserver_port']."<br />".$lang['token'].": ".$token['data']['token'];
+			$error .= $token['errors'][$i]."<br />";
 			}
 		}
 		else
 		{
-		
-		$error .= $lang['noservername']."<br />";
+		$noerror = $lang['serverid'].": ".$token['data']['sid']."<br />".$lang['port'].": ".$token['data']['virtualserver_port']."<br />".$lang['token'].": ".$token['data']['token'];
 		}
 	}
 

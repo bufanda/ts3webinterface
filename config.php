@@ -34,7 +34,7 @@ $server[2]['tport']= "30033";
 */
 
 $server[0]['alias']= "Lokaler Server";
-$server[0]['ip']= "localhost";
+$server[0]['ip']= "127.0.0.1";
 $server[0]['tport']= "10011";
 
 $cfglang	=	"de";			//Language German = de, English = en, Netherlandish=nl (by pd1evl)
@@ -45,13 +45,9 @@ $fastswitch=true;				//If true you can switch the Server on the header
 
 $showicons="left";				//Define the position where the icons on the Viewer will show left or right
 
-$style="new";					//Chose your design  set 'default' or 'new' for the default designs or the name of your own create design
+$style="new";					//Chose your design  set 'new' for the default design or the name of your own create design
 
 $msgsend_name="Webinterface";	//This Name will be show if you send a message to a Server
 
 $show_motd=true;				// Set it to false to not show the message of the day window
-
-$serverhost=false;				//If this true normal query clients must specific a port on Login.
-$hostusername='superadmin';  	//If $serverhost=true write here your webinterface username.
-$hostpassword='123456';		 	//If $serverhost=true write here your webinterface password.
 ?>

@@ -7,7 +7,7 @@
 	{/if}
 </table>
 {/if}
-<form method="post" action="index.php?site=permexport&amp;port={$port}">
+<form method="post" action="index.php?site=permexport&amp;sid={$sid}">
 <table  class="border" cellpadding="1" cellspacing="0">
 	<tr>
 		<td colspan="2" style="font-size:12px">{$lang['permexdesc']}</td>

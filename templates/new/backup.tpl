@@ -33,12 +33,12 @@
 				<td class="{$td_col} center">{$value['server']}</td>
 				<td class="{$td_col} center">
 				<input class="view" type="button" name="view" value="" title="{$lang['view']}" onClick="oeffnefenster('site/chanbackupview.php?backupid={$value['timestamp']}&amp;fileport={$value['server']}');"/>
-				<form method="post" action="index.php?site=backup&amp;port={$port}">
+				<form method="post" action="index.php?site=backup&amp;sid={$sid}">
 				<input type="hidden" name="backupid" value="{$value['timestamp']}" />
 				<input type="hidden" name="fileport" value="{$value['server']}" />
 				<input class="start" type="submit" name="deploy" value="" title="{$lang['deploy']}" />
 				</form>
-				<form method="post" action="index.php?site=backup&amp;port={$port}">
+				<form method="post" action="index.php?site=backup&amp;sid={$sid}">
 				<input type="hidden" name="backupid" value="{$value['timestamp']}" />
 				<input type="hidden" name="fileport" value="{$value['server']}" />
 				<input class="delete" type="submit" name="delete" value="" title="{$lang['delete']}" />
@@ -69,13 +69,13 @@
 				<td class="{$td_col} center">{$value['server']}</td>
 				<td class="{$td_col} center">
 				<input class="view" type="button" name="view" value="" title="{$lang['view']}" onClick="oeffnefenster('site/chanbackupview.php?backupid={$value['timestamp']}&amp;fileport={$value['server']}&amp;hostbackup=1');"/>
-				<form method="post" action="index.php?site=backup&amp;port={$port}">
+				<form method="post" action="index.php?site=backup&amp;sid={$sid}">
 				<input type="hidden" name="hostbackup" value="1" />
 				<input type="hidden" name="backupid" value="{$value['timestamp']}" />
 				<input type="hidden" name="fileport" value="{$value['server']}" />
 				<input class="start" type="submit" name="deploy" value="" title="{$lang['deploy']}" />
 				</form>
-				<form method="post" action="index.php?site=backup&amp;port={$port}">
+				<form method="post" action="index.php?site=backup&amp;sid={$sid}">
 				<input type="hidden" name="hostbackup" value="1" />
 				<input type="hidden" name="backupid" value="{$value['timestamp']}" />
 				<input type="hidden" name="fileport" value="{$value['server']}" />
@@ -95,11 +95,11 @@
 </tr>
 <tr>
 	<td class="green1 center">
-	<form method="post" action="index.php?site=backup&amp;port={$port}">
+	<form method="post" action="index.php?site=backup&amp;sid={$sid}">
 	<input class="button" type="submit" name="create" value="{$lang['create']}" />
 	</form>
 {if $serverhost == true AND $hoststatus == true OR $serverhost == false}
-	<form method="post" action="index.php?site=backup&amp;port={$port}">
+	<form method="post" action="index.php?site=backup&amp;sid={$sid}">
 	<input type="hidden" name="hostbackup" value="1" />
 	<input class="button" type="submit" name="create" value="{$lang['host']} {$lang['create']}" />
 	</form>

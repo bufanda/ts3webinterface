@@ -27,7 +27,7 @@
 					<td class="green1">{sprintf($lang['countcomplain'], count($value2))}</td>
 					<td class="green1">
 					{if !isset($permoverview['b_client_complain_delete']) OR $permoverview['b_client_complain_delete'] == 1}
-						<form method="post" action="index.php?site=complainlist&amp;port={$port}">
+						<form method="post" action="index.php?site=complainlist&amp;sid={$sid}">
 						<input type="hidden" name="tcldbid" value="{$key}" />
 						<input class="delete" type="submit" name="delall" value="" title="{$lang['delall']}" />
 						</form>
@@ -44,7 +44,7 @@
 								<td class="green1" style="width:223px;border:0">{secure($value3['message'])}</td>
 								<td class="green1" style="width:223px;border:0">
 								{if !isset($permoverview['b_client_complain_delete']) OR $permoverview['b_client_complain_delete'] == 1}
-									<form method="post" action="index.php?site=complainlist&amp;port={$port}">
+									<form method="post" action="index.php?site=complainlist&amp;sid={$sid}">
 									<input type="hidden" name="tcldbid" value="{$key}" />
 									<input type="hidden" name="fcldbid" value="{$key3}" />
 									<input class="delete" type="submit" name="delete" value="" title="{$lang['delete']}" />

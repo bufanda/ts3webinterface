@@ -23,7 +23,7 @@
 			<tr>
 				<td class="green1" style="width:50%">{$lang['name']}:</td>
 				<td class="green1" style="width:50%">
-				<form method="post" action="index.php?site=channeledit&amp;port={$port}&amp;cid={$cid}">
+				<form method="post" action="index.php?site=channeledit&amp;sid={$sid}&amp;cid={$cid}">
 				{if isset($permoverview['b_channel_modify_name']) AND empty($permoverview['b_channel_modify_name'])}
 					-
 				{else}
@@ -34,7 +34,7 @@
 				</td>
 			</tr>
 		</table>
-		<form method="post" action="index.php?site=channeledit&amp;port={$port}&amp;cid={$cid}">
+		<form method="post" action="index.php?site=channeledit&amp;sid={$sid}&amp;cid={$cid}">
 		<table style="width:100%" class="border" cellpadding="1" cellspacing="0">
 			<tr>
 				<td class="green2" style="width:50%">{$lang['topic']}:</td>
@@ -182,7 +182,7 @@
 		</td>
 		<td style="width:50%">
 		{if !isset($permoverview['b_channel_modify_password']) OR $permoverview['b_channel_modify_password'] == 1}
-		<form method="post" action="index.php?site=channeledit&amp;port={$port}&amp;cid={$cid}">
+		<form method="post" action="index.php?site=channeledit&amp;sid={$sid}&amp;cid={$cid}">
 		<table class="border" cellpadding="1" cellspacing="0">
 			<tr>
 				<td class="thead" colspan="2">{$lang['channelpassword']}</td>
@@ -220,7 +220,7 @@
 		<br />
 		{/if}
 		{if !isset($permoverview['b_channel_modify_parent']) OR $permoverview['b_channel_modify_parent'] == 1}
-		<form method="post" action="index.php?site=channeledit&amp;port={$port}&amp;cid={$cid}">
+		<form method="post" action="index.php?site=channeledit&amp;sid={$sid}&amp;cid={$cid}">
 		<table class="border" cellpadding="1" cellspacing="0">
 			<tr>
 				<td colspan="2" class="thead">{$lang['channelmove']}</td>

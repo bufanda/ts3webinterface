@@ -13,7 +13,7 @@
 *You should have received a copy of the GNU General Public License along with this program; if not, see <http://www.gnu.org/licenses/>. 
 */
 if(!defined("SECURECHECK")) {die($lang['error_file_alone']);} 
-if($port===false OR empty($port)) { echo "<meta http-equiv=\"refresh\" content=\"0; URL=index.php?site=server\">";} else {
+if($sid===false OR empty($sid)) { echo "<meta http-equiv=\"refresh\" content=\"0; URL=index.php?site=server\">";} else {
 
 $error='';
 $noerror='';
@@ -30,7 +30,7 @@ if(isset($_POST['hostbackup']))
 
 if(isset($_POST['create']))
 	{
-	$filename="channel_".time()."_".$_SESSION['server_ip']."-".$port.".txt";
+	$filename="channel_".time()."_".$_SESSION['server_ip']."-".$whoami['virtualserver_port'].".txt";
 	$channellist=$ts3->channelList("-topic -flags -voice -limits");
 	if($channellist['success']!==false)
 		{

@@ -12,16 +12,16 @@
 *
 *You should have received a copy of the GNU General Public License along with this program; if not, see <http://www.gnu.org/licenses/>. 
 */
-if(!defined("SECURECHECK")) {die($lang['error_file_alone']);} 
+if(!defined('SECURECHECK')) {die($lang['error_file_alone']);} 
 if($hoststatus===false AND $serverhost===true) { echo $lang['nohoster']; } else {
 
-if(!is_dir("site/backups/server/".$_SESSION['server_ip'].'-'.$_SESSION['server_tport'].'/'))
+if(!is_dir('site/backups/server/'.$_SESSION['server_ip'].'-'.$_SESSION['server_tport'].'/'))
 	{
-	mkdir("site/backups/server/".$_SESSION['server_ip'].'-'.$_SESSION['server_tport'].'/',0777);
+	mkdir('site/backups/server/'.$_SESSION['server_ip'].'-'.$_SESSION['server_tport'].'/',0777);
 	}
-if(!is_dir("site/backups/server/hostbackups/".$_SESSION['server_ip'].'-'.$_SESSION['server_tport'].'/'))
+if(!is_dir('site/backups/server/hostbackups/'.$_SESSION['server_ip'].'-'.$_SESSION['server_tport'].'/'))
 	{
-	mkdir("site/backups/server/hostbackups/".$_SESSION['server_ip'].'-'.$_SESSION['server_tport'].'/',0777);
+	mkdir('site/backups/server/hostbackups/'.$_SESSION['server_ip'].'-'.$_SESSION['server_tport'].'/',0777);
 	}
  
 $error = '';
@@ -31,11 +31,11 @@ $serverlist=$ts3->serverList();
 
 if(isset($_POST['hostbackup']))
 		{
-		$path="site/backups/server/hostbackups/";
+		$path='site/backups/server/hostbackups/';
 		}
 		else
 		{
-		$path="site/backups/server/";
+		$path='site/backups/server/';
 		}
 
 if(isset($_POST['create']))
@@ -50,32 +50,32 @@ if(isset($_POST['create']))
 				$snapshotcreate=$ts3->serverSnapshotCreate();
 				if($snapshotcreate['success']===true)
 					{
-					$handler=fopen($path.$_SESSION['server_ip'].'-'.$_SESSION['server_tport'].'/'."server_".time()."_".$_SESSION['server_ip']."-".$value['virtualserver_port'].".txt", "a+");
+					$handler=fopen($path.$_SESSION['server_ip'].'-'.$_SESSION['server_tport'].'/'.'server_'.time().'_'.$_SESSION['server_ip'].'-'.$value['virtualserver_port'].'.txt', 'a+');
 					fwrite($handler, $snapshotcreate['data']);
 					fclose($handler);
-					$noerror .= sprintf($lang['serverbackupok'], $_SESSION['server_ip'], $port)."<br />";
+					$noerror .= sprintf($lang['serverbackupok'], $_SESSION['server_ip'], $value['virtualserver_port']).'<br />';
 					}
 					else
 					{
-					$error .= sprintf($lang['serverbackuperr'], $_SESSION['server_ip'], $value['virtualserver_port'])."<br />";
+					$error .= sprintf($lang['serverbackuperr'], $_SESSION['server_ip'], $value['virtualserver_port']).'<br />';
 					}
 				}
 				else
 				{
-				$error .= sprintf($lang['serverbackuperr'], $_SESSION['server_ip'], $value['virtualserver_port'])."<br />";
+				$error .= sprintf($lang['serverbackuperr'], $_SESSION['server_ip'], $value['virtualserver_port']).'<br />';
 				}
 				
 			}
 		}
 		else
 		{
-		$error .= $lang['serverlistcallerr']."<br />";
+		$error .= $lang['serverlistcallerr'].'<br />';
 		}
 	}
 	
 if(isset($_POST['deploy']))
 	{
-	$handler=file($path.$_SESSION['server_ip'].'-'.$_SESSION['server_tport'].'/'."server_".$_POST['backupid']."_".$_POST['fileport'].".txt");
+	$handler=file($path.$_SESSION['server_ip'].'-'.$_SESSION['server_tport'].'/'.'server_'.$_POST['backupid'].'_'.$_POST['fileport'].'.txt');
 	$selectserver=$ts3->selectServer($_POST['deployon'], 'port', true);
 	if($selectserver['success']===true)
 		{
@@ -84,54 +84,54 @@ if(isset($_POST['deploy']))
 			{
 			for($i=0; $i+1==count($snapshot_deploy['errors']); $i++)
 				{
-				$error .= $snapshot_deploy['errors'][$i]."<br />";
+				$error .= $snapshot_deploy['errors'][$i].'<br />';
 				}
 			}
 			else
 			{
-			$noerror .= $lang['serverbackdeployok']."<br />";
+			$noerror .= $lang['serverbackdeployok'].'<br />';
 			}
 		}
 		else
 		{
 		for($i=0; $i+1==count($selectserver['errors']); $i++)
 			{
-			$error .= $selectserver['errors'][$i]."<br />";
+			$error .= $selectserver['errors'][$i].'<br />';
 			}
 		}
 	}
 	
 if(isset($_POST['delete']))
 	{
-	if(@unlink($path.$_SESSION['server_ip'].'-'.$_SESSION['server_tport'].'/'."server_".$_POST['backupid']."_".$_POST['fileport'].".txt"))
+	if(@unlink($path.$_SESSION['server_ip'].'-'.$_SESSION['server_tport'].'/'.'server_'.$_POST['backupid'].'_'.$_POST['fileport'].'.txt'))
 		{
-		$noerror .= $lang['serverbackdelok']."<br />";
+		$noerror .= $lang['serverbackdelok'].'<br />';
 		}
 		else
 		{
-		$error .= $lang['serverbackdelerr']."<br />";
+		$error .= $lang['serverbackdelerr'].'<br />';
 		}
 	}	
 
-$handler=opendir("site/backups/server/".$_SESSION['server_ip'].'-'.$_SESSION['server_tport'].'/');
+$handler=opendir('site/backups/server/'.$_SESSION['server_ip'].'-'.$_SESSION['server_tport'].'/');
 while($datei=readdir($handler))
 	{
 	if($datei!='.' AND $datei!='..' AND $datei!='hostbackups')
 		{
 		$datei=str_replace('.txt', '', $datei);
 		$datei_info=explode('_', $datei);
-		$files[0][]=array("timestamp"=>$datei_info[1], "server"=>$datei_info[2]);
+		$files[0][]=array('timestamp'=>$datei_info[1], 'server'=>$datei_info[2]);
 		}
 	}	
 
-$handler=opendir("site/backups/server/hostbackups/".$_SESSION['server_ip'].'-'.$_SESSION['server_tport'].'/');
+$handler=opendir('site/backups/server/hostbackups/'.$_SESSION['server_ip'].'-'.$_SESSION['server_tport'].'/');
 while($datei=readdir($handler))
 	{
 	if($datei!='.' AND $datei!='..')
 		{
 		$datei=str_replace('.txt', '', $datei);
 		$datei_info=explode('_', $datei);
-		$files[1][]=array("timestamp"=>$datei_info[1], "server"=>$datei_info[2]);
+		$files[1][]=array('timestamp'=>$datei_info[1], 'server'=>$datei_info[2]);
 		}
 	}
 	
@@ -143,9 +143,9 @@ if(!empty($serverlist['data']))
 		}
 	}
 
-$smarty->assign("error", $error);
-$smarty->assign("noerror", $noerror);
-$smarty->assign("serverlist", $serverlist['data']);
-$smarty->assign("files", $files);
+$smarty->assign('error', $error);
+$smarty->assign('noerror', $noerror);
+$smarty->assign('serverlist', $serverlist['data']);
+$smarty->assign('files', $files);
 }
 ?>

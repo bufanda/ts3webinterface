@@ -13,7 +13,7 @@
 *You should have received a copy of the GNU General Public License along with this program; if not, see <http://www.gnu.org/licenses/>. 
 */
 if(!defined("SECURECHECK")) {die($lang['error_file_alone']);} 
-if($port===false OR empty($port)) { echo "<meta http-equiv=\"refresh\" content=\"0; URL=index.php?site=server\">";} else {
+if($sid===false OR empty($sid)) { echo "<meta http-equiv=\"refresh\" content=\"0; URL=index.php?site=server\">";} else {
 
 $error='';
 $err_msg='';
@@ -119,6 +119,8 @@ if(!empty($serverinfo))
 		{
 		$serverinfo['virtualserver_download_quota']=-1;
 		}
+	$serverinfo['virtualserver_welcomemessage']=str_replace('\r\n', "\r\n", $serverinfo['virtualserver_welcomemessage']);
+	$serverinfo['virtualserver_hostmessage']=str_replace('\r\n', "\r\n", $serverinfo['virtualserver_hostmessage']);
 	}
 	
 if(!empty($servergroups))

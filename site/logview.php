@@ -14,60 +14,33 @@
 */
 if(!defined("SECURECHECK")) {die($lang['error_file_alone']);} 
 
-$yearx=date("Y");
-
-
-$limit=500;
-
-$comparator='';
-$settime='';
-
-if(isset($_POST['getfilter']))
+if(isset($_POST['begin_pos']))
 	{
-	if(empty($_POST['limit']))
-		{
-		$limit=500;
-		}
-	elseif($_POST['limit']<1)
-		{
-		$limit=1;
-		}
-	elseif($_POST['limit']>500)
-		{
-		$limit=500;
-		}
+	$begin_pos=' begin_pos='.$_POST['begin_pos'];
+	}
 	else
-		{
-		$limit=$_POST['limit'];
-		}
-		
-	if(!empty($_POST['day']) or !empty($_POST['month']) or !empty($_POST['year']) or !empty($_POST['hour']) or !empty($_POST['min']) or !empty($_POST['sec']))
-		{
-		$settime=mktime((int)$_POST['hour'],(int)$_POST['min'],(int)$_POST['sec'],(int)$_POST['month'],(int)$_POST['day'],(int)$_POST['year']);
-		}
-		else
-		{
-		$settime='';
-		}
-		
-	if(!empty($_POST['comparator']))
-		{
-		$comparator=$_POST['comparator'];
-		}
-		else
-		{
-		$comparator='';
-		}
-	}
-
-$serverlog=$ts3->getElement('data', $ts3->logView($limit, $comparator, $settime));
-if(!empty($serverlog))
 	{
-	foreach($serverlog AS $key=>$value)
+	$begin_pos='';
+	}
+if(empty($sid))
+	{
+	$instance=' instance=1';
+	}
+	else
+	{
+	$instance=' instance=0';
+	}
+$getlog=$ts3->execOwnCommand('2', 'logview lines=100 reverse=1'.$instance.$begin_pos);
+
+$begin_pos=$getlog['data'][0]['last_pos'];
+if(!empty($getlog['data']))
+	{
+	foreach($getlog['data'] AS $key=>$value)
 		{
-		$serverlog[$key]=secure($serverlog[$key]);
+		$log[]=explode('|', $value['l'], 5);
 		}
 	}
-$smarty->assign("serverlog", $serverlog);
+$smarty->assign("serverlog", $log);
+$smarty->assign("begin_pos", $begin_pos);
 $smarty->assign("yearx", $yearx);
 ?>

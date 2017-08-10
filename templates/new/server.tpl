@@ -62,7 +62,7 @@
 			{if $change_col % 2} {assign var=td_col value="green1"} {else} {assign var=td_col value="green2"} {/if}
 			<tr>
 				<td class="{$td_col} center">{$value['virtualserver_id']}</td>
-				<td class="{$td_col} center"><a href="index.php?site=serverview&amp;port={$value['virtualserver_port']}">{$value['virtualserver_name']}</a></td>
+				<td class="{$td_col} center"><a href="index.php?site=serverview&amp;sid={$value['virtualserver_id']}">{$value['virtualserver_name']}</a></td>
 				<td class="{$td_col} center">{$value['virtualserver_port']}</td>
 				<td class="{$td_col} center">
 				{if $value['virtualserver_status'] == "online"}
@@ -77,7 +77,7 @@
 				<td class="{$td_col} center">{$value['virtualserver_clientsonline']} / {$value['virtualserver_maxclients']}</td>
 				<td class="{$td_col} center"><input type="checkbox" name="caction[{$value['virtualserver_id']}][auto]" value="1" {if $value['virtualserver_autostart'] == 1}checked="checked"{/if}/></td>
 				<td class="{$td_col} center">
-				<select id="caction{$value['virtualserver_id']}" name="caction[{$value['virtualserver_id']}][action]" onChange="confirmArray('{$value['virtualserver_id']}', '{$value['virtualserver_name']|addslashes}', '{$value['virtualserver_port']}', '');">
+				<select id="caction{$value['virtualserver_id']}" name="caction[{$value['virtualserver_id']}][action]" onchange="confirmArray('{$value['virtualserver_id']}', '{$value['virtualserver_name']|addslashes}', '{$value['virtualserver_port']}', '');">
 					<option value="">{$lang['select']}</option>
 					<option value="start">{$lang['start']}</option>
 					<option value="stop">{$lang['stop']}</option>

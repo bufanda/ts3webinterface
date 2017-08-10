@@ -13,7 +13,7 @@
 *You should have received a copy of the GNU General Public License along with this program; if not, see <http://www.gnu.org/licenses/>. 
 */
 if(!defined("SECURECHECK")) {die($lang['error_file_alone']);} 
-if($port===false OR empty($port)) { echo "<meta http-equiv=\"refresh\" content=\"0; URL=index.php?site=server\">";} else {
+if($sid===false OR empty($sid)) { echo "<meta http-equiv=\"refresh\" content=\"0; URL=index.php?site=server\">";} else {
 
 $error='';
 $noerror='';
@@ -23,16 +23,19 @@ $channellist=$ts3->getElement('data', $ts3->channelList());
 
 if(isset($_POST['deltoken']))
 	{
-	$token_delete=$ts3->tokenDelete($_POST['token']);
-	if($token_delete['success']!==false)
+	foreach($_POST['token'] AS $key=>$value)	
 		{
-		$noerror .= $lang['tokendeleteok']."<br />";
-		}
-		else
-		{
-		for($i=0; $i+1==count($token_delete['errors']); $i++)
+		$token_delete=$ts3->tokenDelete($value);
+		if($token_delete['success']!==false)
 			{
-			$error .= $token_delete['errors'][$i]."<br />";
+			$noerror .= $lang['tokendeleteok']."<br />";
+			}
+			else
+			{
+			for($i=0; $i+1==count($token_delete['errors']); $i++)
+				{
+				$error .= $token_delete['errors'][$i]."<br />";
+				}
 			}
 		}
 	}

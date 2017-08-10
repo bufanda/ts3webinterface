@@ -13,17 +13,17 @@
 	</tr>
 	<tr>
 		<td class="green1" colspan="7" style="text-align:right">
-		<form method="post" action="index.php?site=cleditperm&amp;cldbid={$cldbid}&amp;port={$port}">
+		<form method="post" action="index.php?site=cleditperm&amp;cldbid={$cldbid}&amp;sid={$sid}">
 		<input type="text" name="searchperms" value="" />
 		<input type="submit" name="search" value="{$lang['search']}" />
 		</form>
-		<form method="post" action="index.php?site=cleditperm&amp;cldbid={$cldbid}&amp;port={$port}">
+		<form method="post" action="index.php?site=cleditperm&amp;cldbid={$cldbid}&amp;sid={$sid}">
 		<input type="checkbox" name="showmyperms" value="1" onchange="submit()" {if $showmyperms == 1}checked="checked"{/if} />{$lang['showgrantedonly']}
 		</form>
 		</td>
 	</tr>
 </table>
-<form method="post" action="index.php?site=cleditperm&amp;port={$port}&amp;cldbid={$cldbid}">
+<form method="post" action="index.php?site=cleditperm&amp;sid={$sid}&amp;cldbid={$cldbid}">
 <table  class="border" cellpadding="0" cellspacing="0" style="width:100%">
 	<tr>
 		<td class="thead" colspan="7">({$cldbid}) {$clientname} {$lang['permissionlist']}</td>
@@ -38,10 +38,7 @@
 		<td class="thead" style="width:100px">{$lang['grant']} <input type="text" name="granttoall" size="3" maxlength="3" /></td>
 	</tr>
 	{foreach key=key item=value from=$allperms}
-		{if $change_col % 2} {assign var=td_col value="green1"} {else} {assign var=td_col value="green2"} {/if}
-		
-		{if $value['permname'] == 'b_serverinstance_help_view'}
-
+		{if $key == 43}
 			<tr>
 				<td class='maincat left' colspan="7">
 				&nbsp;<a href="javascript:Klappen(1)"><img src="gfx/images/{$disp_pic}.png" id="Pic1" border="0" alt="aus/ein-klappen" /></a>&nbsp;{$lang['global']}
@@ -60,7 +57,7 @@
 					<div style="display:{$display}" id="Lay2">
 					<table style="width:100%;border-collapse:collapse;border:0" cellpadding="0" cellspacing="0">
 		{/if}
-		{if $value['permname'] == 'b_virtualserver_create'}
+		{if $key == 46}
 					</table>
 					</div>
 					</td>
@@ -73,7 +70,7 @@
 					<div style="display:{$display}" id="Lay3">
 					<table style="width:100%;border-collapse:collapse;border:0" cellpadding="0" cellspacing="0">
 		{/if}
-		{if $value['permname'] == 'b_serverquery_login'}
+		{if $key == 48}
 					</table>
 					</div>
 					</td>
@@ -87,7 +84,7 @@
 					<div style="display:{$display}" id="Lay4">
 					<table style="width:100%;border-collapse:collapse;border:0" cellpadding="0" cellspacing="0">
 		{/if}
-		{if $value['permname'] == 'b_serverinstance_modify_settings'}
+		{if $key == 51}
 			 		</table>
 					</div>
 					</td>
@@ -101,7 +98,7 @@
 					<div style="display:{$display}" id="Lay5">
 					<table style="width:100%;border-collapse:collapse;border:0" cellpadding="0" cellspacing="0">
 		{/if}
-		{if $value['permname'] == 'b_virtualserver_select'}
+		{if $key == 84}
 					</table>
 					</div>
 					</td>
@@ -126,7 +123,7 @@
 						<div style="display:{$display}" id="Lay7">
 						<table style="width:100%;border-collapse:collapse;border:0" cellpadding="0" cellspacing="0">
 		{/if}
-		{if $value['permname'] == 'b_virtualserver_start'}
+		{if $key == 87}
 			 			</table>
 						</div>
 						</td>
@@ -140,7 +137,7 @@
 						<div style="display:{$display}" id="Lay8">
 						<table style="width:100%;border-collapse:collapse;border:0" cellpadding="0" cellspacing="0">
 		{/if}
-		{if $value['permname'] == 'b_virtualserver_modify_name'}
+		{if $key == 90}
 			 			</table>
 						</div>
 						</td>
@@ -154,7 +151,7 @@
 						<div style="display:{$display}" id="Lay9">
 						<table style="width:100%;border-collapse:collapse;border:0" cellpadding="0" cellspacing="0">
 		{/if}
-		{if $value['permname'] == 'i_channel_min_depth'}
+		{if $key == 123}
 						</table>
 						</div>
 						</td>
@@ -171,7 +168,7 @@
 				<div style="display:{$display}" id="Lay10">
 				<table style="width:100%;border-collapse:collapse;" cellpadding="0" cellspacing="0">
 		{/if}
-		{if $value['permname'] == 'b_channel_info_view'}
+		{if $key == 126}
 					<tr>
 						<td class='subcat' style='width:51px'>&nbsp;</td>
 						<td class='subcat' colspan="6">&nbsp;<a href="javascript:Klappen(11)"><img src="gfx/images/{$disp_pic}.png" id="Pic11" border="0" alt="aus/ein-klappen" /></a>&nbsp;{$lang['information']}</td>
@@ -181,7 +178,7 @@
 						<div style="display:{$display}" id="Lay11">
 						<table style="width:100%;border-collapse:collapse;border:0" cellpadding="0" cellspacing="0">
 		{/if}
-		{if $value['permname'] == 'b_channel_create_child'}
+		{if $key == 128}
 			 			</table>
 						</div>
 						</td>
@@ -195,7 +192,7 @@
 						<div style="display:{$display}" id="Lay12">
 						<table style="width:100%;border-collapse:collapse;border:0" cellpadding="0" cellspacing="0">
 		{/if}
-		{if $value['permname'] == 'b_channel_modify_parent'}
+		{if $key == 131}
 			 			</table>
 						</div>
 						</td>
@@ -209,7 +206,7 @@
 						<div style="display:{$display}" id="Lay13">
 						<table style="width:100%;border-collapse:collapse;border:0" cellpadding="0" cellspacing="0">
 		{/if}
-		{if $value['permname'] == 'b_channel_delete_permanent'}
+		{if $key == 134}
 			 			</table>
 						</div>
 						</td>
@@ -223,7 +220,7 @@
 						<div style="display:{$display}" id="Lay14">
 						<table style="width:100%;border-collapse:collapse;border:0" cellpadding="0" cellspacing="0">
 		{/if}
-		{if $value['permname'] == 'b_channel_join_permanent'}
+		{if $key == 136}
 			 			</table>
 						</div>
 						</td>
@@ -237,7 +234,7 @@
 						<div style="display:{$display}" id="Lay15">
 						<table style="width:100%;border-collapse:collapse;border:0" cellpadding="0" cellspacing="0">
 		{/if}
-		{if $value['permname'] == 'i_icon_id'}
+		{if $key == 165}
 			 			</table>
 						</div>
 						</td>
@@ -254,7 +251,7 @@
 				<div style="display:{$display}" id="Lay16">
 				<table style="width:100%;border-collapse:collapse;" cellpadding="0" cellspacing="0">
 		{/if}
-		{if $value['permname'] == 'b_virtualserver_servergroup_list'}
+		{if $key == 167}
 					<tr>
 						<td class='subcat' style='width:51px'>&nbsp;</td>
 						<td class='subcat' colspan="6">&nbsp;<a href="javascript:Klappen(17)"><img src="gfx/images/{$disp_pic}.png" id="Pic17" border="0" alt="aus/ein-klappen" /></a>&nbsp;{$lang['information']}</td>
@@ -264,7 +261,7 @@
 						<div style="display:{$display}" id="Lay17">
 						<table style="width:100%;border-collapse:collapse;border:0" cellpadding="0" cellspacing="0">
 		{/if}
-		{if $value['permname'] == 'b_virtualserver_servergroup_create'}
+		{if $key == 170}
 			 			</table>
 						</div>
 						</td>
@@ -278,7 +275,7 @@
 						<div style="display:{$display}" id="Lay18">
 						<table style="width:100%;border-collapse:collapse;border:0" cellpadding="0" cellspacing="0">
 		{/if}
-		{if $value['permname'] == 'i_group_modify_power'}
+		{if $key == 173}
 			 			</table>
 						</div>
 						</td>
@@ -292,7 +289,7 @@
 						<div style="display:{$display}" id="Lay19">
 						<table style="width:100%;border-collapse:collapse;border:0" cellpadding="0" cellspacing="0">
 		{/if}
-		{if $value['permname'] == 'b_virtualserver_servergroup_delete'}
+		{if $key == 175}
 			 			</table>
 						</div>
 						</td>
@@ -306,7 +303,7 @@
 						<div style="display:{$display}" id="Lay20">
 						<table style="width:100%;border-collapse:collapse;border:0" cellpadding="0" cellspacing="0">
 		{/if}
-		{if $build <= 12998 AND $value['permname'] == 'i_client_modify_power' OR $build > 12998 AND $value['permname'] == 'i_client_permission_modify_power'}
+		{if $key == 206}
 						</table>
 						</div>
 						</td>
@@ -323,7 +320,7 @@
 				 <div style="display:{$display}" id="Lay21">
 				 <table style="width:100%;border-collapse:collapse;" cellpadding="0" cellspacing="0">
 		{/if}
-		{if $value['permname'] == 'b_client_info_view'}
+		{if $key == 209}
 					<tr>
 						<td class='subcat' style='width:51px'>&nbsp;</td>
 						<td class='subcat' colspan="6">&nbsp;<a href="javascript:Klappen(22)"><img src="gfx/images/{$disp_pic}.png" id="Pic22" border="0" alt="aus/ein-klappen" /></a>&nbsp;{$lang['information']}</td>
@@ -333,7 +330,7 @@
 						<div style="display:{$display}" id="Lay22">
 						<table style="width:100%;border-collapse:collapse;border:0" cellpadding="0" cellspacing="0">
 		{/if}
-		{if $value['permname'] == 'i_client_kick_from_server_power'}
+		{if $key == 211}
 			 			</table>
 						</div>
 						</td>
@@ -347,7 +344,7 @@
 						<div style="display:{$display}" id="Lay23">
 						<table style="width:100%;border-collapse:collapse;border:0" cellpadding="0" cellspacing="0">
 		{/if}
-		{if $value['permname'] == 'i_client_private_textmessage_power'}
+		{if $key == 214}
 			 			</table>
 						</div>
 						</td>
@@ -361,7 +358,7 @@
 						<div style="display:{$display}" id="Lay24">
 						<table style="width:100%;border-collapse:collapse;border:0" cellpadding="0" cellspacing="0">
 		{/if}
-		{if $value['permname'] == 'b_client_modify_description'}
+		{if $key == 217}
 			 			</table>
 						</div>
 						</td>
@@ -375,7 +372,7 @@
 						<div style="display:{$display}" id="Lay25">
 						<table style="width:100%;border-collapse:collapse;border:0" cellpadding="0" cellspacing="0">
 		{/if}
-		{if $value['permname'] == 'b_ft_ignore_password'}
+		{if $key == 24}
 			 			</table>
 						</div>
 						</td>
@@ -391,42 +388,42 @@
 				 <div style="display:{$display}" id="Lay26">
 				 <table style="width:100%;border-collapse:collapse;" cellpadding="0" cellspacing="0">
 		{/if}
-		
-		{if $value['permname']|strpos:"i_needed_modify_power_" === false}
-			{if $showmyperms == 0 AND empty($searchperms) OR $showmyperms == 1 AND $value['available'] == 1 OR $showmyperms == 0 AND $value['permname']|strpos:{$searchperms} !== false OR $showmyperms == 0 AND $value['permid']|strpos:{$searchperms} !== false}
+		{foreach key=key2 item=value2 from=$value}
+			{if $change_col % 2} {assign var=td_col value="green1"} {else} {assign var=td_col value="green2"} {/if}	
+			{if $showmyperms == 0 AND empty($searchperms) OR $showmyperms == 1 AND $value2['available'] == 1 OR $showmyperms == 0 AND $value2['permname']|strpos:{$searchperms} !== false OR $showmyperms == 0 AND $value2['permid']|strpos:{$searchperms} !== false}
 			<tr>
 				<td class="{$td_col}" style="width:50px">&nbsp;</td>
-				<td class="{$td_col}" style="width:45px">{$value['permid']}</td>
-				<td class="{$td_col}" style="width:410px">{$value['permname']} <br />({$value['permdesc']})</td>
+				<td class="{$td_col}" style="width:45px">{$value2['permid']}</td>
+				<td class="{$td_col}" style="width:410px">{$value2['permname']} <br />({$value2['permdesc']})</td>
 				<td class="{$td_col}" style="width:50px">
-				{if $value['permname']|substr:0:2 != 'i_'}
-					<input type='checkbox' {if $value['permvalue'] == 1}checked="checked"{/if} name="perm[{$value['permid']}][value]" value="1" />
+				{if $value2['permname']|substr:0:2 != 'i_'}
+					<input type='checkbox' {if $value2['permvalue'] == 1}checked="checked"{/if} name="perm[{$value2['permid']}][value]" value="1" />
 				{else}
-					<input {if $value['permname'] == 'i_icon_id'}id="iconid"{/if} type='text' size="1" name="perm[{$value['permid']}][value]" value="{$value['permvalue']}" />
-					{if $value['permname'] == 'i_icon_id'}<a href="javascript:oeffnefenster('site/showallicons.php?ip={$smarty.session.server_ip}&amp;port={$port}');">{$lang['set']}</a>{/if}
+					<input {if $value2['permname'] == 'i_icon_id'}id="iconid"{/if} type='text' size="1" name="perm[{$value2['permid']}][value]" value="{$value2['permvalue']}" />
+					{if $value2['permname'] == 'i_icon_id'}<a href="javascript:oeffnefenster('site/showallicons.php?ip={$smarty.session.server_ip}&amp;sid={$sid}');">{$lang['set']}</a>{/if}
 				{/if}
 				</td>
 				<td class="{$td_col}" style="width:50px">
-				<input type='checkbox' {if $value['permskip'] ==1}checked="checked"{/if} name="perm[{$value['permid']}][skip]" value="1" />
+				<input type='checkbox' {if $value2['permskip'] ==1}checked="checked"{/if} name="perm[{$value2['permid']}][skip]" value="1" />
 				</td>
 				<td class="{$td_col}" style="width:100px">
-				{if $value['available'] == 1}
-					<input type='hidden' name="perm[{$value['permid']}][available]" value='1' /> 
-					<input type='checkbox' name="perm[{$value['permid']}][delperm]" value='1' /> {$lang['delete']}
+				{if $value2['available'] == 1}
+					<input type='hidden' name="perm[{$value2['permid']}][available]" value='1' /> 
+					<input type='checkbox' name="perm[{$value2['permid']}][delperm]" value='1' /> {$lang['delete']}
 				{/if}
 				</td>
 				<td class="{$td_col}" style="width:100px">
-				<input type='text' maxlength="3" size="1" name="perm[{$value['grantpermid']}][value]" value="{$value['grant']}" />
-				<input type='hidden' name="perm[{$value['grantpermid']}][grant]" value='1' /> 
-				{if $value['grantav'] == 1}
-					<input type='hidden' name="perm[{$value['grantpermid']}][available]" value='1' /> 
-					<input type='checkbox' name="perm[{$value['grantpermid']}][delperm]" value='1' /> {$lang['delete']}
+				<input type='text' maxlength="3" size="1" name="perm[{$value2['grantpermid']}][value]" value="{$value2['grant']}" />
+				<input type='hidden' name="perm[{$value2['grantpermid']}][grant]" value='1' /> 
+				{if $value2['grantav'] == 1}
+					<input type='hidden' name="perm[{$value2['grantpermid']}][available]" value='1' /> 
+					<input type='checkbox' name="perm[{$value2['grantpermid']}][delperm]" value='1' /> {$lang['delete']}
 				{/if}
 				</td>
 			</tr>
+			{assign var=change_col value="`$change_col+1`"}
 			{/if}
-		{/if}
-		{assign var=change_col value="`$change_col+1`"}
+		{/foreach}
 		{/foreach}
 		</table>
 		</div>

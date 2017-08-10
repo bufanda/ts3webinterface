@@ -13,7 +13,7 @@
 *You should have received a copy of the GNU General Public License along with this program; if not, see <http://www.gnu.org/licenses/>. 
 */
 if(!defined("SECURECHECK")) {die($lang['error_file_alone']);}
-if($hoststatus===true AND $serverhost===true OR $serverhost===false) {
+if($hoststatus===true) {
 $error = '';
 $noerror = '';
 
@@ -155,6 +155,7 @@ if(isset($_POST['massaction']))
 		}
 	}
 $serverlist=$ts3->getElement('data', $ts3->serverList());
+
 $allslots='';
 $allusedslots='';
 if(!empty($serverlist))

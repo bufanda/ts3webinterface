@@ -79,7 +79,7 @@ function Klappen(Id)
 		KlappBild.src = jetec_Plus;
 		}
 	}
-
+	
 function oeffnefenster (url) {
  fenster = window.open(url, "fenster1", "width=350,height=150,status=no,scrollbars=yes,resizable=no");
  fenster.opener.name="opener";
@@ -199,6 +199,7 @@ function confirmAction()
 	<tr>
 		<td colspan="2" class="footer">
 		{$footer}
+		powered by <a href='http://www.ts-rent.de'>www.TS-Rent.de</a><br />This interface contains images from <a href='http://www.teamspeak.com'>www.teamspeak.com</a>.
 		<br /><br />
 		<form action="https://www.paypal.com/cgi-bin/webscr" method="post">
 		<input type="hidden" name="cmd" value="_s-xclick" />

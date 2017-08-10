@@ -20,14 +20,14 @@ if(isset($_GET['cid']) AND isset($_GET['path']) AND !isset($_GET['getfile']))
 	{
 	$flist=$ts3->getElement('data', $ts3->ftGetFileList($_GET['cid'], '', $_GET['path']));
 	}
-if(isset($_GET['getfile']) AND isset($_GET['cid']) AND isset($_GET['path']) AND isset($_GET['name']) AND isset($_GET['port']))
+if(isset($_GET['getfile']) AND isset($_GET['cid']) AND isset($_GET['path']) AND isset($_GET['name']) AND isset($_GET['sid']))
 	{
 	session_start();
 	require_once('../ts3admin.class.php');
 	$ts3=new ts3admin($_SESSION['server_ip'], $_SESSION['server_tport']);
 	$ts3->connect();
 	$ts3->login($_SESSION['loginuser'], unserialize(base64_decode($_SESSION['loginpw'])));
-	$ts3->selectServer($_GET['port']);
+	$ts3->selectServer($_GET['sid'], 'serverId');
 	
 	$ft=$ts3->ftInitDownload($_GET['path']."/".$_GET['name'], $_GET['cid']);
 	if($ft['success']===true or empty($ft['data']['port']))
@@ -69,10 +69,11 @@ if(isset($geticons) AND $geticons==1)
 		}
 	if(!isset($port))
 		{
-		$port=$_GET['port'];
+		$port=$whoami['virtualserver_port'];
 		}
 	$count=0;
-	$ft=$ts3->getElement('data', $ts3->ftGetFileList(0, '', '/icons'));
+
+	$ft=$ts3->ftGetFileList(0, '', '/icons');
 	
 	if(is_dir('icons/'.$ip.'-'.$port.'/'))
 			{
@@ -96,27 +97,31 @@ if(isset($geticons) AND $geticons==1)
 			}
 			
 		$noIcon=0;
+		if(!empty($ft['data']))
+			{
+			foreach($ft['data'] AS $key2=>$value2)
+				{
+				$foundIcons[]=$value2['name'];
+				}
+			}
 		foreach($icon_arr AS $key=>$value)
 			{
-			if(!empty($ft))
+			if(!empty($ft['data']))
 				{
-				foreach($ft AS $key2=>$value2)
+				if($value!="." AND $value!=".." AND in_array($value, $foundIcons))
 					{
-					if($value!="." AND $value!=".." AND in_array($value, $value2))
-						{
-						$noIcon=1;
-						break;
-						}
-					if($noIcon==0)
-						{
-						if(@unlink('icons/'.$ip.'-'.$port.'/'.$value))
-								{
-								$count_del++;
-								}
-						}
+					$noIcon=1;
+					break;
+					}
+				if($noIcon==0)
+					{
+					if(@unlink('icons/'.$ip.'-'.$port.'/'.$value))
+							{
+							$count_del++;
+							}
 					}
 				}
-				else
+			elseif($ft['errors'][0]!='ErrorID: 2568 | Message: insufficient client permissions failed_permid=16519')
 				{
 				if($value!="." AND $value!="..")
 					{
@@ -128,9 +133,9 @@ if(isset($geticons) AND $geticons==1)
 				}
 			}
 			
-	if(!empty($ft))
+	if(!empty($ft['data']))
 		{	
-		foreach($ft AS $key=>$value)
+		foreach($ft['data'] AS $key=>$value)
 			{
 			if(substr($value['name'], 0, 5)=='icon_')
 				{

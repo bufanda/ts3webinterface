@@ -22,7 +22,7 @@ require('../ts3admin.class.php');
 require('../functions.inc.php');
 require_once('../libs/Smarty/libs/Smarty.class.php');
 
-if(!isset($_SESSION['logged']) OR isset($_SESSION['logged']) AND $_SESSION['logged']!=true OR empty($_GET['port'])) {die($lang['error_file_alone']);}
+if(!isset($_SESSION['logged']) OR isset($_SESSION['logged']) AND $_SESSION['logged']!=true OR empty($_GET['sid'])) {die($lang['error_file_alone']);}
 
 $smarty=new Smarty();
 
@@ -41,7 +41,7 @@ $smarty->assign("tmpl", $style);
 $ts3=new ts3admin($_SESSION['server_ip'], $_SESSION['server_tport']);
 $ts3->connect();
 $ts3->login($_SESSION['loginuser'], unserialize(base64_decode($_SESSION['loginpw'])));
-$ts3->selectServer($_GET['port']);
+$ts3->selectServer($_GET['sid'], 'serverId');
 
 $channellist=$ts3->getElement('data', $ts3->channelList("-limits"));
 

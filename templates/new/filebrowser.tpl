@@ -47,21 +47,21 @@
 		{if $smarty.get.path != "/" AND !empty($smarty.get.path)}
 
 			<tr>
-				<td class="green1" colspan="4"><a href="filebrowser.php?port={$smarty.get.port}&amp;cid={$smarty.get.cid}&amp;path={$newpath}">..</a></td>
+				<td class="green1" colspan="4"><a href="filebrowser.php?sid={$smarty.get.sid}&amp;cid={$smarty.get.cid}&amp;path={$newpath}">..</a></td>
 			</tr>
 		{/if}
 		{foreach key=key item=value from=$flist}
 			<tr>
-				<td class="green1">{if $value['type'] == 0} <img src='../gfx/images/folder.png' alt="" /> <a href="filebrowser.php?&amp;port={$smarty.get.port}&amp;path={if $smarty.get.path != "/"}{$smarty.get.path}{/if}/{$value['name']}&amp;cid={if isset($value['cid'])}{$value['cid']}{else}{$smarty.get.cid}{/if}">{$value['name']}</a>{else}<img src='../gfx/images/file.png' alt="" /> <a href="filetransfer.php?port={$smarty.get.port}&amp;cid={if isset($value['cid'])}{$value['cid']}{else}{$smarty.get.cid}{/if}&amp;path={if $smarty.get.path != "/"}{$smarty.get.path}{/if}&amp;name={$value['name']}&amp;getfile=1" target="_blank">{$value['name']}</a>{/if}</td>
+				<td class="green1">{if $value['type'] == 0} <img src='../gfx/images/folder.png' alt="" /> <a href="filebrowser.php?&amp;sid={$smarty.get.sid}&amp;path={if $smarty.get.path != "/"}{$smarty.get.path}{/if}/{$value['name']}&amp;cid={if isset($value['cid'])}{$value['cid']}{else}{$smarty.get.cid}{/if}">{$value['name']}</a>{else}<img src='../gfx/images/file.png' alt="" /> <a href="filetransfer.php?sid={$smarty.get.sid}&amp;cid={if isset($value['cid'])}{$value['cid']}{else}{$smarty.get.cid}{/if}&amp;path={if $smarty.get.path != "/"}{$smarty.get.path}{/if}&amp;name={$value['name']}&amp;getfile=1" target="_blank">{$value['name']}</a>{/if}</td>
 				<td class="green1">{$value['size']} Mb</td>
 				<td class="green1">{$value['datetime']|date_format:"%d.%m.%Y - %H:%M:%S"}</td>
-				<td class="green1"><a href="filebrowser.php?port={$smarty.get.port}&amp;cid={if isset($value['cid'])}{$value['cid']}{else}{$smarty.get.cid}{/if}&amp;path={$smarty.get.path}&amp;name={$value['name']}&amp;deletefile=1">{$lang['delete']}</a></td>
+				<td class="green1"><a href="filebrowser.php?sid={$smarty.get.sid}&amp;cid={if isset($value['cid'])}{$value['cid']}{else}{$smarty.get.cid}{/if}&amp;path={$smarty.get.path}&amp;name={$value['name']}&amp;deletefile=1">{$lang['delete']}</a></td>
 			</tr>	
 		{/foreach}
 	{else}
 		{if $smarty.get.path != "/" AND !empty($smarty.get.path)}
 			<tr>
-				<td class="green1" colspan="4"><a href="filebrowser.php?port={$smarty.get.port}&amp;cid={$smarty.get.cid}&amp;path={$newpath}">..</a></td>
+				<td class="green1" colspan="4"><a href="filebrowser.php?sid={$smarty.get.sid}&amp;cid={$smarty.get.cid}&amp;path={$newpath}">..</a></td>
 			</tr>
 		{/if}
 		<tr>
@@ -73,7 +73,7 @@
 	</table>
 	<br /><br />
 
-<form enctype="multipart/form-data" method="post" action="filebrowser.php?port={$smarty.get.port}&amp;cid={$smarty.get.cid}&amp;cpw={$smarty.get.cpw}&amp;path={$smarty.get.path}">
+<form enctype="multipart/form-data" method="post" action="filebrowser.php?sid={$smarty.get.sid}&amp;cid={$smarty.get.cid}&amp;cpw={$smarty.get.cpw}&amp;path={$smarty.get.path}">
 <table align="center" class="border" style="width:50%">
 	<tr>
 		<td colspan="2" class="thead">{$lang['upload']}</td>
@@ -92,7 +92,7 @@
 </table>
 </form>
 <br /><br />
-<form method="post" action="filebrowser.php?port={$smarty.get.port}&amp;cid={$smarty.get.cid}&amp;cpw={$smarty.get.pw}&amp;path={$smarty.get.path}">
+<form method="post" action="filebrowser.php?sid={$smarty.get.sid}&amp;cid={$smarty.get.cid}&amp;cpw={$smarty.get.pw}&amp;path={$smarty.get.path}">
 <table align="center" class="border" style="width:50%">
 	<tr>
 		<td colspan="2" class="thead">{$lang['createfolder']}</td>

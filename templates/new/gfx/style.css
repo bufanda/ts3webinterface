@@ -209,7 +209,6 @@ table.border
 	border-collapse:collapse;
 	}
 	
-	
 input.bild
 	{
 	border:0px;
@@ -298,6 +297,7 @@ input.sbutton
 	
 input
 	{
+	cursor: pointer;
 	background: #FFFFFF;
 	border-left:1px solid gray;
 	border-top:1px solid gray;

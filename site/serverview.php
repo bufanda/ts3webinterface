@@ -185,16 +185,6 @@ if(isset($_POST['sendmasskick']))
 				$client_kick=$ts3->clientKick($value, 'server', $_POST['kickmsg']);
 				}
 			}
-		/**		
-		$debuglog=$ts3->getDebugLog();
-		if(!empty($debuglog))
-			{
-			foreach($debuglog AS $key=>$value)
-				{
-				$error.=$value."<br />";
-				}
-			} 
-		**/
 		}
 	}
 	
@@ -276,16 +266,6 @@ if(isset($_POST['sendmassban']))
 				$client_ban=$ts3->banClient($value, $_POST['bantime'], $_POST['banmsg']);
 				}
 			}
-		/**		
-		$debuglog=$ts3->getDebugLog();
-		if(!empty($debuglog))
-			{
-			foreach($debuglog AS $key=>$value)
-				{
-				$error.=$value."<br />";
-				}
-			} 
-		**/
 		}
 	}
 
@@ -400,7 +380,7 @@ if(isset($_POST['stop']))
 		{
 		$noerror .= $lang['serverstopok']."<br />";
 		}
-	$ts3->selectServer($port, 'port', true);
+	$ts3->selectServer($sid, 'serverId', true);
 	}
 
 $serverinfo=$ts3->getElement('data', $ts3->serverInfo());
@@ -418,13 +398,14 @@ if($_SERVER['SERVER_PORT']==443)
 	{
 	$gethttp="http://";
 	}
-$pubtsview=secure("<iframe allowtransparency=\"true\" src=\"".$gethttp.$_SERVER['HTTP_HOST'].$getpath[0]."tsviewpub.php?skey=".$_SESSION['skey']."&amp;port=".$port."&amp;showicons=right&amp;bgcolor=ffffff&amp;fontcolor=000000\" style=\"height:100%;width:100%\" scrolling=\"auto\" frameborder=\"0\">Your Browser will not show Iframes</iframe>");
+$pubtsview=secure("<iframe allowtransparency=\"true\" src=\"".$gethttp.$_SERVER['HTTP_HOST'].$getpath[0]."tsviewpub.php?skey=".$_SESSION['skey']."&amp;sid=".$sid."&amp;showicons=right&amp;bgcolor=ffffff&amp;fontcolor=000000\" style=\"height:100%;width:100%\" scrolling=\"auto\" frameborder=\"0\">Your Browser will not show Iframes</iframe>");
 
 //Bearbeitung der Ausgabe!
 
 if(!empty($serverinfo))
 	{
 	$serverinfo=secure($serverinfo);
+
 	$conv_time=$ts3->convertSecondsToArrayTime($serverinfo['virtualserver_uptime']);
 	$serverinfo['virtualserver_uptime']=$conv_time['days'].$lang['days']." ".$conv_time['hours'].$lang['hours']." ".$conv_time['minutes'].$lang['minutes']." ".$conv_time['seconds'].$lang['seconds'];
 	
@@ -453,6 +434,13 @@ if(!empty($serverinfo))
 		{
 		$serverinfo['virtualserver_icon_id']=sprintf('%u', $serverinfo['virtualserver_icon_id'] & 0xffffffff);
 		}	
+		
+	$sversion=explode(' ', $serverinfo['virtualserver_version']);
+	$sversion2=date('d.m.Y H:i:s',str_replace(']', ' ', $sversion[2]));
+	$serverinfo['virtualserver_version']=$sversion[0].' '.$sversion[1].' '.$sversion2.']';
+	
+	$serverinfo['virtualserver_welcomemessage']=parse_bbcode(str_replace('\r\n', '<br />', $serverinfo['virtualserver_welcomemessage']));
+	$serverinfo['virtualserver_hostmessage']=parse_bbcode(str_replace('\r\n', '<br />', $serverinfo['virtualserver_hostmessage']));
 	}
 		
 include("site/tsview.php");

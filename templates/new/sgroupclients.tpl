@@ -28,7 +28,7 @@
 	</tr>
 	<tr>
 		<td class="green1" colspan="6">
-		<form method="post" action="index.php?site=sgroupclients&amp;port={$port}&amp;sgid={$sgid}">
+		<form method="post" action="index.php?site=sgroupclients&amp;sid={$sid}&amp;sgid={$sgid}">
 		<select name="searchby">
 		<option value="cldbid">{$lang['cldbid']}</option>
 		<option value="name">{$lang['name']}</option>
@@ -59,7 +59,7 @@
 				<td class="{$td_col} center">{date("d.m.Y", $value['client_created'])}</td>
 				<td class="{$td_col} center">{date("d.m.Y", $value['client_lastconnected'])}</td>
 				<td class="{$td_col} center">
-				<form method="post" action="index.php?site=sgroupclients&amp;port={$port}&amp;sgid={$sgid}">
+				<form method="post" action="index.php?site=sgroupclients&amp;sid={$sid}&amp;sgid={$sgid}">
 				<input type="hidden" name="cldbid" value="{$value['cldbid']}" />
 				<input type="submit" class="delete" name="kickclient" value="" title="kick"/>
 				</form>
@@ -70,7 +70,7 @@
 	{/if}
 </table>
 <br />
-<form method="post" action="index.php?site=sgroupclients&amp;port={$port}&amp;sgid={$sgid}">
+<form method="post" action="index.php?site=sgroupclients&amp;sid={$sid}&amp;sgid={$sgid}">
 <table class="border" cellpadding="1" cellspacing="0">
 	<tr>
 		<td colspan="2" class="thead">{$lang['addclient']}</td>

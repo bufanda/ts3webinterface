@@ -25,21 +25,17 @@ if($serverstatus===false)
 		}
 	session_destroy();
 	}
-elseif($loginstatus===true AND $serverhost===true AND isset($_POST['sendlogin']))
+elseif($loginstatus===true AND $hoststatus===false AND isset($_POST['sendlogin']))
 	{
-	header("Location: index.php?site=serverview&port=".$_SESSION['loginport']);
+	header("Location: index.php?site=serverview&sid=".$_SESSION['loginsid']);
 
     exit;
 	}
-elseif($loginstatus===true AND $serverhost===false AND isset($_POST['sendlogin']))
+elseif($loginstatus===true AND $hoststatus===true AND isset($_POST['sendlogin']))
 	{
 	header("Location: index.php?site=server");
 
     exit;
-	}
-elseif($loginstatus===false AND !empty($port_err) AND isset($_POST['sendlogin']))
-	{
-	$error .= $lang['noserverport']."<br />";
 	}
 elseif($loginstatus===false AND isset($_POST['sendlogin']))
 	{

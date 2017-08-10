@@ -22,7 +22,7 @@
 	{/if}
 </table>
 {/if}
-<form method="post" action="index.php?site=createchannel&amp;port={$port}">
+<form method="post" action="index.php?site=createchannel&amp;sid={$sid}">
 <table class="border" cellpadding="1" cellspacing="0">
 			<tr>
 				<td colspan="2" class="thead">{$lang['createachannel']}</td>

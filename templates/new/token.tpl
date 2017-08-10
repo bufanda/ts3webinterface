@@ -22,6 +22,7 @@
 		</tr>
 	</table>
 {else}
+<form method="post" action="index.php?site=token&amp;sid={$sid}">
 <table class="border" style="width:100%" cellpadding="1" cellspacing="0">
 	<tr>
 		<td class="thead" colspan="7">{$lang['tokenlist']}</td>
@@ -33,7 +34,7 @@
 		<td class="thead">{$lang['id2']}</td>
 		<td class="thead">{$lang['created']}</td>
 		<td class="thead">{$lang['description']}</td>
-		<td class="thead">{$lang['option']}</td>
+		<td class="thead">{$lang['selectall']}<input type="checkbox" name="checkall" value="0" onclick="check(1)" /></td>
 	</tr>
 	{if !empty($tokenlist)}
 		{foreach key=key item=value from=$tokenlist}
@@ -75,17 +76,19 @@
 				<td class="{$td_col} center">{$value['token_description']}</td>
 				<td class="{$td_col} center">
 				{if !isset($permoverview['b_virtualserver_token_delete']) OR $permoverview['b_virtualserver_token_delete']==1}
-				<form method="post" action="index.php?site=token&amp;port={$port}">
-				<input type="hidden" name="token" value="{$value['token']}" />
-				<input class="delete" type="submit" name="deltoken" value="" title="{$lang['delete']}" />
-				</form>
+				<input type="checkbox" name="token[]" value="{$value['token']}" />
 				{/if}
 				</td>
 			</tr>
 			{assign var=change_col value="`$change_col+1`"}
 		{/foreach} 
+		<tr>
+			<td colspan="6">&nbsp;</td>
+			<td align="center"><input type="submit" name="deltoken" value="{$lang['delete']}" /></td>
+		</tr>
 	{/if}
 </table>
+</form>
 <br />
 {/if}
 {if isset($permoverview['b_virtualserver_token_add']) AND empty($permoverview['b_virtualserver_token_add'])}
@@ -98,7 +101,7 @@
 		</tr>
 	</table>
 {else}
-<form method="post" action="index.php?site=token&amp;port={$port}">
+<form method="post" action="index.php?site=token&amp;sid={$sid}">
 <table class="border" style="width:100%" cellpadding="1" cellspacing="0">
 	<tr>
 		<td class="thead" colspan="6">{$lang['createtoken']}</td>
@@ -153,18 +156,7 @@
 		<input type="text" name="description" value="" />
 		</td>
 		<td class="green1 center">
-		<select name="number">
-			<option value='1'>1</option>
-			<option value='2'>2</option>
-			<option value='3'>3</option>
-			<option value='4'>4</option>
-			<option value='5'>5</option>
-			<option value='6'>6</option>
-			<option value='7'>7</option>
-			<option value='8'>8</option>
-			<option value='9'>9</option>
-			<option value='10'>10</option>
-		</select>
+		<input type="text" name="number" size="3" value="1" />
 		</td>
 		<td class="green1 center">
 		<input class="button" type="submit" name="addtoken" value="{$lang['create']}" />

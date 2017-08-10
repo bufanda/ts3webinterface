@@ -59,21 +59,10 @@
 				<td class="login">{$lang['password']}:</td>
 				<td class="login"><input type="password" name="loginPw" /></td>
 			</tr>
-			{if $serverhost === true}
-				<tr>
-					<td class="login">{$lang['port']}:</td>
-					<td class="login"><input type="text" name="loginPort" value="" /></td>
-				</tr>
-			{/if}
 			<tr>
 				<td class="login">{$lang['option']}:</td>
 				<td><input class="button" type="submit" name="sendlogin" value="{$lang['login']}"/></td>
 			</tr>
-			{if $serverhost === true}
-			<tr>
-				<td colspan="2" style="text-align:center"><a href="index.php?site=hostlogin">{$lang['hostlogin']}</a></td>
-			</tr>
-			{/if}
 		</table>
 		
 		</td>

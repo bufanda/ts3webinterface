@@ -1,4 +1,4 @@
-<form method="post" action="index.php?site=console&amp;port={$port}">
+<form method="post" action="index.php?site=console&amp;sid={$sid}">
 <table class="border" cellpadding="0" cellspacing="0">
 	<tr>
 		<td class="thead">{$lang['queryconsole']}</td>

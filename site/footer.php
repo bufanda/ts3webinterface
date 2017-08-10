@@ -12,6 +12,6 @@
 *
 *You should have received a copy of the GNU General Public License along with this program; if not, see <http://www.gnu.org/licenses/>. 
 */
-$footer2="Teamspeak 3 Web Interface Beta 3.0.1<br />&copy; by <a href='http://www.ts3.cs-united.de'>Psychokiller</a><br />This interface contains images from <a href='http://www.teamspeak.com'>www.teamspeak.com</a>.";
+$footer2="Teamspeak 3 Web Interface Beta 3.2<br /> &copy; by <a href='http://www.ts3.cs-united.de'>Psychokiller</a><br />";
 $smarty->assign("footer", $footer2);
 ?>

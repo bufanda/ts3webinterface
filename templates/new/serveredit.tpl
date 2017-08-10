@@ -15,7 +15,7 @@
 <table style="width:100%" cellpadding="1" cellspacing="0">
 	<tr valign="top">
 		<td style="width:50%">
-		<form method="post" action="index.php?site=serveredit&amp;port={$port}">
+		<form method="post" action="index.php?site=serveredit&amp;sid={$sid}">
 		<table  style="width:100%" class="border" cellpadding="1" cellspacing="0">
 			<tr>
 				<td class="thead" colspan="2">{$lang['virtualserver']} #{$serverinfo['virtualserver_id']} {$lang['editor']} </td>
@@ -26,8 +26,10 @@
 				{if isset($permoverview['b_virtualserver_modify_autostart']) AND empty($permoverview['b_virtualserver_modify_autostart'])}
 					-
 				{else}
-					{$lang['yes']}<input type="radio" name="newsettings[virtualserver_autostart]" value="1" {if $serverinfo['virtualserver_autostart'] == 1}checked="checked"{/if} />
-					{$lang['no']}<input type="radio" name="newsettings[virtualserver_autostart]" value="0" {if $serverinfo['virtualserver_autostart'] == 0}checked="checked"{/if} />
+					<select name="newsettings[virtualserver_autostart]">
+						<option value="1" {if $serverinfo['virtualserver_autostart'] == 1}selected="selected"{/if}>{$lang['yes']}</option>
+						<option value="0" {if $serverinfo['virtualserver_autostart'] == 0}selected="selected"{/if}>{$lang['no']}</option>
+					</select>
 				{/if}
 				</td>
 			</tr>
@@ -67,7 +69,7 @@
 				{if isset($permoverview['b_virtualserver_modify_welcomemessage']) AND empty($permoverview['b_virtualserver_modify_welcomemessage'])}
 					-
 				{else}
-					<input type="text" name="newsettings[virtualserver_welcomemessage]" value="{$serverinfo['virtualserver_welcomemessage']}" />
+					<textarea name="newsettings[virtualserver_welcomemessage]" rows="5" cols="30">{$serverinfo['virtualserver_welcomemessage']}</textarea>
 				{/if}
 				</td>
 			</tr>
@@ -97,8 +99,10 @@
 				{if isset($permoverview['b_virtualserver_modify_weblist']) AND empty($permoverview['b_virtualserver_modify_weblist'])}
 					-
 				{else}
-					{$lang['yes']}<input type="radio" name="newsettings[virtualserver_weblist_enabled]" value="1" {if $serverinfo['virtualserver_weblist_enabled'] == 1}checked="checked"{/if} />
-					{$lang['no']}<input type="radio" name="newsettings[virtualserver_weblist_enabled]" value="0" {if $serverinfo['virtualserver_weblist_enabled'] == 0}checked="checked"{/if} />
+					<select name="newsettings[virtualserver_weblist_enabled]">
+						<option value="1" {if $serverinfo['virtualserver_weblist_enabled'] == 1}selected="selected"{/if}>{$lang['yes']}</option>
+						<option value="0" {if $serverinfo['virtualserver_weblist_enabled'] == 0}selected="selected"{/if}>{$lang['no']}</option>
+					</select>
 				{/if}
 				</td>
 			</tr>
@@ -108,7 +112,11 @@
 				{if isset($permoverview['b_virtualserver_modify_codec_encryption_mode']) AND empty($permoverview['b_virtualserver_modify_codec_encryption_mode'])}
 					-
 				{else}
-					<input type="text" name="newsettings[virtualserver_codec_encryption_mode]" value="{$serverinfo['virtualserver_codec_encryption_mode']}" />
+					<select name="newsettings[virtualserver_codec_encryption_mode]">
+					<option value="0" {if $serverinfo['virtualserver_codec_encryption_mode'] == 0}selected='selected'{/if}>{$lang['codecencryptionmodeindi']}</option>
+					<option value="1" {if $serverinfo['virtualserver_codec_encryption_mode'] == 1}selected='selected'{/if}>{$lang['codecencryptionmodegoff']}</option>
+					<option value="2" {if $serverinfo['virtualserver_codec_encryption_mode'] == 2}selected='selected'{/if}>{$lang['codecencryptionmodegon']}</option>
+					</select>
 				{/if}
 				</td>
 			</tr>
@@ -148,7 +156,7 @@
 				{if isset($permoverview['b_virtualserver_modify_icon_id']) AND empty($permoverview['b_virtualserver_modify_icon_id'])}
 					-
 				{else}
-					<input id="iconid" type="text" name="newsettings[virtualserver_icon_id]" value="{$serverinfo['virtualserver_icon_id']}" /><a href="javascript:oeffnefenster('site/showallicons.php?ip={$smarty.session.server_ip}&amp;port={$port}');">{$lang['set']}</a>
+					<input id="iconid" type="text" name="newsettings[virtualserver_icon_id]" value="{$serverinfo['virtualserver_icon_id']}" /><a href="javascript:oeffnefenster('site/showallicons.php?ip={$smarty.session.server_ip}&amp;sid={$sid}');">{$lang['set']}</a>
 				{/if}
 				</td>
 			</tr>
@@ -212,7 +220,7 @@
 				{if isset($permoverview['b_virtualserver_modify_hostmessage']) AND empty($permoverview['b_virtualserver_modify_hostmessage'])}
 					-
 				{else}
-					<input type="text" name="newsettings[virtualserver_hostmessage]" value="{$serverinfo['virtualserver_hostmessage']}" />
+					<textarea name="newsettings[virtualserver_hostmessage]" rows="5" cols="30">{$serverinfo['virtualserver_hostmessage']}</textarea>
 				{/if}
 				</td>
 			</tr>
@@ -222,10 +230,12 @@
 				{if isset($permoverview['b_virtualserver_modify_hostmessage']) AND empty($permoverview['b_virtualserver_modify_hostmessage'])}
 					-
 				{else}
-					{$lang['nomessage']} <input type="radio" name="newsettings[virtualserver_hostmessage_mode]" value="0" {if $serverinfo['virtualserver_hostmessage_mode'] == 0}checked='checked'{/if} /><br />
-					{$lang['showmessagelog']} <input type="radio" name="newsettings[virtualserver_hostmessage_mode]" value="1" {if $serverinfo['virtualserver_hostmessage_mode'] == 1}checked='checked'{/if}  /><br />
-					{$lang['showmodalmessage']} <input type="radio" name="newsettings[virtualserver_hostmessage_mode]" value="2" {if $serverinfo['virtualserver_hostmessage_mode'] == 2}checked='checked'{/if} /><br />
-					{$lang['modalandexit']} <input type="radio" name="newsettings[virtualserver_hostmessage_mode]" value="3" {if $serverinfo['virtualserver_hostmessage_mode'] == 3}checked='checked'{/if}  />
+				<select name="newsettings[virtualserver_hostmessage_mode]">
+					<option value="0" {if $serverinfo['virtualserver_hostmessage_mode'] == 0}selected='selected'{/if}>{$lang['nomessage']}</option>
+					<option value="1" {if $serverinfo['virtualserver_hostmessage_mode'] == 1}selected='selected'{/if}>{$lang['showmessagelog']}</option>
+					<option value="2" {if $serverinfo['virtualserver_hostmessage_mode'] == 2}selected='selected'{/if}>{$lang['showmodalmessage']}</option>
+					<option value="3" {if $serverinfo['virtualserver_hostmessage_mode'] == 3}selected='selected'{/if}>{$lang['modalandexit']}</option>
+				</select>
 				{/if}
 				</td>
 			</tr>
@@ -342,42 +352,22 @@
 				</td>
 			</tr>
 			<tr>
-				<td class="green2">{$lang['pointsneededwarning']}:</td>
+				<td class="green2">{$lang['pointsneededblockcmd']}:</td>
 				<td class="green2">
 				{if isset($permoverview['b_virtualserver_modify_antiflood']) AND empty($permoverview['b_virtualserver_modify_antiflood'])}
 					-
 				{else}
-					<input type="text" name="newsettings[virtualserver_antiflood_points_needed_warning]" value="{$serverinfo['virtualserver_antiflood_points_needed_warning']}" />
+					<input type="text" name="newsettings[virtualserver_antiflood_points_needed_command_stop]" value="{$serverinfo['virtualserver_antiflood_points_needed_command_stop']}" />
 				{/if}
 				</td>
 			</tr>
 			<tr>
-				<td class="green1">{$lang['pointsneededkick']}:</td>
+				<td class="green1">{$lang['pointsneededblockip']}:</td>
 				<td class="green1">
 				{if isset($permoverview['b_virtualserver_modify_antiflood']) AND empty($permoverview['b_virtualserver_modify_antiflood'])}
 					-
 				{else}
-					<input type="text" name="newsettings[virtualserver_antiflood_points_needed_kick]" value="{$serverinfo['virtualserver_antiflood_points_needed_kick']}" />
-				{/if}
-				</td>
-			</tr>
-			<tr>
-				<td class="green2">{$lang['pointsneededban']}:</td>
-				<td class="green2">
-				{if isset($permoverview['b_virtualserver_modify_antiflood']) AND empty($permoverview['b_virtualserver_modify_antiflood'])}
-					-
-				{else}
-					<input type="text" name="newsettings[virtualserver_antiflood_points_needed_ban]" value="{$serverinfo['virtualserver_antiflood_points_needed_ban']}" />
-				{/if}
-				</td>
-			</tr>
-			<tr>
-				<td class="green1">{$lang['pointsbantime']}:</td>
-				<td class="green1">
-				{if isset($permoverview['b_virtualserver_modify_antiflood']) AND empty($permoverview['b_virtualserver_modify_antiflood'])}
-					-
-				{else}
-					<input type="text" name="newsettings[virtualserver_antiflood_ban_time]" value="{$serverinfo['virtualserver_antiflood_ban_time']}" />
+					<input type="text" name="newsettings[virtualserver_antiflood_points_needed_ip_ban]" value="{$serverinfo['virtualserver_antiflood_points_needed_ip_ban']}" />
 				{/if}
 				</td>
 			</tr>
@@ -430,43 +420,55 @@
 			<tr>
 				<td class="green1">{$lang['logclient']}:</td>
 				<td class="green1">
-					{$lang['yes']}<input type="radio" name="newsettings[virtualserver_log_client]" value="1" {if $serverinfo['virtualserver_log_client'] == 1}checked="checked"{/if} />
-					{$lang['no']}<input type="radio" name="newsettings[virtualserver_log_client]" value="0" {if $serverinfo['virtualserver_log_client'] == 0}checked="checked"{/if} />
+				<select name="newsettings[virtualserver_log_client]">
+					<option value="1" {if $serverinfo['virtualserver_log_client'] == 1}selected="selected"{/if}>{$lang['yes']}</option>
+					<option value="0" {if $serverinfo['virtualserver_log_client'] == 0}selected="selected"{/if}>{$lang['no']}</option>
+				</select>
 				</td>
 			</tr>
 			<tr>
 				<td class="green2">{$lang['logquery']}:</td>
 				<td class="green2">
-					{$lang['yes']}<input type="radio" name="newsettings[virtualserver_log_query]" value="1" {if $serverinfo['virtualserver_log_query'] == 1}checked="checked"{/if} />
-					{$lang['no']}<input type="radio" name="newsettings[virtualserver_log_query]" value="0" {if $serverinfo['virtualserver_log_query'] == 0}checked="checked"{/if} />
+				<select name="newsettings[virtualserver_log_query]">
+					<option value="1" {if $serverinfo['virtualserver_log_query'] == 1}selected="selected"{/if}>{$lang['yes']}</option>
+					<option value="0" {if $serverinfo['virtualserver_log_query'] == 0}selected="selected"{/if}>{$lang['no']}</option>
+				</select>
 				</td>
 			</tr>
 			<tr>
 				<td class="green1">{$lang['logchannel']}:</td>
 				<td class="green1">
-					{$lang['yes']}<input type="radio" name="newsettings[virtualserver_log_channel]" value="1" {if $serverinfo['virtualserver_log_channel'] == 1}checked="checked"{/if} />
-					{$lang['no']}<input type="radio" name="newsettings[virtualserver_log_channel]" value="0" {if $serverinfo['virtualserver_log_channel'] == 0}checked="checked"{/if} />
+				<select name="newsettings[virtualserver_log_channel]">
+					<option value="1" {if $serverinfo['virtualserver_log_channel'] == 1}selected="selected"{/if}>{$lang['yes']}</option>
+					<option value="0" {if $serverinfo['virtualserver_log_channel'] == 0}selected="selected"{/if}>{$lang['no']}</option>
+				</select>
 				</td>
 			</tr>
 			<tr>
 				<td class="green2">{$lang['logpermissions']}:</td>
 				<td class="green2">
-					{$lang['yes']}<input type="radio" name="newsettings[virtualserver_log_permissions]" value="1" {if $serverinfo['virtualserver_log_permissions'] == 1}checked="checked"{/if} />
-					{$lang['no']}<input type="radio" name="newsettings[virtualserver_log_permissions]" value="0" {if $serverinfo['virtualserver_log_permissions'] == 0}checked="checked"{/if} />
+				<select name="newsettings[virtualserver_log_permissions]">
+					<option value="1" {if $serverinfo['virtualserver_log_permissions'] == 1}selected="selected"{/if}>{$lang['yes']}</option>
+					<option value="0" {if $serverinfo['virtualserver_log_permissions'] == 0}selected="selected"{/if}>{$lang['no']}</option>
+				</select>
 				</td>
 			</tr>
 			<tr>
 				<td class="green1">{$lang['logserver']}:</td>
 				<td class="green1">
-					{$lang['yes']}<input type="radio" name="newsettings[virtualserver_log_server]" value="1" {if $serverinfo['virtualserver_log_server'] == 1}checked="checked"{/if} />
-					{$lang['no']}<input type="radio" name="newsettings[virtualserver_log_server]" value="0" {if $serverinfo['virtualserver_log_server'] == 0}checked="checked"{/if} />
+				<select name="newsettings[virtualserver_log_server]">
+					<option value="1" {if $serverinfo['virtualserver_log_server'] == 1}selected="selected"{/if}>{$lang['yes']}</option>
+					<option value="0" {if $serverinfo['virtualserver_log_server'] == 0}selected="selected"{/if}>{$lang['no']}</option>
+				</select>
 				</td>
 			</tr>	
 			<tr>
 				<td class="green2">{$lang['logfiletransfer']}:</td>
 				<td class="green2">
-					{$lang['yes']}<input type="radio" name="newsettings[virtualserver_log_filetransfer]" value="1" {if $serverinfo['virtualserver_log_filetransfer'] == 1}checked="checked"{/if} />
-					{$lang['no']}<input type="radio" name="newsettings[virtualserver_log_filetransfer]" value="0" {if $serverinfo['virtualserver_log_filetransfer'] == 0}checked="checked"{/if} />
+				<select name="newsettings[virtualserver_log_filetransfer]">
+					<option value="1" {if $serverinfo['virtualserver_log_filetransfer'] == 1}selected="selected"{/if}>{$lang['yes']}</option>
+					<option value="0" {if $serverinfo['virtualserver_log_filetransfer'] == 0}selected="selected"{/if}>{$lang['no']}</option>
+				</select>
 				</td>
 			</tr>	
 			<tr>
@@ -478,7 +480,7 @@
 		</td>
 		<td style="width:50%" align="center">
 		{if !isset($permoverview['b_virtualserver_modify_password']) OR $permoverview['b_virtualserver_modify_password'] == 1}
-			<form method="post" action="index.php?site=serveredit&amp;port={$port}">
+			<form method="post" action="index.php?site=serveredit&amp;sid={$sid}">
 			<table class="border" cellpadding="1" cellspacing="0">
 				<tr>
 					<td class="thead" colspan="2">{$lang['serverpassword']}</td>

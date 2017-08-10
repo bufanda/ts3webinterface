@@ -14,7 +14,7 @@
 */
 if(!defined("SECURECHECK")) {die($lang['error_file_alone']);}
 
-if($port===false OR empty($port)) { echo "<meta http-equiv=\"refresh\" content=\"0; URL=index.php?site=server\">";} else {
+if($sid===false OR empty($sid)) { echo "<meta http-equiv=\"refresh\" content=\"0; URL=index.php?site=server\">";} else {
 $banlist=$ts3->getElement('data', $ts3->banList());
 
 $banexport='';

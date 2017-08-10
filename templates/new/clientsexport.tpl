@@ -9,7 +9,7 @@
 	<tr>
 		<td class="green1">
 		{$lang['serverid']}: <input type="text" name="sid" value="" />
-		<input type="hidden" name="port" value="{$port}" />
+		<input type="hidden" name="sid" value="{$sid}" />
 		<input class="button" type="submit" name="give" value="{$lang['clientsexport']}" />
 		</td>
 	</tr>

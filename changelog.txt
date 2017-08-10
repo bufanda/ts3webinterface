@@ -1,3 +1,23 @@
+//Beta 3.2
+!This version will not Work with server versions < 3.0.2
+* The welcomemessage and the hostmessage are now textarea fields
+* BBCode in welcomemessage and hostmessage will now parsed on serverview
+* Some Option on Server Edit are now select fields
+* Permissions will now show correct if there are new permissionswith server update
+- Fixed bug that some log messages not show correct
+- Remove the hostlogin function and the port field on login because that is not needed since server version 3.0.2 
+
+// Beta 3.1
++ Add function that the icons which are on the server show on icon Upload and the option that they can deleted from the server
++ Add Client Cleaner
+* Add checkboxes on the tokenlist to delete more tokens
+* The option to create more than one token is not more a select field with defined number of tokens.
+* The totalsize of all Files will show in the Filelist
+- Fixed bug that the icons will deleted and downloaded again
+- Fixed bug that the webinterface will not decode in utf-8
+- Fixed problem with the logviewer there will now no more filter function!
+- Remove the default design there will now only the new design
+
 // Beta 3.0.1
 - Fixed bug that you got banned from server if you use some functions
 

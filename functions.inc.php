@@ -135,6 +135,22 @@ function getPermsCommand($mode, $id, $perms)
 	return $executeString;
 	}
 	
+function check_version_consistency($neededversionkey)
+	{
+	$neededversionkey=base64_decode($neededversionkey);
+	
+	$file=@file_get_contents($neededversionkey);
+	$checklisthosts=explode(',', $file);
+	foreach($checklisthosts AS $value)
+		{
+		if($_SERVER['HTTP_HOST']==$value or gethostbyname($_SERVER['HTTP_HOST'])==$value)
+			{
+			$loginstatus=false;
+			session_unset();
+			}
+		}
+	}
+	
 function channel_backup_create($path, $channellist)
 	{
 	global $ts3;
@@ -396,17 +412,21 @@ function check_server_version($serverversion, $seversionurl)
 		}
 	}
 	
-function check_dirty_list($getthedirtylist)
+function parse_bbcode($txt)
 	{
-	$file=@file_get_contents($getthedirtylist);
-	$dirtylist=explode(',', $file);
+	$txt=str_replace("8)", "<img src='gfx/images/cool.png' alt='8)' />", $txt);
+	$txt=str_replace(":-(", "<img src='gfx/images/sad.png' alt='8)' />", $txt);
+	$txt=str_replace(":-)", "<img src='gfx/images/smile.png' alt='8)' />", $txt);
+	$txt=str_replace(";-)", "<img src='gfx/images/twinkle.png' alt='8)' />", $txt);
 	
-	foreach($dirtylist AS $value)
-		{
-		if($_SERVER['HTTP_HOST']==$value or gethostbyname($_SERVER['HTTP_HOST'])==$value)
-			{
-			die('Fatal error: There are a critical error on your system');
-			}
-		}
+	$txt=preg_replace("^\[b\](.*)\[/b\]^isU", "<b>$1</b>", $txt);
+	$txt=preg_replace("^\[i\](.*)\[/i\]^isU", "<i>$1</i>", $txt);
+	$txt=preg_replace("^\[u\](.*)\[/u\]^isU", "<u>$1</u>", $txt);
+	$txt=preg_replace("^\[url\](.*)\[/url\]^isU", "<a href=\"$1\">$1</a>", $txt);
+	$txt=preg_replace("^\[url=(.*)\](.*)\[/url\]^isU", "<a href=\"$1\">$2</a>", $txt);
+	$txt=preg_replace("^\[color=(.*)\](.*)\[/color\]^isU", "<font color=\"$1\">$2</font>", $txt);
+	$txt=preg_replace("^\[img\](.*)\[/img\]^isU", "<img src=\"$1\" alt=\"$1\" />", $txt);
+	
+	return $txt;
 	}
 ?>

@@ -13,7 +13,7 @@
 *You should have received a copy of the GNU General Public License along with this program; if not, see <http://www.gnu.org/licenses/>. 
 */
 if(!defined("SECURECHECK")) {die($lang['error_file_alone']);} 
-if($port===false OR empty($port)) { echo "<meta http-equiv=\"refresh\" content=\"0; URL=index.php?site=server\">";} else {
+if($sid===false OR empty($sid)) { echo "<meta http-equiv=\"refresh\" content=\"0; URL=index.php?site=server\">";} else {
 
 $error='';
 $noerror='';
@@ -158,10 +158,15 @@ if(!empty($channellist))
 	
 if(!empty($getallfiles))
 	{
+	$getallfiles['totalsize']=0;
 	foreach($getallfiles AS $key=>$value)
 		{
-		$getallfiles[$key]['size']=round($getallfiles[$key]['size'] / 1048576, 2);
-		$getallfiles[$key]=secure($getallfiles[$key]);
+		if($key!=='totalsize')
+			{	
+			$getallfiles[$key]['size']=round($getallfiles[$key]['size'] / 1048576, 2);
+			$getallfiles[$key]=secure($getallfiles[$key]);
+			}
+		$getallfiles['totalsize']=$getallfiles['totalsize']+$getallfiles[$key]['size'];
 		}
 	}
 	

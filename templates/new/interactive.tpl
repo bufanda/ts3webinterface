@@ -20,7 +20,7 @@
 </head>
 <body>
 {if !isset($smarty.get.clid)}
-	<form method="post" name="f2" action="interactive.php?port={$smarty.get.port}">
+	<form method="post" name="f2" action="interactive.php?sid={$smarty.get.sid}">
 		<table class="border" cellpadding="1" cellspacing="0">
 			<tr>
 				<td class="maincat" colspan="2">{$lang['massaction']}</td>
@@ -45,7 +45,7 @@
 	window.resizeTo(350,550);
 	//]]>
 	</script>
-	<form method="post" name="f1" target="opener" action="../index.php?site=serverview&amp;port={$smarty.get.port}">
+	<form method="post" name="f1" target="opener" action="../index.php?site=serverview&amp;sid={$smarty.get.sid}">
 		<table class="border" cellpadding="1" cellspacing="0">
 			<tr>
 				<td class="maincat" colspan="2">{$lang['massmover']}</td>
@@ -105,7 +105,7 @@
 	window.resizeTo(350,550);
 	//]]>
 	</script>
-	<form method="post" name="f1" target="opener" action="../index.php?site=serverview&amp;port={$smarty.get.port}">
+	<form method="post" name="f1" target="opener" action="../index.php?site=serverview&amp;sid={$smarty.get.sid}">
 		<table class="border" cellpadding="1" cellspacing="0">
 			<table class="border" cellpadding="1" cellspacing="0">
 			<tr>
@@ -160,7 +160,7 @@
 	window.resizeTo(350,550);
 	//]]>
 	</script>
-	<form method="post" name="f1" target="opener" action="../index.php?site=serverview&amp;port={$smarty.get.port}">
+	<form method="post" name="f1" target="opener" action="../index.php?site=serverview&amp;sid={$smarty.get.sid}">
 		<table class="border" cellpadding="1" cellspacing="0">
 			<tr>
 				<td class="maincat" colspan="2">{$lang['massban']}</td>
@@ -213,7 +213,7 @@
 	<br />
 	{/if}
 {else}
-	<form method="post" name="f2" action="interactive.php?port={$smarty.get.port}&amp;clid={$smarty.get.clid}&amp;nick={$smarty.get.nick}">
+	<form method="post" name="f2" action="interactive.php?sid={$smarty.get.sid}&amp;clid={$smarty.get.clid}&amp;nick={$smarty.get.nick}">
 		<table class="border" cellpadding="1" cellspacing="0">
 			<tr>
 				<td class="maincat" colspan="2">{$smarty.get.nick}</td>
@@ -234,7 +234,7 @@
 		</form>
 		<br />
 	{if $smarty.post.action == 'kick'}
-	<form method="post" name="f1" target="opener" action="../index.php?site=serverview&amp;port={$smarty.get.port}" onsubmit="window.close()">
+	<form method="post" name="f1" target="opener" action="../index.php?site=serverview&amp;sid={$smarty.get.sid}" onsubmit="window.close()">
 	<table class="border" cellpadding="1" cellspacing="0">
 		<tr>
 			<td class="maincat" colspan="2">{$lang['kick']} {$smarty.get.nick}</td>
@@ -255,7 +255,7 @@
 	{/if}
 
 	{if $smarty.post.action == 'ban'}
-	<form method="post" name="f1" target="opener" action="../index.php?site=serverview&amp;port={$smarty.get.port}">
+	<form method="post" name="f1" target="opener" action="../index.php?site=serverview&amp;sid={$smarty.get.sid}">
 	<table class="border" cellpadding="1" cellspacing="0">
 		<tr>
 			<td class="maincat" colspan="2">{$lang['ban']} {$smarty.get.nick}</td>
@@ -282,7 +282,7 @@
 	{/if}
 
 	{if $smarty.post.action == 'poke'}
-	<form method="post" name="f1" target="opener" action="../index.php?site=serverview&amp;port={$smarty.get.port}">
+	<form method="post" name="f1" target="opener" action="../index.php?site=serverview&amp;sid={$smarty.get.sid}">
 	<table class="border" cellpadding="1" cellspacing="0">
 		<tr>
 			<td class="maincat" colspan="2">{$lang['poke']} {$smarty.get.nick}</td>
@@ -302,7 +302,7 @@
 	</form>
 	{/if}
 	{if $smarty.post.action=='move'}
-	<form method="post" name="f1" target="opener" action="../index.php?site=serverview&amp;port={$smarty.get.port}">
+	<form method="post" name="f1" target="opener" action="../index.php?site=serverview&amp;sid={$smarty.get.sid}">
 	<table class="border" cellpadding="1" cellspacing="0">
 		<tr>
 			<td class="maincat" colspan="2">{$lang['move']} {$_GET['nick']}</td>

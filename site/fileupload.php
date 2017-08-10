@@ -46,6 +46,35 @@ if(isset($_POST['upload']))
 		}
 	}
 	
+if(isset($_POST['delicons']) AND !empty($_POST['delicons']))
+	{
+	echo "<pre>";
+	print_r($_POST['delicons']);
+	echo "</pre>";
+	$ts3->ftDeleteFile(0, '', $_POST['delicons']);
+	foreach($_POST['delicons'] AS $key=>$value)
+		{
+		@unlink('icons/'.$_SESSION['server_ip'].'-'.$whoami['virtualserver_port'].'/'.$value);
+		}
+	}
+	
+$handler2=@opendir('icons/'.$_SESSION['server_ip'].'-'.$whoami['virtualserver_port'].'/');
+if($handler2)
+	{
+	while($datei=readdir($handler2))
+		{
+		if($datei!='.' AND $datei!='..')
+			{
+			$icon_id=str_replace("icon_", "", $datei);
+			$allicons[$datei]['name']=$icon_id;
+			$allicons[$datei]['id']=sprintf('%u', $icon_id & 0xffffffff);
+			$allicons[$datei]['info']=getimagesize('icons/'.$_SESSION['server_ip'].'-'.$whoami['virtualserver_port'].'/'.$datei);
+			}
+		}
+	}
+	
+$smarty->assign("port", $whoami['virtualserver_port']);
+$smarty->assign("allicons", $allicons);
 $smarty->assign("error", $error);
 $smarty->assign("noerror", $noerror);
 ?>

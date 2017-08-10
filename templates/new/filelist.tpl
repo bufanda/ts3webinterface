@@ -25,18 +25,25 @@
 		</tr>
 		{if $smarty.get.path != "/" AND !empty($smarty.get.path)}
 			<tr>
-				<td class="green1" colspan="3"><a href="index.php?site=filelist&amp;port={$smarty.get.port}&amp;cid={$cid}&amp;path={$newpath}">..</a></td>
+				<td class="green1" colspan="3"><a href="index.php?site=filelist&amp;sid={$smarty.get.sid}&amp;cid={$cid}&amp;path={$newpath}">..</a></td>
 			</tr>
 		{/if}
 		{if !empty($getallfiles)}
 			{foreach key=key item=value from=$getallfiles}	
+				{if $key !== 'totalsize'}
 				<tr>
-					<td class="green1">{if $value['type'] == 0} <img src='gfx/images/folder.png' alt="" /> <a href="index.php?site=filelist&amp;port={$smarty.get.port}&amp;path={if $smarty.get.path != "/"}{$smarty.get.path}{/if}/{$value['name']}&amp;cid={if isset($value['cid'])}{$value['cid']}{else}{$smarty.get.cid}{/if}">{$value['name']}</a>{else}<img src='gfx/images/file.png' alt="" /> <a href="site/filetransfer.php?port={$smarty.get.port}&amp;cid={if isset($value['cid'])}{$value['cid']}{else}{$smarty.get.cid}{/if}&amp;path={if $smarty.get.path != "/"}{$smarty.get.path}{/if}&amp;name={$value['name']}&amp;getfile=1" target="_blank">{$value['name']}</a>{/if}</td>
+					<td class="green1">{if $value['type'] == 0} <img src='gfx/images/folder.png' alt="" /> <a href="index.php?site=filelist&amp;sid={$smarty.get.sid}&amp;path={if $smarty.get.path != "/"}{$smarty.get.path}{/if}/{$value['name']}&amp;cid={if isset($value['cid'])}{$value['cid']}{else}{$smarty.get.cid}{/if}">{$value['name']}</a>{else}<img src='gfx/images/file.png' alt="" /> <a href="site/filetransfer.php?sid={$smarty.get.sid}&amp;cid={if isset($value['cid'])}{$value['cid']}{else}{$smarty.get.cid}{/if}&amp;path={if $smarty.get.path != "/"}{$smarty.get.path}{/if}&amp;name={$value['name']}&amp;getfile=1" target="_blank">{$value['name']}</a>{/if}</td>
 					<td class="green1">{$value['size']} Mb</td>
 					<td class="green1">{$value['datetime']|date_format:"%d.%m.%Y - %H:%M:%S"}</td>
 					<td class="green1">{$value['cname']}</td>
-					<td class="green1"><a href="index.php?site=filelist&amp;port={$port}&amp;cid={if isset($value['cid'])}{$value['cid']}{else}{$smarty.get.cid}{/if}&amp;path={if empty($smarty.get.path)}/{else}{$smarty.get.path}{/if}&amp;name={$value['name']}&amp;deletefile=1">{$lang['delete']}</a></td>
+					<td class="green1"><a href="index.php?site=filelist&amp;sid={$sid}&amp;cid={if isset($value['cid'])}{$value['cid']}{else}{$smarty.get.cid}{/if}&amp;path={if empty($smarty.get.path)}/{else}{$smarty.get.path}{/if}&amp;name={$value['name']}&amp;deletefile=1">{$lang['delete']}</a></td>
 				</tr>
+				{elseif $key === 'totalsize'}
+				<tr>
+					<td class="green1">{$lang['totalsize']}</td>
+					<td class="green1" colspan="4">{$value} Mb</td>
+				</tr>
+				{/if}
 			{/foreach}
 		{else}
 			<tr>
@@ -47,7 +54,7 @@
 		{/if}
 	</table>
 	<br /><br />
-	<form enctype="multipart/form-data" method="post" action="index.php?site=filelist&amp;port={$smarty.get.port}&amp;cid={$smarty.get.cid}&amp;cpw={$smarty.get.cpw}&amp;path={$smarty.get.path}">
+	<form enctype="multipart/form-data" method="post" action="index.php?site=filelist&amp;sid={$smarty.get.sid}&amp;cid={$smarty.get.cid}&amp;cpw={$smarty.get.cpw}&amp;path={$smarty.get.path}">
 	<table align="center" class="border" style="width:50%">
 		<tr>
 			<td colspan="2" class="thead">{$lang['upload']}</td>
@@ -78,7 +85,7 @@
 	</table>
 	</form>
 	<br /><br />
-	<form method="post" action="index.php?site=filelist&amp;port={$smarty.get.port}&amp;cid={$smarty.get.cid}&amp;cpw={$smarty.get.cpw}&amp;path={$smarty.get.path}">
+	<form method="post" action="index.php?site=filelist&amp;sid={$smarty.get.sid}&amp;cid={$smarty.get.cid}&amp;cpw={$smarty.get.cpw}&amp;path={$smarty.get.path}">
 	<table align="center" class="border" style="width:50%">
 		<tr>
 			<td colspan="2" class="thead">{$lang['createfolder']}</td>

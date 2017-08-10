@@ -33,7 +33,7 @@
 	</td>
 {else}
 	<td style="width:50%">
-	<form method="post" action="index.php?site=serverview&amp;port={$port}">
+	<form method="post" action="index.php?site=serverview&amp;sid={$sid}">
 	<table class="border" style="width:100%;" cellpadding="1" cellspacing="0">
 		<tr>
 			<td class="thead" colspan="7">{$lang['msgtoserver']}</td>
@@ -52,13 +52,13 @@
 	{if $serverhost === true AND $hoststatus === false}
 		<tr>
 			<td class="center">
-			<form method="post" action="index.php?site=serverview&amp;port={$port}">
+			<form method="post" action="index.php?site=serverview&amp;sid={$sid}">
 			<input type="hidden" name="sid" value="{$serverinfo['virtualserver_id']}" />
 			<input class="start" type="submit" name="start" value="" title="{$lang['start']}" />
 			</form>
 			</td>
 			<td class="center">
-			<form method="post" action="index.php?site=serverview&amp;port={$port}">
+			<form method="post" action="index.php?site=serverview&amp;sid={$sid}">
 			<input type="hidden" name="sid" value="{$serverinfo['virtualserver_id']}" />
 			<input class="stop" type="submit" name="stop" value="" title="{$lang['stop']}" onclick="return confirm('{$lang['stopservermsg']}')" />
 			</form>
@@ -98,61 +98,79 @@
 				<td class="green1">{$serverinfo['virtualserver_name']}</td>
 			</tr>
 			<tr>
-				<td class="green2">{$lang['version']}:</td>
-				<td class="green2">{$serverinfo['virtualserver_version']}</td>
+				<td class="green2">{$lang['welcomemsg']}:</td>
+				<td class="green2">{$serverinfo['virtualserver_welcomemessage']}</td>
 			</tr>
 			<tr>
-				<td class="green1">{$lang['platform']}:</td>
-				<td class="green1">{$serverinfo['virtualserver_platform']}</td>
+				<td class="green1">{$lang['version']}:</td>
+				<td class="green1">{$serverinfo['virtualserver_version']}</td>
 			</tr>
 			<tr>
-				<td class="green2">{$lang['created']}:</td>
-				<td class="green2">{$serverinfo['virtualserver_created']|date_format:"%d.%m.%Y - %H:%M:%S"}</td>
+				<td class="green2">{$lang['platform']}:</td>
+				<td class="green2">{$serverinfo['virtualserver_platform']}</td>
 			</tr>
 			<tr>
-				<td class="green1">{$lang['status']}:</td>
-				<td class="green1">{$serverinfo['virtualserver_status']}</td>
+				<td class="green1">{$lang['created']}:</td>
+				<td class="green1">{$serverinfo['virtualserver_created']|date_format:"%d.%m.%Y - %H:%M:%S"}</td>
 			</tr>
 			<tr>
-				<td class="green2">{$lang['runtime']}:</td>
-				<td class="green2">{$serverinfo['virtualserver_uptime']}
+				<td class="green2">{$lang['status']}:</td>
+				<td class="green2">{$serverinfo['virtualserver_status']}</td>
+			</tr>
+			<tr>
+				<td class="green1">{$lang['runtime']}:</td>
+				<td class="green1">{$serverinfo['virtualserver_uptime']}
 				</td>
 			</tr>
 			<tr>
-				<td class="green1">{$lang['clients']}:</td>
-				<td class="green1">{$serverinfo['virtualserver_clientsonline']-$serverinfo['virtualserver_queryclientsonline']} / {$serverinfo['virtualserver_maxclients']}</td>
+				<td class="green2">{$lang['clients']}:</td>
+				<td class="green2">{$serverinfo['virtualserver_clientsonline']-$serverinfo['virtualserver_queryclientsonline']} / {$serverinfo['virtualserver_maxclients']}</td>
 			</tr>
 			<tr>
-				<td class="green2">{$lang['queryclients']}:</td>
-				<td class="green2">{$serverinfo['virtualserver_queryclientsonline']}</td>
+				<td class="green1">{$lang['queryclients']}:</td>
+				<td class="green1">{$serverinfo['virtualserver_queryclientsonline']}</td>
 			</tr>
 			<tr>
-				<td class="green1">{$lang['maxreservedslots']}:</td>
-				<td class="green1">{$serverinfo['virtualserver_reserved_slots']}</td>
+				<td class="green2">{$lang['maxreservedslots']}:</td>
+				<td class="green2">{$serverinfo['virtualserver_reserved_slots']}</td>
 			</tr>
 			<tr>
-				<td class="green2">{$lang['showonweblist']}:</td>
-				<td class="green2">{$serverinfo['virtualserver_weblist_enabled']}</td>
-			</tr>
-			<tr>
-				<td class="green1">{$lang['codecencryptionmode']}:</td>
-				<td class="green1">{$serverinfo['virtualserver_codec_encryption_mode']}</td>
-			</tr>
-			<tr>
-				<td class="green2">{$lang['channel']}:</td>
-				<td class="green2">{$serverinfo['virtualserver_channelsonline']}</td>
-			</tr>
-			<tr>
-				<td class="green1">{$lang['minclientschan']}:</td>
-				<td class="green1">{$serverinfo['virtualserver_min_clients_in_channel_before_forced_silence']}</td>
-			</tr>
-			<tr>
-				<td class="green2">{$lang['clientsdimm']}:</td>
-				<td class="green2">{$serverinfo['virtualserver_priority_speaker_dimm_modificator']}</td>
-			</tr>
-			<tr>
-				<td class="green1">{$lang['passwordset']}:</td>
+				<td class="green1">{$lang['showonweblist']}:</td>
 				<td class="green1">
+				{if $serverinfo['virtualserver_weblist_enabled'] == 1}
+					{$lang['yes']}
+				{else}
+					{$lang['no']}
+				{/if}				
+				</td>
+			</tr>
+			<tr>
+				<td class="green2">{$lang['codecencryptionmode']}:</td>
+				<td class="green2">
+				{if $serverinfo['virtualserver_codec_encryption_mode']==0}
+				{$lang['codecencryptionmodeindi']}
+				{elseif $serverinfo['virtualserver_codec_encryption_mode']==1}
+				{$lang['codecencryptionmodegoff']}
+				{elseif $serverinfo['virtualserver_codec_encryption_mode']==2}
+				{$lang['codecencryptionmodegon']}
+				{/if}
+				</td>
+			</tr>
+			<tr>
+				<td class="green1">{$lang['channel']}:</td>
+				<td class="green1">{$serverinfo['virtualserver_channelsonline']}</td>
+			</tr>
+			<tr>
+				<td class="green2">{$lang['minclientschan']}:</td>
+				<td class="green2">{$serverinfo['virtualserver_min_clients_in_channel_before_forced_silence']}</td>
+			</tr>
+			<tr>
+				<td class="green1">{$lang['clientsdimm']}:</td>
+				<td class="green1">{$serverinfo['virtualserver_priority_speaker_dimm_modificator']}</td>
+			</tr>
+			<tr>
+				<td class="green2">{$lang['passwordset']}:</td>
+				<td class="green2">
 				{if $serverinfo['virtualserver_flag_password'] == 1}
 					{$lang['yes']}
 				{else}
@@ -161,12 +179,12 @@
 				</td>
 			</tr>
 			<tr>
-				<td class="green2">{$lang['securitylevel']}:</td>
-				<td class="green2">{$serverinfo['virtualserver_needed_identity_security_level']}</td>
+				<td class="green1">{$lang['securitylevel']}:</td>
+				<td class="green1">{$serverinfo['virtualserver_needed_identity_security_level']}</td>
 			</tr>
 			<tr>
-				<td class="green1">{$lang['iconid']}:</td>
-				<td class="green1">{$serverinfo['virtualserver_icon_id']}</td>
+				<td class="green2">{$lang['iconid']}:</td>
+				<td class="green2">{$serverinfo['virtualserver_icon_id']}</td>
 			</tr>
 			<tr>
 				<td class="maincat" colspan="2">{$lang['standardgroups']}</td>
@@ -281,20 +299,12 @@
 				<td class="green1">{$serverinfo['virtualserver_antiflood_points_tick_reduce']}</td>
 			</tr>
 			<tr>
-				<td class="green2">{$lang['pointsneededwarning']}:</td>
-				<td class="green2">{$serverinfo['virtualserver_antiflood_points_needed_warning']}</td>
+				<td class="green2">{$lang['pointsneededblockcmd']}:</td>
+				<td class="green2">{$serverinfo['virtualserver_antiflood_points_needed_command_stop']}</td>
 			</tr>
 			<tr>
-				<td class="green1">{$lang['pointsneededkick']}:</td>
-				<td class="green1">{$serverinfo['virtualserver_antiflood_points_needed_kick']}</td>
-			</tr>
-			<tr>
-				<td class="green2">{$lang['pointsneededban']}:</td>
-				<td class="green2">{$serverinfo['virtualserver_antiflood_points_needed_ban']}</td>
-			</tr>
-			<tr>
-				<td class="green1">{$lang['pointsbantime']}:</td>
-				<td class="green1">{$serverinfo['virtualserver_antiflood_ban_time']}</td>
+				<td class="green1">{$lang['pointsneededblockip']}:</td>
+				<td class="green1">{$serverinfo['virtualserver_antiflood_points_needed_ip_ban']}</td>
 			</tr>
 			<tr>
 				<td class="thead" colspan="2">{$lang['transfers']}</td>
@@ -320,27 +330,63 @@
 			</tr>
 			<tr>
 				<td class="green1">{$lang['logclient']}:</td>
-				<td class="green1">{$serverinfo['virtualserver_log_client']}</td>
+				<td class="green1">
+				{if $serverinfo['virtualserver_log_client'] == 1}
+					{$lang['yes']}
+				{else}
+					{$lang['no']}
+				{/if}
+				</td>
 			</tr>
 			<tr>
 				<td class="green2">{$lang['logquery']}:</td>
-				<td class="green2">{$serverinfo['virtualserver_log_query']}</td>
+				<td class="green2">
+				{if $serverinfo['virtualserver_log_query'] == 1}
+					{$lang['yes']}
+				{else}
+					{$lang['no']}
+				{/if}
+				</td>
 			</tr>
 			<tr>
 				<td class="green1">{$lang['logchannel']}:</td>
-				<td class="green1">{$serverinfo['virtualserver_log_channel']}</td>
+				<td class="green1">
+				{if $serverinfo['virtualserver_log_channel'] == 1}
+					{$lang['yes']}
+				{else}
+					{$lang['no']}
+				{/if}
+				</td>
 			</tr>
 			<tr>
 				<td class="green2">{$lang['logpermissions']}:</td>
-				<td class="green2">{$serverinfo['virtualserver_log_permissions']}</td>
+				<td class="green2">
+				{if $serverinfo['virtualserver_log_permissions'] == 1}
+					{$lang['yes']}
+				{else}
+					{$lang['no']}
+				{/if}
+				</td>
 			</tr>
 			<tr>
 				<td class="green1">{$lang['logserver']}:</td>
-				<td class="green1">{$serverinfo['virtualserver_log_server']}</td>
+				<td class="green1">
+				{if $serverinfo['virtualserver_log_server'] == 1}
+					{$lang['yes']}
+				{else}
+					{$lang['no']}
+				{/if}	
+				</td>
 			</tr>
 			<tr>
 				<td class="green2">{$lang['logfiletransfer']}:</td>
-				<td class="green2">{$serverinfo['virtualserver_log_filetransfer']}</td>
+				<td class="green2">
+				{if $serverinfo['virtualserver_log_filetransfer'] == 1}
+					{$lang['yes']}
+				{else}
+					{$lang['no']}
+				{/if}	
+				</td>
 			</tr>			
 		</table>
 		</td>

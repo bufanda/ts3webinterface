@@ -43,14 +43,14 @@ if(isset($_POST['create']))
 	$serversnapshot=$ts3->serverSnapshotCreate();
 	if($serversnapshot['success']!==false)
 		{
-		$handler=fopen($path.$_SESSION['server_ip'].'-'.$_SESSION['server_tport'].'/'."server_".time()."_".$_SESSION['server_ip']."-".$port.".txt", "a+");
+		$handler=fopen($path.$_SESSION['server_ip'].'-'.$_SESSION['server_tport'].'/'."server_".time()."_".$_SESSION['server_ip']."-".$whoami['virtualserver_port'].".txt", "a+");
 		fwrite($handler, $serversnapshot['data']);
 		fclose($handler);
-		$noerror .= sprintf($lang['serverbackupok'], $_SESSION['server_ip'], $port)."<br />";
+		$noerror .= sprintf($lang['serverbackupok'], $_SESSION['server_ip'], $whoami['virtualserver_port'])."<br />";
 		}
 		else
 		{
-		$error .= sprintf($lang['serverbackuperr'], $_SESSION['server_ip'], $port)."<br />";
+		$error .= sprintf($lang['serverbackuperr'], $_SESSION['server_ip'], $whoami['virtualserver_port'])."<br />";
 		}
 	}		
 
@@ -108,6 +108,6 @@ while($datei=readdir($handler))
 $smarty->assign("error", $error);
 $smarty->assign("noerror", $noerror);
 $smarty->assign("files", $files);
-$smarty->assign("getserverip", $_SESSION['server_ip']."-".$port);
+$smarty->assign("getserverip", $_SESSION['server_ip']."-".$whoami['virtualserver_port']);
 }
 ?>

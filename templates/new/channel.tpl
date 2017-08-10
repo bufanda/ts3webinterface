@@ -41,13 +41,13 @@
 			<td class="{$td_col} center">{$value['pid']}</td>
 			<td class="{$td_col} center">{$value['channel_name']}</td>
 			<td class="{$td_col} center">
-			<form method="post" action="index.php?site=channelview&amp;port={$port}&amp;cid={$value['cid']}">
+			<form method="post" action="index.php?site=channelview&amp;sid={$sid}&amp;cid={$value['cid']}">
 			<input type="submit" class="select" name="select" value="" title="{$lang['select']}" />
 			</form>
-			<form method="post" action="index.php?site=channeleditperm&amp;port={$port}&amp;cid={$value['cid']}">
+			<form method="post" action="index.php?site=channeleditperm&amp;sid={$sid}&amp;cid={$value['cid']}">
 			<input type="submit" class="eperms" name="editperms" value="" title="{$lang['editperms']}" />
 			</form>
-			<form method="post" action="index.php?site=channel&amp;port={$port}">
+			<form method="post" action="index.php?site=channel&amp;sid={$sid}">
 			<input type="hidden" name="cid" value="{$value['cid']}" />
 			{if $value['total_clients'] > 0}
 				<input type="hidden" name="force" value="1" />

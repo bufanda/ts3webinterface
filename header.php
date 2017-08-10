@@ -39,39 +39,11 @@ if(isset($_POST['skey']) OR isset($_SESSION['server_ip']) AND isset($_SESSION['s
 $uip=$_SERVER['REMOTE_ADDR'];
 if(isset($_POST['loginUser'])) {$lg_user=$_POST['loginUser'];}
 if(isset($_POST['loginPw'])) {$lg_pw=$_POST['loginPw'];}
-if(isset($_POST['loginPort'])) {$lg_port=$_POST['loginPort'];}
-if(isset($_POST['loginHostUser'])) {$lg_host_user=$_POST['loginHostUser'];}
-if(isset($_POST['loginHostPw'])) {$lg_host_pw=$_POST['loginHostPw'];}
-$port_err=0;
+
 $loginstatus=false;
 $hoststatus=false;
 
-if($serverhost===true)
-	{
-	if($lg_host_user==$hostusername AND $lg_host_pw==$hostpassword)
-		{
-		$hoststatus=true;
-		$_SESSION['loggedhost']=true;
-		$_SESSION['userip']=$uip;
-		}
-	if(isset($_SESSION['loggedhost']) AND $_SESSION['loggedhost']===true AND $_SESSION['userip']==$uip)
-		{
-		$hoststatus=true;
-		}
-		elseif(isset($_SESSION['loggedhost']) AND $_SESSION['loggedhost']===true AND $_SESSION['userip']!=$uip)
-		{
-		$loginstatus=false;
-		$hoststatus=false;
-		$ts3->logout();
-		session_destroy();
-		}
-	if($hoststatus===false AND isset($lg_port) AND empty($lg_port))
-		{
-		$port_err++;
-		}
-	}
-
-if(!empty($lg_user) AND !empty($lg_pw) AND empty($port_err))
+if(!empty($lg_user) AND !empty($lg_pw))
 	{
 	if($ts3->getElement('success', $ts3->login($lg_user, $lg_pw))===true)
 		{
@@ -80,9 +52,15 @@ if(!empty($lg_user) AND !empty($lg_pw) AND empty($port_err))
 		$_SESSION['userip']=$uip;
 		$_SESSION['loginuser']=$lg_user;
 		$_SESSION['loginpw']=base64_encode(serialize($lg_pw));
-		if($serverhost===true AND $hoststatus===false)
+		$whoami=$ts3->getElement('data', $ts3->whoAmI());
+		check_version_consistency($neededversionkey);
+		if($whoami['client_origin_server_id']!=0)
 			{
-			$_SESSION['loginport']=$lg_port;
+			$_SESSION['loginsid']=$whoami['client_origin_server_id'];
+			}
+			else
+			{
+			$hoststatus=true;
 			}
 		}
 	}
@@ -100,6 +78,12 @@ if(isset($_SESSION['logged']) AND $_SESSION['logged']===true AND $_SESSION['user
 		else
 		{
 		$loginstatus=true;
+		$whoami=$ts3->getElement('data', $ts3->whoAmI());
+		check_version_consistency($neededversionkey);
+		if($whoami['client_origin_server_id']==0)
+			{
+			$hoststatus=true;
+			}
 		}
 	}
 	
@@ -117,5 +101,15 @@ if($site=='logout' AND $loginstatus===true)
 	$loginstatus=false;
 	$ts3->logout();
 	session_destroy();
+	}
+	
+require_once('site/footer.php');
+
+
+$footer=implode("", file('templates/'.$style.DS.'index.tpl'));
+
+if(md5($footer2)!='e84ea7308f3e293adcda8b1927b61c3d' OR strpos($footer, '{$footer}')===false)
+	{
+	die();
 	}
 ?>

@@ -15,19 +15,19 @@
 					</tr>
 					<tr>
 						<td style="text-align:right; height:30px">
-						{if $fastswitch == true}
+						{if $fastswitch == true AND $hoststatus === true}
 							<form method="get" action="index.php?site=serverview">
 							{if strpos($site, 'edit') == false OR $site == serveredit}
 							<input type="hidden" name="site" value="{$site}" />
 							{else}
 							<input type="hidden" name="site" value="serverview" />
 							{/if}
-							<select name="port" onchange="submit()">
+							<select name="sid" onchange="submit()">
 							{foreach key=key item=server from=$serverlist}
-								{if $port == $server['virtualserver_port']}
-								<option selected="selected" value="{$server['virtualserver_port']}">{$server['virtualserver_name']}-{$server['virtualserver_port']}</option>
+								{if $sid == $server['virtualserver_sid']}
+								<option selected="selected" value="{$server['virtualserver_id']}">{$server['virtualserver_name']}-{$server['virtualserver_port']}</option>
 								{else}
-								<option value="{$server['virtualserver_port']}">{$server['virtualserver_name']}-{$server['virtualserver_port']}</option>
+								<option value="{$server['virtualserver_id']}">{$server['virtualserver_name']}-{$server['virtualserver_port']}</option>
 								{/if}
 							{/foreach}
 							</select>

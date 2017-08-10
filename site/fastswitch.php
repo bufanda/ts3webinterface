@@ -13,7 +13,7 @@
 *You should have received a copy of the GNU General Public License along with this program; if not, see <http://www.gnu.org/licenses/>. 
 */
 if(!defined("SECURECHECK")) {die($lang['error_file_alone']);} 
-if($fastswitch==true AND $serverhost==true AND $hoststatus==true AND $loginstatus!==false AND !empty($port) OR $fastswitch==true AND $serverhost==false AND $loginstatus!==false AND !empty($port))
+if($fastswitch==true AND $serverhost==true AND $hoststatus==true AND $loginstatus!==false AND !empty($sid) OR $fastswitch==true AND $serverhost==false AND $loginstatus!==false AND !empty($sid))
 	{
 	$serverlist=$ts3->getElement('data', $ts3->serverList());
 	if(!empty($serverlist))

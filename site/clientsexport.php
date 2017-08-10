@@ -20,7 +20,7 @@ if(isset($_POST['give']))
 	$ts3=new ts3admin($_SESSION['server_ip'], $_SESSION['server_tport']);
 	$ts3->connect();
 	$ts3->login($_SESSION['loginuser'], unserialize(base64_decode($_SESSION['loginpw'])));
-	$ts3->selectServer($_POST['port']);
+	$ts3->selectServer($_POST['sid'], 'serverId');
 
 	$start=0;
 	$duration=1000;

@@ -1,4 +1,4 @@
-{if !isset($port)}
+{if !isset($sid)}
 	{if !isset($smarty.get.refresh) OR $smarty.get.refresh == on}
 	<meta http-equiv="refresh" content="3; URL=index.php?site=servertraffic" />
 	{/if}
@@ -59,7 +59,7 @@
 		</table>
 	{else}
 	{if !isset($smarty.get.refresh) OR $smarty.get.refresh == on}
-		<meta http-equiv="refresh" content="3; URL=index.php?site=servertraffic&amp;port={$port}" />
+		<meta http-equiv="refresh" content="3; URL=index.php?site=servertraffic&amp;sid={$sid}" />
 	{/if}
 	<table align="center" style="width:50%" class="border" cellpadding="1" cellspacing="0">
 		<tr>
@@ -98,9 +98,9 @@
 		<tr>
 			<td colspan="3">
 			{if !isset($smarty.get.refresh) OR $smarty.get.refresh == on}
-			<a href="index.php?site=servertraffic&amp;port={$port}&amp;refresh=off">{$lang['stoprefresh']}</a>
+			<a href="index.php?site=servertraffic&amp;sid={$sid}&amp;refresh=off">{$lang['stoprefresh']}</a>
 			{else}
-			<a href="index.php?site=servertraffic&amp;port={$port}&amp;refresh=on">{$lang['autorefresh']}</a>
+			<a href="index.php?site=servertraffic&amp;sid={$sid}&amp;refresh=on">{$lang['autorefresh']}</a>
 			{/if}
 			</td>
 		</tr>

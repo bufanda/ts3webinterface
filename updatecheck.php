@@ -15,7 +15,7 @@
 if(!defined("SECURECHECK")) {die($lang['error_file_alone']);} 
 $wiversionurl="http://www.ts3.cs-united.de/ts3wi/wiversion.html";
 $seversionurl="http://www.ts3.cs-united.de/ts3wi/seversion.html";
-$getthedirtylist="http://www.ts3.cs-united.de/ts3wi/dirtylist.html";
 
-$wiversion="beta3.0.1";
+$neededversionkey="aHR0cDovL3d3dy50czMuY3MtdW5pdGVkLmRlL3RzM3dpL2RpcnR5bGlzdC5odG1s";
+$wiversion="beta3.1";
 ?>

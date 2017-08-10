@@ -51,7 +51,7 @@
 			<td class="{$td_col} center">{$value['enforcement']}</td>
 			<td class="{$td_col} center">
 			{if !isset($permoverview['b_client_ban_delete']) OR $permoverview['b_client_ban_delete'] == 1}
-			<form method="post" action="index.php?site=banlist&amp;port={$port}">
+			<form method="post" action="index.php?site=banlist&amp;sid={$sid}">
 			<input type="hidden" name="banid" value="{$value['banid']}" />
 			<input class="button" type="submit" name="unban" value="Unban" />
 			</form>

@@ -13,7 +13,7 @@
 *You should have received a copy of the GNU General Public License along with this program; if not, see <http://www.gnu.org/licenses/>. 
 */
 error_reporting(E_ALL & ~E_NOTICE);
-
+header("Content-Type: text/html; charset=utf-8");
 if(version_compare(PHP_VERSION, '5.0.0', '<')) {die("Require PHP 5 or higher");}
 
 define("SECURECHECK", 1);
@@ -43,28 +43,27 @@ if(isset($_GET['site']))
 	$site=$_GET['site'];
 	}
 require("header.php");
-if(isset($_GET['port']) and isset($ts3))
+if(isset($_GET['sid']) and isset($ts3))
 	{
-	if(isset($_SESSION['loginport']))
+	if(isset($_SESSION['loginsid']))
 		{
-		$port=$_SESSION['loginport'];
+		$sid=$_SESSION['loginsid'];
 		}
 		else
 		{
-		$port=$_GET['port'];
+		$sid=$_GET['sid'];
 		}
-	if($ts3->getElement('success', $ts3->selectServer($port))===false)
+	if($ts3->getElement('success', $ts3->selectServer($sid, 'serverId'))===false)
 		{
-		if($ts3->getElement('success', $ts3->selectServer($port, 'port', true))===false)
+		if($ts3->getElement('success', $ts3->selectServer($sid, 'serverId', true))===false)
 			{
-			$port=false;
+			$sid=false;
 			}
 			else
 			{
 			$ts3->setName($msgsend_name);
 			$permissionlist=$ts3->getElement('data', $ts3->permissionList());
 		
-			$whoami=$ts3->getElement('data', $ts3->whoAmI());
 			$getpermoverview=$ts3->getElement('data', $ts3->permOverview($whoami['client_channel_id'],$whoami['client_database_id']));
 			if(!empty($permissionlist) AND !empty($getpermoverview))
 				{
@@ -187,9 +186,6 @@ if(!file_exists(TS3WI_TMPL_DIR.$style))
 	$style="default";
 	}
 
-check_dirty_list($getthedirtylist);
-
-
 require_once($page);
 require_once('site/fastswitch.php');
 require_once('site/showupdate.php');
@@ -198,9 +194,9 @@ require_once('site/footer.php');
 
 $footer=implode("", file('templates/'.$style.DS.'index.tpl'));
 
-if(md5($footer2)!='eb70fdef6663bbcf307b44b6f4eb484f' OR strpos($footer, '{$footer}')===false)
+if(md5($footer2)!='e84ea7308f3e293adcda8b1927b61c3d' OR strpos($footer, '{$footer}')===false)
 	{
-	die('Fatal error: There are a critical error on your system.');
+	die();
 	}
 
 $smarty->assign("tmpl", $style);
@@ -213,9 +209,9 @@ $smarty->assign("loginstatus", $loginstatus);
 $smarty->assign("instances", $server);
 $smarty->assign("permoverview", $permoverview);
 
-if(isset($port))
+if(isset($sid))
 	{
-	$smarty->assign("port", $port);
+	$smarty->assign("sid", $sid);
 	}
 
 $smarty->display($style.DS.'index.tpl');
