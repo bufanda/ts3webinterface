@@ -1,0 +1,190 @@
+a.kick
+	{
+	display:block;
+	width:16px;
+	height:16px;
+	background-image:url(images/kick.png);
+	}
+
+a.ban
+	{
+	display:block;
+	width:16px;
+	height:16px;
+	background-image:url(images/ban.png);
+	}
+
+a.poke
+	{
+	display:block;
+	width:16px;
+	height:16px;
+	background-image:url(images/poke.png);
+	}
+a.move
+	{
+	display:block;
+	width:16px;
+	height:16px;
+	background-image:url(images/move.png);
+	}
+div.content
+	{
+
+	border:1px solid #666666;
+	}
+div.place
+	{
+	float:left;
+	width:16px;
+	height:16px;
+	}
+div.pwchanimg
+	{
+	float:left;
+	width:16px;
+	height:16px;
+	background-image:URL(images/pwchannel.png);
+	}
+div.chanimg
+	{
+	float:left;
+	width:16px;
+	height:16px;
+	background-image:URL(images/channel.png);
+	}
+div.channame
+	{
+	float:left;
+	height:16px;
+	line-height:16px;
+	font-size:12px;
+	font-weight:lighter;
+	}
+div.pwimg
+	{
+	float:left;
+	width:16px;
+	height:16px;
+	background-image:URL(images/password.png);
+	}
+div.clear
+	{
+	clear:both;
+	}
+div.serveradmin_img
+	{
+	float:left;
+	width:16px;
+	height:16px;
+	background-image:URL(images/sa.png);
+	}
+div.channeladmin_img
+	{
+	float:left;
+	width:16px;
+	height:16px;
+	background-image:URL(images/ca.png);
+	}
+div.channeloperator_img
+	{
+	float:left;
+	width:16px;
+	height:16px;
+	background-image:URL(images/co.png);
+	}
+div.away_img
+	{
+	float:left;
+	width:16px;
+	height:16px;
+	background-image:URL(images/away.png);
+	}
+div.away_msg
+	{
+	float:left;
+	height:16px;
+	line-height:16px;
+	font-size:12px;
+	font-style:normal;
+	font-weight:lighter;
+	}
+div.hwhead_img
+	{
+	float:left;
+	width:16px;
+	height:16px;
+	background-image:URL(images/hwhead.png);
+	}
+div.hwmic_img
+	{
+	float:left;
+	width:16px;
+	height:16px;
+	background-image:URL(images/hwmic.png);
+	}
+div.head_img
+	{
+	float:left;
+	width:16px;
+	height:16px;
+	background-image:URL(images/head.png);
+	}
+div.mic_img
+	{
+	float:left;
+	width:16px;
+	height:16px;
+	background-image:URL(images/mic.png);
+	}
+div.player_on_img
+	{
+	float:left;
+	width:16px;
+	height:16px;
+	background-image:URL(images/player_on.png);
+	}
+div.player_img
+	{
+	float:left;
+	width:16px;
+	height:16px;
+	background-image:URL(images/player.png);
+	}
+div.clientnick
+	{
+	float:left;
+	height:16px;
+	line-height:16px;
+	font-size:12px;
+	font-style:normal;
+	font-weight:bold;
+	}
+div.channel
+	{
+	height:16px;
+	line-height:16px;
+	margin-bottom:3px;
+	}
+div.client
+	{
+	height:16px;
+	line-height:16px;
+	margin-bottom:3px;
+	}
+div.server_img
+	{
+	float:left;
+	width:16px;
+	height:16px;
+	background-image:URL(images/server.png);
+	}
+div.servername
+	{
+	float:left;
+	height:16px;
+	line-height:16px;
+	font-size:12px;
+	font-style:normal;
+	font-weight:lighter;
+	}	
