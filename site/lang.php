@@ -15,6 +15,7 @@
 if(!defined("SECURECHECK")) {die($lang['error_file_alone']);} 
 $lang=array();
 $lang['access']="Access";
+$lang['action']="Action";
 $lang['add']="Add";
 $lang['addban']="Ban Add";
 $lang['addchannelgroup']="Channel Group Add";
@@ -111,6 +112,7 @@ $lang['complainlist']="Complain List";
 $lang['complainsdel']="Complains successfully deleted";
 $lang['copypermsfrom']="Copy perms from";
 $lang['countcomplain']="have %d complains";
+$lang['countdelicon']="It were deleted %d old icons.";
 $lang['countnewicon']="It were downloaded %d new icons.";
 $lang['create']="Create";
 $lang['createachannel']="Create a Channel";
@@ -280,6 +282,7 @@ $lang['nouse']="You do not have permission to use the \"use\" command!";
 $lang['number']="Number";
 $lang['offline']="Offline";
 $lang['online']="Online";
+$lang['onlinevirtual']="Online Virtual";
 $lang['option']="Option";
 $lang['options']="Options";
 $lang['outgoing']="Outgoing";
@@ -420,6 +423,7 @@ $lang['yes']="Yes";
 if($cfglang=='de')
 	{
 	$lang['access']="Zugriff";
+	$lang['action']="Aktion";
 	$lang['add']="Hinzuf&uuml;gen";
 	$lang['addban']="Bann hinzuf&uuml;gen";
 	$lang['addchannelgroup']="Channelgruppe hinzuf&uuml;gen";
@@ -516,6 +520,7 @@ if($cfglang=='de')
 	$lang['complainsdel']="Beschwerden erfolgreich gel&ouml;scht";
 	$lang['copypermsfrom']="Kopiere Rechte von";
 	$lang['countcomplain']="hat %d beschwerden";
+	$lang['countdelicon']="Es wurden %d alte Icons gel&ouml;scht.";
 	$lang['countnewicon']="Es wurden %d neue Icons runtergeladen.";
 	$lang['create']="Erstellen";
 	$lang['createachannel']="Erstelle einen Channel";

@@ -85,10 +85,10 @@
 			<tr>
 				<td class="green2">{$lang['hostmessageshow']}:</td>
 				<td class="green2">
-				{$lang['nomessage']} <input {if $screate_tmp['hostmsgshow'] == 0} checked="checked" {/if} type="radio" name="newsettings[virtualserver_hostmessage_mode]" value="0" /><br />
-				{$lang['showmessagelog']} <input {if $screate_tmp['hostmsgshow'] == 1} checked="checked" {/if} type="radio" name="newsettings[virtualserver_hostmessage_mode]" value="1" /><br />
-				{$lang['showmodalmessage']} <input {if $screate_tmp['hostmsgshow'] == 2} checked="checked" {/if} type="radio" name="newsettings[virtualserver_hostmessage_mode]" value="2" /><br />
-				{$lang['modalandexit']} <input {if $screate_tmp['hostmsgshow'] == 3} checked="checked" {/if} type="radio" name="newsettings[virtualserver_hostmessage_mode]" value="3" />
+				{$lang['nomessage']} <input {if $screate_tmp['hostmsgshow'] === '0'} checked="checked" {/if} type="radio" name="newsettings[virtualserver_hostmessage_mode]" value="0" /><br />
+				{$lang['showmessagelog']} <input {if $screate_tmp['hostmsgshow'] === '1'} checked="checked" {/if} type="radio" name="newsettings[virtualserver_hostmessage_mode]" value="1" /><br />
+				{$lang['showmodalmessage']} <input {if $screate_tmp['hostmsgshow'] === '2'} checked="checked" {/if} type="radio" name="newsettings[virtualserver_hostmessage_mode]" value="2" /><br />
+				{$lang['modalandexit']} <input {if $screate_tmp['hostmsgshow'] === '3'} checked="checked" {/if} type="radio" name="newsettings[virtualserver_hostmessage_mode]" value="3" />
 				</td>
 			</tr>
 			<tr>
@@ -178,6 +178,51 @@
 				<td class="green2">{$lang['downloadquota']}:</td>
 				<td class="green2"><input type="text" name="newsettings[virtualserver_download_quota]" value="{$screate_tmp['downloadquota']}"/> MiB</td>
 			</tr>
+			<tr>
+				<td class="maincat" colspan="2">{$lang['logs']}</td>
+			</tr>
+			<tr>
+				<td class="green1">{$lang['logclient']}:</td>
+				<td class="green1">
+					{$lang['yes']}<input type="radio" name="newsettings[virtualserver_log_client]" value="1" {if $screate_tmp['virtualserver_log_client'] === '1'}checked="checked"{/if} />
+					{$lang['no']}<input type="radio" name="newsettings[virtualserver_log_client]" value="0" {if $screate_tmp['virtualserver_log_client'] === '0'}checked="checked"{/if} />
+				</td>
+			</tr>
+			<tr>
+				<td class="green2">{$lang['logquery']}:</td>
+				<td class="green2">
+					{$lang['yes']}<input type="radio" name="newsettings[virtualserver_log_query]" value="1" {if $screate_tmp['virtualserver_log_query'] === '1'}checked="checked"{/if} />
+					{$lang['no']}<input type="radio" name="newsettings[virtualserver_log_query]" value="0" {if $screate_tmp['virtualserver_log_query'] === '0'}checked="checked"{/if} />
+				</td>
+			</tr>
+			<tr>
+				<td class="green1">{$lang['logchannel']}:</td>
+				<td class="green1">
+					{$lang['yes']}<input type="radio" name="newsettings[virtualserver_log_channel]" value="1" {if $screate_tmp['virtualserver_log_channel'] === '1'}checked="checked"{/if} />
+					{$lang['no']}<input type="radio" name="newsettings[virtualserver_log_channel]" value="0" {if $screate_tmp['virtualserver_log_channel'] === '0'}checked="checked"{/if} />
+				</td>
+			</tr>
+			<tr>
+				<td class="green2">{$lang['logpermissions']}:</td>
+				<td class="green2">
+					{$lang['yes']}<input type="radio" name="newsettings[virtualserver_log_permissions]" value="1" {if $screate_tmp['virtualserver_log_permissions'] === '1'}checked="checked"{/if} />
+					{$lang['no']}<input type="radio" name="newsettings[virtualserver_log_permissions]" value="0" {if $screate_tmp['virtualserver_log_permissions'] === '0'}checked="checked"{/if} />
+				</td>
+			</tr>
+			<tr>
+				<td class="green1">{$lang['logserver']}:</td>
+				<td class="green1">
+					{$lang['yes']}<input type="radio" name="newsettings[virtualserver_log_server]" value="1" {if $screate_tmp['virtualserver_log_server'] === '1'}checked="checked"{/if} />
+					{$lang['no']}<input type="radio" name="newsettings[virtualserver_log_server]" value="0" {if $screate_tmp['virtualserver_log_server'] === '0'}checked="checked"{/if} />
+				</td>
+			</tr>	
+			<tr>
+				<td class="green2">{$lang['logfiletransfer']}:</td>
+				<td class="green2">
+					{$lang['yes']}<input type="radio" name="newsettings[virtualserver_log_filetransfer]" value="1" {if $screate_tmp['virtualserver_log_filetransfer'] === '1'}checked="checked"{/if} />
+					{$lang['no']}<input type="radio" name="newsettings[virtualserver_log_filetransfer]" value="0" {if $screate_tmp['virtualserver_log_filetransfer'] === '0'}checked="checked"{/if} />
+				</td>
+			</tr>	
 	<tr>
 		<td class="green1">{$lang['option']}</td>
 		<td class="green1"><input class="button" type="submit" name="createserver" value="{$lang['create']}" /></td>

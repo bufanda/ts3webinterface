@@ -2293,8 +2293,9 @@ class ts3admin {
 		$settingsString = '';
 		
 		foreach($data as $key => $value) {
-			if(!empty($value)) { $settingsString .= ' '.$key.'='.$this->escapeText($value); }
+			if($value==='0' OR !empty($value)) { $settingsString .= ' '.$key.'='.$this->escapeText($value); }
 		}
+		
 		return $this->getData('array', 'servercreate'.$settingsString);
 	}
 

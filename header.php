@@ -79,7 +79,7 @@ if(!empty($lg_user) AND !empty($lg_pw) AND empty($port_err))
 		$_SESSION['logged']=true;
 		$_SESSION['userip']=$uip;
 		$_SESSION['loginuser']=$lg_user;
-		$_SESSION['loginpw']=$lg_pw;
+		$_SESSION['loginpw']=base64_encode(serialize($lg_pw));
 		if($serverhost===true AND $hoststatus===false)
 			{
 			$_SESSION['loginport']=$lg_port;
@@ -90,8 +90,7 @@ if(!empty($lg_user) AND !empty($lg_pw) AND empty($port_err))
 
 if(isset($_SESSION['logged']) AND $_SESSION['logged']===true AND $_SESSION['userip']==$uip AND $serverstatus===true)
 	{
-
-	if($ts3->getElement('success', $ts3->login($_SESSION['loginuser'], $_SESSION['loginpw']))===false)
+	if($ts3->getElement('success', $ts3->login($_SESSION['loginuser'], unserialize(base64_decode($_SESSION['loginpw']))))===false)
 		{
 		$loginstatus=false;
 		$hoststatus=false;

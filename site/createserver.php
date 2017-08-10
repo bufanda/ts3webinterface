@@ -20,9 +20,9 @@ include('screate_config.php');
 $error = '';
 $noerror = '';
 if(isset($_POST['createserver']))
-	{	
+	{
 	if(!empty($_POST['newsettings']['virtualserver_name']))
-		{
+		{	
 		$token=$ts3->serverCreate($_POST['newsettings']);
 		if($token['success']===false)
 			{

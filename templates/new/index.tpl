@@ -23,6 +23,48 @@
 //<![CDATA[
 function Klappen(Id) 
 	{
+	
+	if(Id == 0)
+		{
+		var i = 1;
+		var jetec_Minus="gfx/images/minus.png", jetec_Plus="gfx/images/plus.png";
+		
+		if(document.getElementById('Pic0').name == 'plus')
+			{
+			document.getElementById('Pic0').src = jetec_Minus;
+			document.getElementById('Pic0').name = 'minus';
+			var openAll = 1;
+			}
+			else
+			{
+			document.getElementById('Pic0').src = jetec_Plus;
+			document.getElementById('Pic0').name = 'plus';
+			var openAll = 0;
+			}
+		while(i<100)
+			{
+			if(document.getElementById('Pic'+i)!=null)
+				{
+				var KlappText = document.getElementById('Lay'+i);
+				var KlappBild = document.getElementById('Pic'+i);
+				if (openAll == 1) 
+					{
+					KlappText.style.display = 'block';
+					KlappBild.src = jetec_Minus;
+					} 
+					else 
+					{
+					KlappText.style.display = 'none';
+					KlappBild.src = jetec_Plus;
+					}
+				i++;
+				}
+				else
+				{
+				break;
+				}
+			}
+		}
 	var KlappText = document.getElementById('Lay'+Id);
 	var KlappBild = document.getElementById('Pic'+Id);
 	var jetec_Minus="gfx/images/minus.png", jetec_Plus="gfx/images/plus.png";
@@ -94,6 +136,50 @@ function check(form)
 		checkflag = "false";
 		return checkflag; 
 		}
+	}
+var conf_arr = new Array();
+function confirmArray(sid, name, port, action)
+	{
+	conf_arr[sid]=new Object();
+	conf_arr[sid]['name']=name;
+	conf_arr[sid]['port']=port;
+	if(document.getElementById("caction"+sid).options.selectedIndex == 0)
+		{
+		conf_arr[sid]['action']='';
+		}
+		else if(document.getElementById("caction"+sid).options.selectedIndex == 1)
+		{
+		conf_arr[sid]['action']='start';
+		}
+		else if(document.getElementById("caction"+sid).options.selectedIndex == 2)
+		{
+		conf_arr[sid]['action']='stop';
+		}
+		else if(document.getElementById("caction"+sid).options.selectedIndex == 3)
+		{
+		conf_arr[sid]['action']='del';
+		}
+	}
+	
+function confirmAction()
+	{
+	var text="Möchtest du folgende Aktion wirklich ausführen?\n\n";
+	for(var i in conf_arr)
+		{
+		if(conf_arr[i]['action'] == 'start')
+			{
+			text = text+"***Starten*** "+conf_arr[i]['name']+" "+conf_arr[i]['port']+"\n";
+			}
+			else if(conf_arr[i]['action'] == 'stop')
+			{
+			text = text+"***Stoppen*** "+conf_arr[i]['name']+" "+conf_arr[i]['port']+"\n";
+			}
+			else if(conf_arr[i]['action'] == 'del')
+			{
+			text = text+"***Löschen*** "+conf_arr[i]['name']+" "+conf_arr[i]['port']+"\n";
+			}
+		}
+	return text;
 	}
 //]]>
 </script>

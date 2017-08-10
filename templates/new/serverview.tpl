@@ -69,7 +69,7 @@
 				<td class="thead" colspan="2">{$lang['virtualserver']} #{$serverinfo['virtualserver_id']}</td>
 			</tr>
 			<tr>
-				<td class="maincat left" colspan="2">{$lang['basics']}</td>
+				<td class="maincat" colspan="2">{$lang['basics']}</td>
 			</tr>
 			<tr>
 				<td class="green1">{$lang['autostart']}:</td>
@@ -169,7 +169,7 @@
 				<td class="green1">{$serverinfo['virtualserver_icon_id']}</td>
 			</tr>
 			<tr>
-				<td class="maincat left" colspan="2">{$lang['standardgroups']}</td>
+				<td class="maincat" colspan="2">{$lang['standardgroups']}</td>
 			</tr>
 			<tr>
 				<td class="green1">{$lang['servergroup']}:</td>
@@ -208,7 +208,7 @@
 				</td>
 			</tr>
 			<tr>
-				<td class="maincat left" colspan="2">{$lang['host']}</td>
+				<td class="maincat" colspan="2">{$lang['host']}</td>
 			</tr>
 			<tr>
 				<td class="green1">{$lang['hostmessage']}:</td>
@@ -259,7 +259,7 @@
 				<td class="green2">{$serverinfo['virtualserver_hostbutton_url']}</td>
 			</tr>
 			<tr>
-				<td class="maincat left" colspan="2">{$lang['autoban']}</td>
+				<td class="maincat" colspan="2">{$lang['autoban']}</td>
 			</tr>
 			<tr>
 				<td class="green2">{$lang['autobancount']}:</td>
@@ -274,7 +274,7 @@
 				<td class="green2">{$serverinfo['virtualserver_complain_remove_time']}</td>
 			</tr>
 			<tr>
-				<td class="maincat left" colspan="2">{$lang['antiflood']}</td>
+				<td class="maincat" colspan="2">{$lang['antiflood']}</td>
 			</tr>
 			<tr>
 				<td class="green1">{$lang['pointstickreduce']}:</td>
@@ -297,7 +297,26 @@
 				<td class="green1">{$serverinfo['virtualserver_antiflood_ban_time']}</td>
 			</tr>
 			<tr>
-				<td class="maincat left" colspan="2">{$lang['logs']}</td>
+				<td class="thead" colspan="2">{$lang['transfers']}</td>
+			</tr>
+			<tr>
+				<td class="green1">{$lang['upbandlimit']}:</td>
+				<td class="green1">{$serverinfo['virtualserver_max_upload_total_bandwidth']} Byte/s</td>
+			</tr>
+			<tr>
+				<td class="green2">{$lang['uploadquota']}:</td>
+				<td class="green2">{$serverinfo['virtualserver_upload_quota']} MiB</td>
+			</tr>
+			<tr>
+				<td class="green1">{$lang['downbandlimit']}:</td>
+				<td class="green1">{$serverinfo['virtualserver_max_download_total_bandwidth']} Byte/s</td>
+			</tr>
+			<tr>
+				<td class="green2">{$lang['downloadquota']}:</td>
+				<td class="green2">{$serverinfo['virtualserver_download_quota']} MiB</td>
+			</tr>
+			<tr>
+				<td class="maincat" colspan="2">{$lang['logs']}</td>
 			</tr>
 			<tr>
 				<td class="green1">{$lang['logclient']}:</td>

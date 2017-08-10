@@ -97,7 +97,8 @@
 				{if isset($permoverview['b_virtualserver_modify_weblist']) AND empty($permoverview['b_virtualserver_modify_weblist'])}
 					-
 				{else}
-					<input type="text" name="newsettings[virtualserver_weblist_enabled]" value="{$serverinfo['virtualserver_weblist_enabled']}" />
+					{$lang['yes']}<input type="radio" name="newsettings[virtualserver_weblist_enabled]" value="1" {if $serverinfo['virtualserver_weblist_enabled'] == 1}checked="checked"{/if} />
+					{$lang['no']}<input type="radio" name="newsettings[virtualserver_weblist_enabled]" value="0" {if $serverinfo['virtualserver_weblist_enabled'] == 0}checked="checked"{/if} />
 				{/if}
 				</td>
 			</tr>
@@ -424,31 +425,49 @@
 				</td>
 			</tr>
 			<tr>
-				<td class="maincat left" colspan="2">{$lang['logs']}</td>
+				<td class="maincat" colspan="2">{$lang['logs']}</td>
 			</tr>
 			<tr>
 				<td class="green1">{$lang['logclient']}:</td>
-				<td class="green1"><input type="checkbox" {if $serverinfo['virtualserver_log_client'] == 1}checked="checked"{/if} name="newsettings[virtualserver_log_client]" value="1" /></td>
+				<td class="green1">
+					{$lang['yes']}<input type="radio" name="newsettings[virtualserver_log_client]" value="1" {if $serverinfo['virtualserver_log_client'] == 1}checked="checked"{/if} />
+					{$lang['no']}<input type="radio" name="newsettings[virtualserver_log_client]" value="0" {if $serverinfo['virtualserver_log_client'] == 0}checked="checked"{/if} />
+				</td>
 			</tr>
 			<tr>
 				<td class="green2">{$lang['logquery']}:</td>
-				<td class="green2"><input type="checkbox" {if $serverinfo['virtualserver_log_query'] == 1}checked="checked"{/if} name="newsettings[virtualserver_log_query]" value="1" /></td>
+				<td class="green2">
+					{$lang['yes']}<input type="radio" name="newsettings[virtualserver_log_query]" value="1" {if $serverinfo['virtualserver_log_query'] == 1}checked="checked"{/if} />
+					{$lang['no']}<input type="radio" name="newsettings[virtualserver_log_query]" value="0" {if $serverinfo['virtualserver_log_query'] == 0}checked="checked"{/if} />
+				</td>
 			</tr>
 			<tr>
 				<td class="green1">{$lang['logchannel']}:</td>
-				<td class="green1"><input type="checkbox" {if $serverinfo['virtualserver_log_channel'] == 1}checked="checked"{/if} name="newsettings[virtualserver_log_channel]" value="1" /></td>
+				<td class="green1">
+					{$lang['yes']}<input type="radio" name="newsettings[virtualserver_log_channel]" value="1" {if $serverinfo['virtualserver_log_channel'] == 1}checked="checked"{/if} />
+					{$lang['no']}<input type="radio" name="newsettings[virtualserver_log_channel]" value="0" {if $serverinfo['virtualserver_log_channel'] == 0}checked="checked"{/if} />
+				</td>
 			</tr>
 			<tr>
 				<td class="green2">{$lang['logpermissions']}:</td>
-				<td class="green2"><input type="checkbox" {if $serverinfo['virtualserver_log_permissions'] == 1}checked="checked"{/if} name="newsettings[virtualserver_log_permissions]" value="1" /></td>
+				<td class="green2">
+					{$lang['yes']}<input type="radio" name="newsettings[virtualserver_log_permissions]" value="1" {if $serverinfo['virtualserver_log_permissions'] == 1}checked="checked"{/if} />
+					{$lang['no']}<input type="radio" name="newsettings[virtualserver_log_permissions]" value="0" {if $serverinfo['virtualserver_log_permissions'] == 0}checked="checked"{/if} />
+				</td>
 			</tr>
 			<tr>
 				<td class="green1">{$lang['logserver']}:</td>
-				<td class="green1"><input type="checkbox" {if $serverinfo['virtualserver_log_server'] == 1}checked="checked"{/if} name="newsettings[virtualserver_log_server]" value="1" /></td>
+				<td class="green1">
+					{$lang['yes']}<input type="radio" name="newsettings[virtualserver_log_server]" value="1" {if $serverinfo['virtualserver_log_server'] == 1}checked="checked"{/if} />
+					{$lang['no']}<input type="radio" name="newsettings[virtualserver_log_server]" value="0" {if $serverinfo['virtualserver_log_server'] == 0}checked="checked"{/if} />
+				</td>
 			</tr>	
 			<tr>
 				<td class="green2">{$lang['logfiletransfer']}:</td>
-				<td class="green2"><input type="checkbox" {if $serverinfo['virtualserver_log_filetransfer'] == 1}checked="checked"{/if} name="newsettings[virtualserver_log_filetransfer]" value="1" /></td>
+				<td class="green2">
+					{$lang['yes']}<input type="radio" name="newsettings[virtualserver_log_filetransfer]" value="1" {if $serverinfo['virtualserver_log_filetransfer'] == 1}checked="checked"{/if} />
+					{$lang['no']}<input type="radio" name="newsettings[virtualserver_log_filetransfer]" value="0" {if $serverinfo['virtualserver_log_filetransfer'] == 0}checked="checked"{/if} />
+				</td>
 			</tr>	
 			<tr>
 				<td class="green1">{$lang['option']}:</td>

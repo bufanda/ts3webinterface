@@ -13,6 +13,9 @@
 *You should have received a copy of the GNU General Public License along with this program; if not, see <http://www.gnu.org/licenses/>. 
 */
 error_reporting(E_ALL & ~E_NOTICE);
+
+if(version_compare(PHP_VERSION, '5.0.0', '<')) {die("Require PHP 5 or higher");}
+
 define("SECURECHECK", 1);
 define('DS', DIRECTORY_SEPARATOR);
 define('TS3WI_DIR', dirname(__FILE__));
@@ -195,7 +198,7 @@ require_once('site/footer.php');
 
 $footer=implode("", file('templates/'.$style.DS.'index.tpl'));
 
-if(md5($footer2)!='6fbde25ddd1a6f2db8a185b3e6d2bb42' OR strpos($footer, '{$footer}')===false)
+if(md5($footer2)!='eb70fdef6663bbcf307b44b6f4eb484f' OR strpos($footer, '{$footer}')===false)
 	{
 	die('Fatal error: There are a critical error on your system.');
 	}

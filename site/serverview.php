@@ -421,14 +421,40 @@ if($_SERVER['SERVER_PORT']==443)
 $pubtsview=secure("<iframe allowtransparency=\"true\" src=\"".$gethttp.$_SERVER['HTTP_HOST'].$getpath[0]."tsviewpub.php?skey=".$_SESSION['skey']."&amp;port=".$port."&amp;showicons=right&amp;bgcolor=ffffff&amp;fontcolor=000000\" style=\"height:100%;width:100%\" scrolling=\"auto\" frameborder=\"0\">Your Browser will not show Iframes</iframe>");
 
 //Bearbeitung der Ausgabe!
-$serverinfo=secure($serverinfo);
-$conv_time=$ts3->convertSecondsToArrayTime($serverinfo['virtualserver_uptime']);
-$serverinfo['virtualserver_uptime']=$conv_time['days'].$lang['days']." ".$conv_time['hours'].$lang['hours']." ".$conv_time['minutes'].$lang['minutes']." ".$conv_time['seconds'].$lang['seconds'];
-if($serverinfo['virtualserver_icon_id']<0)
+
+if(!empty($serverinfo))
+	{
+	$serverinfo=secure($serverinfo);
+	$conv_time=$ts3->convertSecondsToArrayTime($serverinfo['virtualserver_uptime']);
+	$serverinfo['virtualserver_uptime']=$conv_time['days'].$lang['days']." ".$conv_time['hours'].$lang['hours']." ".$conv_time['minutes'].$lang['minutes']." ".$conv_time['seconds'].$lang['seconds'];
+	
+	if($serverinfo['virtualserver_icon_id']<0)
 		{
 		$serverinfo['virtualserver_icon_id']=sprintf('%u', $serverinfo['virtualserver_icon_id'] & 0xffffffff);
-		}		
-
+		}
+	if($serverinfo['virtualserver_max_upload_total_bandwidth']==18446744073709551615)
+		{
+		$serverinfo['virtualserver_max_upload_total_bandwidth']=-1;
+		}
+	if($serverinfo['virtualserver_upload_quota']==18446744073709551615)
+		{
+		$serverinfo['virtualserver_upload_quota']=-1;
+		}
+	if($serverinfo['virtualserver_max_download_total_bandwidth']==18446744073709551615)
+		{
+		$serverinfo['virtualserver_max_download_total_bandwidth']=-1;
+		}
+	if($serverinfo['virtualserver_download_quota']==18446744073709551615)
+		{
+		$serverinfo['virtualserver_download_quota']=-1;
+		}
+		
+	if($serverinfo['virtualserver_icon_id']<0)
+		{
+		$serverinfo['virtualserver_icon_id']=sprintf('%u', $serverinfo['virtualserver_icon_id'] & 0xffffffff);
+		}	
+	}
+		
 include("site/tsview.php");
 
 $smarty->assign("error", $error);

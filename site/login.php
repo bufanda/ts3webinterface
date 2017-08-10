@@ -23,6 +23,7 @@ if($serverstatus===false)
 		{
 		$error .= $value."<br />";
 		}
+	session_destroy();
 	}
 elseif($loginstatus===true AND $serverhost===true AND isset($_POST['sendlogin']))
 	{
@@ -47,6 +48,7 @@ elseif($loginstatus===false AND isset($_POST['sendlogin']))
 		{
 		$error .= $value."<br />";
 		}
+	session_destroy();
 	}
 elseif($loginstatus===true AND !isset($_POST['sendlogin']))
 	{

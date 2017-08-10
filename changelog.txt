@@ -1,3 +1,18 @@
+// Beta 3.0.1
+- Fixed bug that you got banned from server if you use some functions
+
+//Beta 3.0
+* The password for the login will not longer show on plain text in the session
+* The Serverbackups will now save on folder with the ip of the instance and the port.
+* Update the server create function to set the log settings
+- Fixed bug that the interface not delete the session if the instance offline after login
+- Fixed some small bugs
++ Add function that will delete old icons which are not longer on the virtual server
++ Add function to make mass action on the serverlist
++ Add function to open all permissions on the permission edit
++ Add function to set the same grant value to all available grant permissions
++ Add function to set autostart on serverlist
+
 //Beta 2.9.1
 - Fixed bug that the channelicons will not show in the public ts viewer
 - Fixed the problem with the permission edit if you use the beta31pre

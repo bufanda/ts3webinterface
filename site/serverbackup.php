@@ -12,7 +12,17 @@
 *
 *You should have received a copy of the GNU General Public License along with this program; if not, see <http://www.gnu.org/licenses/>. 
 */
-if(!defined("SECURECHECK")) {die($lang['error_file_alone']);} 
+if(!defined("SECURECHECK")) {die($lang['error_file_alone']);}
+
+if(!is_dir("site/backups/server/".$_SESSION['server_ip'].'-'.$_SESSION['server_tport'].'/'))
+	{
+	mkdir("site/backups/server/".$_SESSION['server_ip'].'-'.$_SESSION['server_tport'].'/',0777);
+	}
+if(!is_dir("site/backups/server/hostbackups/".$_SESSION['server_ip'].'-'.$_SESSION['server_tport'].'/'))
+	{
+	mkdir("site/backups/server/hostbackups/".$_SESSION['server_ip'].'-'.$_SESSION['server_tport'].'/',0777);
+	}
+
 if($hoststatus===false AND $serverhost===true) { echo $lang['nohoster']; } else { 
 $error = '';
 $noerror = '';
@@ -33,7 +43,7 @@ if(isset($_POST['create']))
 	$serversnapshot=$ts3->serverSnapshotCreate();
 	if($serversnapshot['success']!==false)
 		{
-		$handler=fopen($path."server_".time()."_".$_SESSION['server_ip']."-".$port.".txt", "a+");
+		$handler=fopen($path.$_SESSION['server_ip'].'-'.$_SESSION['server_tport'].'/'."server_".time()."_".$_SESSION['server_ip']."-".$port.".txt", "a+");
 		fwrite($handler, $serversnapshot['data']);
 		fclose($handler);
 		$noerror .= sprintf($lang['serverbackupok'], $_SESSION['server_ip'], $port)."<br />";
@@ -46,7 +56,7 @@ if(isset($_POST['create']))
 
 if(isset($_POST['deploy']))
 	{
-	$handler=file($path."server_".$_POST['backupid']."_".$_POST['fileport'].".txt");
+	$handler=file($path.$_SESSION['server_ip'].'-'.$_SESSION['server_tport'].'/'."server_".$_POST['backupid']."_".$_POST['fileport'].".txt");
 	$snapshot_deploy=$ts3->serverSnapshotDeploy($handler[0]);
 	if($snapshot_deploy['success']===false)
 		{
@@ -63,7 +73,7 @@ if(isset($_POST['deploy']))
 	
 if(isset($_POST['delete']))
 	{
-	if(@unlink($path."server_".$_POST['backupid']."_".$_POST['fileport'].".txt"))
+	if(@unlink($path.$_SESSION['server_ip'].'-'.$_SESSION['server_tport'].'/'."server_".$_POST['backupid']."_".$_POST['fileport'].".txt"))
 		{
 		$noerror .= $lang['serverbackdelok']."<br />";
 		}
@@ -72,8 +82,8 @@ if(isset($_POST['delete']))
 		$error .= $lang['serverbackdelerr']."<br />";
 		}
 	}
-
-$handler=opendir("site/backups/server");
+	
+$handler=opendir("site/backups/server/".$_SESSION['server_ip'].'-'.$_SESSION['server_tport'].'/');
 while($datei=readdir($handler))
 	{
 	if($datei!='.' AND $datei!='..' AND $datei!='hostbackups')
@@ -84,7 +94,7 @@ while($datei=readdir($handler))
 		}
 	}	
 
-$handler=opendir("site/backups/server/hostbackups");
+$handler=opendir("site/backups/server/hostbackups/".$_SESSION['server_ip'].'-'.$_SESSION['server_tport'].'/');
 while($datei=readdir($handler))
 	{
 	if($datei!='.' AND $datei!='..')

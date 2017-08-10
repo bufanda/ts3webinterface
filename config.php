@@ -24,17 +24,17 @@ $server[0]['alias']= "Lokaler Server1";
 $server[0]['ip']= "127.0.0.1";
 $server[0]['tport']= "10011";
 
-$server[0]['alias']= "Lokaler Server2";
+$server[1]['alias']= "Lokaler Server2";
 $server[1]['ip']= "127.0.0.2";
 $server[1]['tport']= "20022";
 
-$server[0]['alias']= "Lokaler Server3";
+$server[2]['alias']= "Lokaler Server3";
 $server[2]['ip']= "127.0.0.3";
 $server[2]['tport']= "30033";
 */
 
 $server[0]['alias']= "Lokaler Server";
-$server[0]['ip']= "127.0.0.1";
+$server[0]['ip']= "localhost";
 $server[0]['tport']= "10011";
 
 $cfglang	=	"de";			//Language German = de, English = en, Netherlandish=nl (by pd1evl)
@@ -45,7 +45,7 @@ $fastswitch=true;				//If true you can switch the Server on the header
 
 $showicons="left";				//Define the position where the icons on the Viewer will show left or right
 
-$style="default";					//Chose your design  set 'default' or 'new' for the default designs or the name of your own create design
+$style="new";					//Chose your design  set 'default' or 'new' for the default designs or the name of your own create design
 
 $msgsend_name="Webinterface";	//This Name will be show if you send a message to a Server
 

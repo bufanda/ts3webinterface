@@ -29,12 +29,12 @@
 		<td class="thead" colspan="6">({$cid}) {$channelname} {$lang['permissionlist']}</td>
 	</tr>
 	<tr>
-		<td class="thead" style="width:50px">&nbsp;</td>
+		<td class="thead" style="width:50px">&nbsp;<a href="javascript:Klappen(0)"><img src="gfx/images/{$disp_pic}.png" id="Pic0" name="{$disp_pic}" border="0" alt="aus/ein-klappen" /></td>
 		<td class="thead" style="width:45px">{$lang['permid']}</td>
 		<td class="thead" style="width:410px">{$lang['permname']}</td>
 		<td class="thead" style="width:50px">{$lang['value']}</td>
 		<td class="thead" style="width:101px">{$lang['options']}</td>
-		<td class="thead" style="width:100px">{$lang['grant']}</td>
+		<td class="thead" style="width:100px">{$lang['grant']} <input type="text" name="granttoall" size="3" maxlength="3" /></td>
 	</tr>
 	{foreach key=key item=value from=$allperms}
 		{if $change_col % 2} {assign var=td_col value="green1"} {else} {assign var=td_col value="green2"} {/if}

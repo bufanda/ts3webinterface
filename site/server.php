@@ -63,55 +63,7 @@ if(isset($_GET['sorttype']))
 		$sorttype=SORT_DESC;
 		}
 	}
-	
-if(isset($_GET['action']) AND $_GET['action'] == 'start')
-	{
-	$server_start=$ts3->serverStart($_POST['sid']);
-	if($server_start['success']===false)
-		{
-		for($i=0; $i+1==count($server_start['errors']); $i++)
-			{
-			$error .= $server_start['errors'][$i]."<br />";
-			}
-		}
-		elseif($server_start['success']===true)
-		{
-		$noerror = $lang['serverstartok']."<br />";
-		}
-	}
-	
-if(isset($_GET['action']) AND $_GET['action'] == 'stop')
-	{
-	$server_stop=$ts3->serverStop($_POST['sid']);
-	if($server_stop['success']===false)
-		{
-		for($i=0; $i+1==count($server_stop['errors']); $i++)
-			{
-			$error .= $server_stop['errors'][$i]."<br />";
-			}
-		}
-		elseif($server_stop['success']===true)
-		{
-		$noerror = $lang['serverstopok']."<br />";
-		}
-	}
-	
-if(isset($_GET['action']) AND $_GET['action'] == 'del')
-	{
-	$server_delete=$ts3->serverDelete($_POST['sid']);
-	if($server_delete['success']===false)
-		{
-		for($i=0; $i+1==count($server_delete['errors']); $i++)
-			{
-			$error .= $server_delete['errors'][$i]."<br />";
-			}
-		}
-		elseif($server_delete['success']===true)
-		{
-		$noerror = $lang['serverdelok']."<br />";
-		}
-	}
-	
+
 if(isset($_POST['sendmsg']))
 	{
 	$_POST['msgtoall']=str_replace("\\", "\\\\", $_POST['msgtoall']);
@@ -128,7 +80,80 @@ if(isset($_POST['sendmsg']))
 		$noerror = $lang['msgsendok']."<br />";
 		}
 	}
-	
+		
+if(isset($_POST['massaction']))
+	{
+	$serverlist=$ts3->getElement('data', $ts3->serverList());
+	foreach($_POST['caction'] AS $key=>$value)
+		{
+		foreach($serverlist AS $key2=>$value2)
+			{
+			if($value2['virtualserver_id']==$key)
+				{
+				if(empty($value['auto']) AND $value2['virtualserver_autostart']==1 OR $value['auto']==1 AND $value2['virtualserver_autostart']==0)
+					{
+					$ts3->selectServer($value2['virtualserver_port'], 'port', true);
+					$autostart_edit=$ts3->serverEdit(array('virtualserver_autostart'=>$value['auto']));
+					if($autostart_edit['success']===false)
+						{
+						for($i=0; $i+1==count($autostart_edit['errors']); $i++)
+							{
+							$error .= $autostart_edit['errors'][$i]."<br />";
+							}
+						}
+					$ts3->selectServer('0', 'serverId', true);
+					}
+				}
+			}
+		if($value['action']=='start')
+			{
+			$server_start=$ts3->serverStart($key);
+			if($server_start['success']===false)
+				{
+				for($i=0; $i+1==count($server_start['errors']); $i++)
+					{
+					$error .= $server_start['errors'][$i]."<br />";
+					}
+				}
+				elseif($server_start['success']===true)
+				{
+				$noerror = $lang['serverstartok']."<br />";
+				}
+			}
+
+		if($value['action']=='stop')
+			{
+			$server_stop=$ts3->serverStop($key);
+			if($server_stop['success']===false)
+				{
+				for($i=0; $i+1==count($server_stop['errors']); $i++)
+					{
+					$error .= $server_stop['errors'][$i]."<br />";
+					}
+				}
+				elseif($server_stop['success']===true)
+				{
+				$noerror = $lang['serverstopok']."<br />";
+				}
+			}
+
+		if($value['action']=='del')
+			{
+			$server_delete=$ts3->serverDelete($key);
+			if($server_delete['success']===false)
+				{
+				for($i=0; $i+1==count($server_delete['errors']); $i++)
+					{
+					$error .= $server_delete['errors'][$i]."<br />";
+					}
+				}
+				elseif($server_delete['success']===true)
+				{
+				$noerror = $lang['serverdelok']."<br />";
+				}
+			}
+		}
+	}
 $serverlist=$ts3->getElement('data', $ts3->serverList());
 $allslots='';
 $allusedslots='';

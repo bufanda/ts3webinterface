@@ -52,6 +52,13 @@ if (isset($_POST['editall']))
 	
 	foreach($allpermsedit AS $key => $value)
 		{
+		if(isset($_POST['granttoall']) AND isset($value['grant']) AND $value['grant']==1 AND isset($value['available']))
+			{
+			if($_POST['granttoall']===0 OR $_POST['granttoall']>0)
+				{
+				$value['value']=$_POST['granttoall'];
+				}
+			}
 		if(isset($value['delperm']) AND $value['delperm']==1)
 			{
 			$delperms[]=$key;

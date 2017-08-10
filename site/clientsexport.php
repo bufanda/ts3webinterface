@@ -19,7 +19,7 @@ if(isset($_POST['give']))
 	$sqlstring='';
 	$ts3=new ts3admin($_SESSION['server_ip'], $_SESSION['server_tport']);
 	$ts3->connect();
-	$ts3->login($_SESSION['loginuser'], $_SESSION['loginpw']);
+	$ts3->login($_SESSION['loginuser'], unserialize(base64_decode($_SESSION['loginpw'])));
 	$ts3->selectServer($_POST['port']);
 
 	$start=0;
