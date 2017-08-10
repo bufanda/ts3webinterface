@@ -1,58 +1,72 @@
 <?PHP
 /**
- *                            ts3admin.class.php                    <br />
- *                            ------------------                    <br />
- *   begin                : 18. December 2009                       <br />
- *   copyright            : (C) 2009-2011 Par0noid Solutions         <br />
- *   email                : par0noid@gmx.de                         <br />
- *   version              : 0.6.3                                   <br />
- *   last modified        : 27. September 2011                      <br />
- *   build                : 5130073                                 <br />
+ *                         ts3admin.class.php
+ *                         ------------------                    
+ *   begin                : 18. December 2009
+ *   copyright            : (C) 2009-2013 Par0noid Solutions
+ *   email                : contact@ts3admin.info
+ *   version              : 0.6.8.1
+ *   last modified        : 03. March 2013
  *
-
-    This file is a powerful library for querying TeamSpeak3 servers.<br />																			
-    
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-*/
-
-/**
- * @author      Par0noid Solutions <par0noid@gmx.de>
- * @package     ts3admin
- * @version     0.6.3
- * @copyright   Copyright (c) 2009-2011, Stefan Z.
- * @link        http://ts3admin.info
- * @link        http://par0noid.info
+ *
+ *  This file is a powerful library for querying TeamSpeak3 servers.
+ *  
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *  
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *  
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
+/** 
+ * The ts3admin.class.php is a powerful library that offers functions to communicate with Teamspeak 3 Servers from your website!
+ * 
+ * You can do everything, your creativity knows no bounds!
+ * That library is faster than all other librarys because its optimized to find the shortest way to your information.
+ * No unneeded PHP 5 OOP Stuff, just the basics!
+ * There are a lot of professional developers and some big companys using my library.
+ * The best thing is that you can use it for free under the terms of the GNU General Public License v3.
+ * Take a look on the project website where you can find code examples, a manual and some other stuff.
+ * 
+ * @author      Par0noid Solutions <contact@ts3admin.info>
+ * @version     0.6.8.1
+ * @copyright   Copyright (c) 2009-2013, Stefan Z.
+ * @package		ts3admin
+ * @link        http://ts3admin.info
+ */
+
 class ts3admin {
 
 //*******************************************************************************************	
 //****************************************** Vars *******************************************
 //*******************************************************************************************
 
-	//ts3admin runtime values
+/**
+  * runtime is an private handle and configuration storage
+  *
+  * @author     Par0noid Solutions
+  * @access		private
+  */
 	private $runtime = array('socket' => '', 'selected' => false, 'host' => '', 'queryport' => '10011', 'timeout' => 2, 'debug' => array(), 'fileSocket' => '');
 
-	
+
 //*******************************************************************************************	
 //************************************ Public Functions *************************************
 //******************************************************************************************
 
 /**
-  * banAddByIp bans a client from the selected server by ip<br><br><br>
+  * banAddByIp
   *
-  * <b>Output:</b><br>
+  * Adds a new ban rule on the selected virtual server.
+  *
+  *	<b>Output:</b>
   * <code>
   * Array
   * {
@@ -64,21 +78,23 @@ class ts3admin {
   * @access		public
   * @param		string	$ip			clientIp
   * @param		integer	$time		bantime in seconds (0=unlimited)
-  * @param		string	$banreason	banreason [optional]
-  * @return     array banId/s
+  * @param		string	$banreason	Banreason [optional]
+  * @return     array banId
   */
-	function banAddByIp($ip, $time, $banreason = '') {
+	function banAddByIp($ip, $time, $banreason = NULL) {
 		if(!$this->runtime['selected']) { return $this->checkSelected(); }
 		
-		if(!empty($banreason)) { $msg = ' banreason='.$this->escapeText($banreason); } else { $msg = ''; }
+		if(!empty($banreason)) { $msg = ' banreason='.$this->escapeText($banreason); } else { $msg = NULL; }
 
 		return $this->getData('array', 'banadd ip='.$ip.' time='.$time.$msg);
 	}
 
 /**
-  * banAddByUid bans a client from the selected server by uid<br><br><br>
+  * banAddByUid
   *
-  * <b>Output:</b><br>
+  *	Adds a new ban rule on the selected virtual server.
+  *
+  * <b>Output:</b>
   * <code>
   * Array
   * {
@@ -90,24 +106,27 @@ class ts3admin {
   * @access		public
   * @param		string	$uid		clientUniqueId
   * @param		integer	$time		bantime in seconds (0=unlimited)
-  * @param		string	$banreason	Banreason (optional)
-  * @return     array banId/s
+  * @param		string	$banreason	Banreason [optional]
+  * @return     array banId
   */
-	function banAddByUid($uid, $time, $banreason = "") {
+	function banAddByUid($uid, $time, $banreason = NULL) {
 		if(!$this->runtime['selected']) { return $this->checkSelected(); }
-		if(!empty($banreason)) { $msg = ' banreason='.$this->escapeText($banreason); } else { $msg = ''; }
+		
+		if(!empty($banreason)) { $msg = ' banreason='.$this->escapeText($banreason); } else { $msg = NULL; }
 		
 		return $this->getData('array', 'banadd uid='.$uid.' time='.$time.$msg);
 	}
 
 /**
-  * banAddByName bans a client from the selected server by name<br><br><br>
+  * banAddByName
   *
-  * <b>Output:</b><br>
+  *	Adds a new ban rule on the selected virtual server.
+  *
+  * <b>Output:</b>
   * <code>
   * Array
   * {
-  *  [banid] => 110
+  *  [banid] => 111
   * }
   * </code>
   *
@@ -116,19 +135,22 @@ class ts3admin {
   * @param		string	$name		clientName
   * @param		integer	$time		bantime in seconds (0=unlimited)
   * @param		string	$banreason	Banreason [optional]
-  * @return     array banId/s
+  * @return     array banId
   */
-	function banAddByName($name, $time, $banreason = "") {
+	function banAddByName($name, $time, $banreason = NULL) {
 		if(!$this->runtime['selected']) { return $this->checkSelected(); }
-		if(!empty($banreason)) { $msg = ' banreason='.$this->escapeText($banreason); } else { $msg = ''; }
+		
+		if(!empty($banreason)) { $msg = ' banreason='.$this->escapeText($banreason); } else { $msg = NULL; }
 										
 		return $this->getData('array', 'banadd name='.$this->escapeText($name).' time='.$time.$msg);
 	}
 
 /**
-  * banClient bans a client from the selected server<br><br><br>
+  * banClient
+  * 
+  * Bans the client specified with ID clid from the server. Please note that this will create two separate ban rules for the targeted clients IP address and his unique identifier.
   *
-  * <b>Output:</b><br>
+  * <b>Output:</b>
   * <code>
   * Array
   * {
@@ -141,11 +163,12 @@ class ts3admin {
   * @access		public
   * @param		integer $clid		clientId
   * @param		integer $time		bantime in seconds (0=unlimited)
-  * @param		string	$banreason	Kick reason [optional]
-  * @return     array banId/s
+  * @param		string	$banreason	Banreason [optional]
+  * @return     array banIds
   */
-	function banClient($clid, $time, $banreason = '') {
+	function banClient($clid, $time, $banreason = NULL) {
 		if(!$this->runtime['selected']) { return $this->checkSelected(); }
+		
 		if(!empty($banreason)) { $msg = ' banreason='.$this->escapeText($banreason); } else { $msg = ''; }
 		
 		$result = $this->getData('plain', 'banclient clid='.$clid.' time='.$time.$msg);
@@ -158,7 +181,9 @@ class ts3admin {
 	}
 
 /**
-  * banDelete deletes a ban from banlist
+  * banDelete
+  * 
+  * Deletes the ban rule with ID banid from the server.
   *
   * @author     Par0noid Solutions
   * @access		public
@@ -171,7 +196,9 @@ class ts3admin {
 	}
 
 /**
-  * banDeleteAll deletes all bans from banlist
+  * banDeleteAll
+  * 
+  * Deletes all active ban rules from the server.
   *
   * @author     Par0noid Solutions
   * @access		public
@@ -183,14 +210,16 @@ class ts3admin {
 	}
 
 /**
-  * banList returns all bans on selected server<br><br><br>
-  *
-  * <b>Output:</b><br>
+  * banList
+  * 
+  * Displays a list of active bans on the selected virtual server.
+  * 
+  * <b>Output:</b>
   * <code>
   * Array
   * {
   *  [banid] => 131
-  *  [ip] => 63\.54\.78\.14
+  *  [ip] => 1.2.3.4
   *  [name] => eugen
   *  [uid] => IYAntAcZHgVC7s3n3DNWmuJB/aM=
   *  [created] => 1286660391
@@ -205,19 +234,17 @@ class ts3admin {
   *
   * @author     Par0noid Solutions
   * @access		public
-  * @param		string	$params	additional parameters [optional]
-  * @return     array banList
+  * @return     array banlist
   */
-	function banList($params = '') {
-		if(!$this->runtime['selected']) { return $this->checkSelected(); }
-		
-		if(!empty($params)) { $params = ' '.$params; }
-		
-		return $this->getData('multi', 'banlist'.$params);
+	function banList() {
+		if(!$this->runtime['selected']) { return $this->checkSelected(); }		
+		return $this->getData('multi', 'banlist');
 	}
 
 /**
-  * bindingList displays a list of IP addresses used by the server instance on multi-homed machines<br><br><br>
+  * bindingList
+  * 
+  * Displays a list of IP addresses used by the server instance on multi-homed machines.
   *
   * <b>Output:</b><br>
   * <code>
@@ -229,21 +256,23 @@ class ts3admin {
   *
   * @author     Par0noid Solutions
   * @access		public
-  * @return     multidimensional-array bindingList
+  * @return     array bindingList
   */
 	function bindingList() {
 		return $this->getData('multi', 'bindinglist');
 	}
 
 /**
-  * channelAddPerm adds a set of specified permissions to a channel<br><br><br>
+  * channelAddPerm
   * 
-  * <b>Input-Array like this:</b><br>
+  * Adds a set of specified permissions to a channel. Multiple permissions can be added by providing the two parameters of each permission. A permission can be specified by permid or permsid.
+  * 
+  * <b>Input-Array like this:</b>
   * <code>
-  * <?PHP
   * $permissions = array();
   * $permissions['permissionID'] = 'permissionValue';
-  * ?>
+  * //or you could use Permission Name
+  * $permissions['permissionName'] = 'permissionValue';
   * </code>
   *
   * @author     Par0noid Solutions
@@ -254,135 +283,148 @@ class ts3admin {
   */
 	function channelAddPerm($cid, $permissions) {
 		if(!$this->runtime['selected']) { return $this->checkSelected(); }
-		$error = false;
-        $results = array();
-        
-        if(count($permissions) > 0) {
-     		$new = array();
- 
-    		$i = 0;
-    		$k = 0;
-    		foreach($permissions as $ke => $va) {
-        		if($i > 149){ $i = 0; $k++; }else{ $i++; }
-        		$new[$k][$ke] = $va;
-    		}
-    		
-    		foreach($new as $perms) {
-    			$permissionArray = array();
-    			foreach($perms as $key => $value) {
-    				$permissionArray[] = 'permid='.$key.' permvalue='.$value;
-    			}
-				$result = $this->getData('boolean', 'channeladdperm cid='.$cid.' '.implode('|', $permissionArray));
-				if(!$result['success']) { $error = true; }
-    			$results[] = $result;
-    		}
-    		
-    		if($error) {
-    			$returnErrors = array();
-    			foreach($results as $errorResult) {
-    				if(count($errorResult['errors']) > 0) {
-    					foreach($errorResult['errors'] as $errorResultError) {
-    						$returnErrors[] = $errorResultError;
-    					}
-    				}
-    			}
-    			return $this->generateOutput(false, $returnErrors, false);
-    		}else{
-    			return $this->generateOutput(true, array(), true);
-    		}
-        }else{
-            $this->addDebugLog('no permissions given');
-            return $this->generateOutput(false, array('Error: no permissions given'), false);
-        }
+		
+		if(count($permissions) > 0) {
+			//Permissions given
+			
+			//Errorcollector
+			$errors = array();
+			
+			//Split Permissions to prevent query from overload
+			$permissions = array_chunk($permissions, 50, true);
+			
+			//Action for each splitted part of permission
+			foreach($permissions as $permission_part)
+			{
+				//Create command_string for each command that we could use implode later
+				$command_string = array();
+				
+				foreach($permission_part as $key => $value)
+				{
+					$command_string[] = (is_numeric($key) ? "permid=" : "permsid=").$this->escapeText($key).' permvalue='.$value;
+				}
+				
+				$result = $this->getData('boolean', 'channeladdperm cid='.$cid.' '.implode('|', $command_string));
+				
+				if(!$result['success'])
+				{
+					foreach($result['errors'] as $error)
+					{
+						$errors[] = $error;
+					}
+				}
+			}
+			
+			if(count($errors) == 0)
+			{
+				return $this->generateOutput(true, array(), true);
+			}else{
+				return $this->generateOutput(false, $errors, false);
+			}
+			
+		}else{
+			// No permissions given
+			$this->addDebugLog('no permissions given');
+			return $this->generateOutput(false, array('Error: no permissions given'), false);
+		}
 	}
 
 /**
-  * channelClientAddPerm adds a set of specified permissions to a client in a specific channel<br><br><br>
+  * channelClientAddPerm
   * 
-  * <b>Input-Array like this:</b><br>
+  * Adds a set of specified permissions to a client in a specific channel. Multiple permissions can be added by providing the three parameters of each permission. A permission can be specified by permid or permsid.
+  * 
+  * <b>Input-Array like this:</b>
   * <code>
-  * <?PHP
   * $permissions = array();
   * $permissions['permissionID'] = 'permissionValue';
-  * ?>
+  * //or you could use Permission Name
+  * $permissions['permissionName'] = 'permissionValue';
   * </code>
   *
   * @author     Par0noid Solutions
   * @access		public
   * @param		integer		$cid			channelID
-  * @param		integer		$cldbid			clientDatabaseId
+  * @param		integer		$cldbid			clientDBID
   * @param		array		$permissions	permissions
   * @return     boolean success
   */
 	function channelClientAddPerm($cid, $cldbid, $permissions) {
 		if(!$this->runtime['selected']) { return $this->checkSelected(); }
-	    $error = false;
-        $results = array();
-        
-        if(count($permissions) > 0) {
-     		$new = array();
- 
-    		$i = 0;
-    		$k = 0;
-    		foreach($permissions as $ke => $va) {
-        		if($i > 149){ $i = 0; $k++; }else{ $i++; }
-        		$new[$k][$ke] = $va;
-    		}
-    		
-    		foreach($new as $perms) {
-    			$permissionArray = array();
-    			foreach($perms as $key => $value) {
-    				$permissionArray[] = 'permid='.$key.' permvalue='.$value;
-    			}
-				$result = $this->getData('boolean', 'channelclientaddperm cid='.$cid.' cldbid='.$cldbid.' '.implode('|', $permissionArray));
-				if(!$result['success']) { $error = true; }
-    			$results[] = $result;
-    		}
-    		
-    		if($error) {
-    			$returnErrors = array();
-    			foreach($results as $errorResult) {
-    				if(count($errorResult['errors']) > 0) {
-    					foreach($errorResult['errors'] as $errorResultError) {
-    						$returnErrors[] = $errorResultError;
-    					}
-    				}
-    			}
-    			return $this->generateOutput(false, $returnErrors, false);
-    		}else{
-    			return $this->generateOutput(true, array(), true);
-    		}
-        }else{
-            $this->addDebugLog('no permissions given');
-            return $this->generateOutput(false, array('Error: no permissions given'), false);
-        }
+		
+		if(count($permissions) > 0) {
+			//Permissions given
+				
+			//Errorcollector
+			$errors = array();
+				
+			//Split Permissions to prevent query from overload
+			$permissions = array_chunk($permissions, 50, true);
+				
+			//Action for each splitted part of permission
+			foreach($permissions as $permission_part)
+			{
+				//Create command_string for each command that we could use implode later
+				$command_string = array();
+		
+				foreach($permission_part as $key => $value)
+				{
+					$command_string[] = (is_numeric($key) ? "permid=" : "permsid=").$this->escapeText($key).' permvalue='.$value;
+				}
+		
+				$result = $this->getData('boolean', 'channelclientaddperm cid='.$cid.' cldbid='.$cldbid.' '.implode('|', $command_string));
+		
+				if(!$result['success'])
+				{
+					foreach($result['errors'] as $error)
+					{
+						$errors[] = $error;
+					}
+				}
+			}
+				
+			if(count($errors) == 0)
+			{
+				return $this->generateOutput(true, array(), true);
+			}else{
+				return $this->generateOutput(false, $errors, false);
+			}
+				
+		}else{
+			// No permissions given
+			$this->addDebugLog('no permissions given');
+			return $this->generateOutput(false, array('Error: no permissions given'), false);
+		}
 	}
 
 /**
-  * channelClientDelPerm removes a set of specified permissions from a client in a specific channel<br><br><br>
+  * channelClientDelPerm
+  * 
+  * Removes a set of specified permissions from a client in a specific channel. Multiple permissions can be removed at once. A permission can be specified by permid or permsid.
   *
-  * <b>Input-Array like this:</b><br>
+  * <b>Input-Array like this:</b>
   * <code>
-  * <?PHP
   * $permissions = array();
   * $permissions[] = 'permissionID';
-  * ?>
+  * $permissions[] = 'permissionName';
+  * //or
+  * $permissions = array('permissionID', 'permissionName', 'permissionID');
   * </code>
   *
   * @author     Par0noid Solutions
   * @access		public
   * @param		integer		$cid				channelID
-  * @param		integer		$cldbid				clientDatabaseID
-  * @param		array		$permissionIds		permissionIDs
+  * @param		integer		$cldbid				clientDBID
+  * @param		array		$permissions		permissions
   * @return     boolean success
   */
-	function channelClientDelPerm($cid, $cldbid, $permissionIds) {
+	function channelClientDelPerm($cid, $cldbid, $permissions) {
 		if(!$this->runtime['selected']) { return $this->checkSelected(); }
 		$permissionArray = array();
 		
 		if(count($permissionIds) > 0) {
 			foreach($permissionIds AS $value) {
-				$permissionArray[] = 'permid='.$value;
+				$permissionArray[] = is_numeric($value) ? 'permid='.$value : 'permsid='.$value;
 			}
 			return $this->getData('boolean', 'channelclientdelperm cid='.$cid.' cldbid='.$cldbid.' '.implode('|', $permissionArray));
 		}else{
@@ -392,15 +434,18 @@ class ts3admin {
 	}
 
 /**
-  * channelClientPermList displays a list of permissions defined for a client in a specific channel<br><br><br>
+  * channelClientPermList
+  * 
+  * Displays a list of permissions defined for a client in a specific channel.
   *
   * <b>Output:</b><br>
   * <code>
   * Array
   * {
-  *  [cid] => 250
-  *  [cldbid] => 2086
-  *  [permid] => 12876
+  *  [cid] => 250 (only in first result)
+  *  [cldbid] => 2086 (only in first result)
+  *  [permid] => 12876 (if permsid = false)
+  *  [permsid] => b_client_info_view (if permsid = true)
   *  [permvalue] => 1
   *  [permnegated] => 0
   *  [permskip] => 0
@@ -410,33 +455,33 @@ class ts3admin {
   * @author     Par0noid Solutions
   * @access		public
   * @param		integer		$cid		channelID
-  * @param		integer		$cldbid		clientDatabaseID
-  * @param		boolean		$permsid	set true to add -permsid param [optional]
-  * @return     multidimensional-array	channelclientpermlist
+  * @param		integer		$cldbid		clientDBID
+  * @param		boolean		$permsid	displays permissionName instead of permissionID
+  * @return     array	channelclientpermlist
   */
 	function channelClientPermList($cid, $cldbid, $permsid = false) {
-		if(!$this->runtime['selected']) { return $this->checkSelected(); }
-		if($permsid) { $additional = ' -permsid'; }else{ $additional = ''; }
-		
-		return $this->getData('multi', 'channelclientpermlist cid='.$cid.' cldbid='.$cldbid.$additional);
+		if(!$this->runtime['selected']) { return $this->checkSelected(); }		
+		return $this->getData('multi', 'channelclientpermlist cid='.$cid.' cldbid='.$cldbid.($permsid ? ' -permsid' : ''));
 	}
 
 /**
-  * channelCreate creates a new channel using the given properties and displays its ID<br><br><br>
+  * channelCreate
   * 
-  * <b>Hint:</b> don't forget to set channel_flag_semi_permanent = 0 and channel_flag_permanent = 1<br><br><br>
+  * Creates a new channel using the given properties and displays its ID. Note that this command accepts multiple properties which means that you're able to specifiy all settings of the new channel at once.
   * 
-  * <b>Input-Array like this:</b><br>
+  * <b style="color:red">Hint:</b> don't forget to set channel_flag_semi_permanent = 1 or channel_flag_permanent = 1
+  * 
+  * <b style="color:red">Hint:</b> you'll get an error if you want to create a channel without channel_name
+  * 
+  * <b>Input-Array like this:</b>
   * <code>
-  * <?PHP 
   * $data = array();
   * 
   * $data['setting'] = 'value';
   * $data['setting'] = 'value';
-  * ?>
-  * </code><br><br><br>
+  * </code>
   * 
-  * <b>Output:</b><br>
+  * <b>Output:</b>
   * <code>
   * Array
   * {
@@ -462,12 +507,14 @@ class ts3admin {
 	}
 
 /**
-  * channelDelete deletes an existing channel by ID. If force is set to 1, the channel will be deleted even if there are clients within
+  * channelDelete
+  * 
+  * Deletes an existing channel by ID. If force is set to 1, the channel will be deleted even if there are clients within. The clients will be kicked to the default channel with an appropriate reason message.
   *
   * @author     Par0noid Solutions
   * @access		public
   * @param		integer $cid channelID
-  * @param		integer $force forces deleting channel (default: 1)
+  * @param		integer $force {1|0} (default: 1)
   * @return     boolean success
   */
 	function channelDelete($cid, $force = 1) {
@@ -476,29 +523,31 @@ class ts3admin {
 	}
 
 /**
-  * channelDelPerm removes a set of specified permissions from a channel<br><br><br>
+  * channelDelPerm
+  * 
+  * Removes a set of specified permissions from a channel. Multiple permissions can be removed at once. A permission can be specified by permid or permsid.
   *
-  * <b>Input-Array like this:</b><br>
+  * <b>Input-Array like this:</b>
   * <code>
-  * <?PHP
   * $permissions = array();
   * $permissions[] = 'permissionID';
-  * ?>
+  * //or you could use
+  * $permissions[] = 'permissionName';
   * </code>
   *
   * @author     Par0noid Solutions
   * @access		public
   * @param		integer		$cid				channelID
-  * @param		array		$permissionIds		permissionIDs
+  * @param		array		$permissions		permissions
   * @return     boolean	success
   */
-	function channelDelPerm($cid, $permissionIds) {
+	function channelDelPerm($cid, $permissions) {
 		if(!$this->runtime['selected']) { return $this->checkSelected(); }
 		$permissionArray = array();
 		
-		if(count($permissionIds) > 0) {
-			foreach($permissionIds AS $value) {
-				$permissionArray[] = 'permid='.$value;
+		if(count($permissions) > 0) {
+			foreach($permissions AS $value) {
+				$permissionArray[] = (is_numeric($value) ? 'permid=' : 'permsid=').$value;
 			}
 			return $this->getData('boolean', 'channeldelperm cid='.$cid.' '.implode('|', $permissionArray));
 		}else{
@@ -508,22 +557,22 @@ class ts3admin {
 	}
 
 /**
-  * channelEdit changes a channels configuration using given properties<br><br><br>
+  * channelEdit
+  * 
+  * Changes a channels configuration using given properties. Note that this command accepts multiple properties which means that you're able to change all settings of the channel specified with cid at once.
   *
-  * <b>Input-Array like this:</b><br>
-  * <br><code>
-  * <?PHP
+  * <b>Input-Array like this:</b>
+  * <code>
   * $data = array();
   *	
   * $data['setting'] = 'value';
   * $data['setting'] = 'value';
-  * ?>
   * </code>
   *
   * @author     Par0noid Solutions
   * @access		public
-  * @param		integer	$cid	$channelId
-  * @param		array	$data	newSettings
+  * @param		integer	$cid	$channelID
+  * @param		array	$data	edited settings
   * @return     boolean success
   */
 	function channelEdit($cid, $data) {
@@ -539,11 +588,12 @@ class ts3admin {
 	}
 
 /**
-  * channelFind displays a list of channels matching a given name pattern.<br><br><br>
+  * channelFind
+  * 
+  * displays a list of channels matching a given name pattern.
   *
-  * <b>Output:</b><br>
+  * <b>Output:</b>
   * <code>
-  * Array
   * Array
   * {
   *  [cid] => 2
@@ -554,7 +604,7 @@ class ts3admin {
   * @author     Par0noid Solutions
   * @access		public
   * @param		string	$pattern	channelName
-  * @return     multidimensional-array channelList 
+  * @return     array channelList 
   */
 	function channelFind($pattern) {
 		if(!$this->runtime['selected']) { return $this->checkSelected(); }
@@ -562,9 +612,18 @@ class ts3admin {
 	}
 
 /**
-  * channelGroupAdd creates a new channel group using a given name and displays its ID<br><br><br>
+  * channelGroupAdd
+  * 
+  * Creates a new channel group using a given name and displays its ID. The optional type parameter can be used to create ServerQuery groups and template groups.
   *
-  * <b>Output:</b><br>
+  * <b>groupDbTypes:</b>
+  *	<ol start="0">
+  *		<li>template group (used for new virtual servers)</li>
+  *		<li>regular group (used for regular clients)</li>
+  *		<li>global query group (used for ServerQuery clients)</li>
+  *	</ol>
+  *
+  * <b>Output:</b>
   * <code>
   * Array
   * {
@@ -575,22 +634,25 @@ class ts3admin {
   * @author     Par0noid Solutions
   * @access		public
   * @param		integer	$name	groupName
+  * @param		integer	$type   groupDbType [optional] (default: 1)
   * @return     boolean success
   */
-	function channelGroupAdd($name) {
+	function channelGroupAdd($name, $type = 1) {
 		if(!$this->runtime['selected']) { return $this->checkSelected(); }
-		return $this->getData('array', 'channelgroupadd name='.$this->escapeText($name));
+		return $this->getData('array', 'channelgroupadd name='.$this->escapeText($name).' type='.$type);
 	}
 
 /**
-  * channelGroupAddPerm adds a set of specified permissions to a channel group<br><br><br>
+  * channelGroupAddPerm
+  * 
+  * Adds a set of specified permissions to a channel group. Multiple permissions can be added by providing the two parameters of each permission. A permission can be specified by permid or permsid.
   *
-  * <b>Input-Array like this:</b><br>
+  * <b>Input-Array like this:</b>
   * <code>
-  * <?PHP
   * $permissions = array();
   * $permissions['permissionID'] = 'permissionValue';
-  * ?>
+  * //or you could use:
+  * $permissions['permissionName'] = 'permissionValue';
   * </code>
   *
   * @author     Par0noid Solutions
@@ -601,52 +663,57 @@ class ts3admin {
   */
 	function channelGroupAddPerm($cgid, $permissions) {
 		if(!$this->runtime['selected']) { return $this->checkSelected(); }
-		$error = false;
-        $results = array();
-        
-        if(count($permissions) > 0) {
-     		$new = array();
- 
-    		$i = 0;
-    		$k = 0;
-    		foreach($permissions as $ke => $va) {
-        		if($i > 149){ $i = 0; $k++; }else{ $i++; }
-        		$new[$k][$ke] = $va;
-    		}
-    		
-    		foreach($new as $perms) {
-    			$permissionArray = array();
-    			foreach($perms as $key => $value) {
-    				$permissionArray[] = 'permid='.$key.' permvalue='.$value;
-    			}
-				$result = $this->getData('boolean', 'channelgroupaddperm cgid='.$cgid.' '.implode('|', $permissionArray));
-				if(!$result['success']) { $error = true; }
-    			$results[] = $result;
-    		}
-    		
-    		if($error) {
-    			$returnErrors = array();
-    			foreach($results as $errorResult) {
-    				if(count($errorResult['errors']) > 0) {
-    					foreach($errorResult['errors'] as $errorResultError) {
-    						$returnErrors[] = $errorResultError;
-    					}
-    				}
-    			}
-    			return $this->generateOutput(false, $returnErrors, false);
-    		}else{
-    			return $this->generateOutput(true, array(), true);
-    		}
-        }else{
-            $this->addDebugLog('no permissions given');
-            return $this->generateOutput(false, array('Error: no permissions given'), false);
-        }
+		
+		if(count($permissions) > 0) {
+			//Permissions given
+		
+			//Errorcollector
+			$errors = array();
+		
+			//Split Permissions to prevent query from overload
+			$permissions = array_chunk($permissions, 50, true);
+		
+			//Action for each splitted part of permission
+			foreach($permissions as $permission_part)
+			{
+				//Create command_string for each command that we could use implode later
+				$command_string = array();
+		
+				foreach($permission_part as $key => $value)
+				{
+					$command_string[] = (is_numeric($key) ? "permid=" : "permsid=").$this->escapeText($key).' permvalue='.$value;
+				}
+		
+				$result = $this->getData('boolean', 'channelgroupaddperm cgid='.$cid.' '.implode('|', $command_string));
+		
+				if(!$result['success'])
+				{
+					foreach($result['errors'] as $error)
+					{
+						$errors[] = $error;
+					}
+				}
+			}
+		
+			if(count($errors) == 0) {
+				return $this->generateOutput(true, array(), true);
+			}else{
+				return $this->generateOutput(false, $errors, false);
+			}
+		
+		}else{
+			// No permissions given
+			$this->addDebugLog('no permissions given');
+			return $this->generateOutput(false, array('Error: no permissions given'), false);
+		}
 	}
 
 /**
-  * channelGroupClientList displays all the client and/or channel IDs currently assigned to channel groups<br><br><br>
+  * channelGroupClientList
+  * 
+  * Displays all the client and/or channel IDs currently assigned to channel groups. All three parameters are optional so you're free to choose the most suitable combination for your requirement
   *
-  * <b>Output:</b><br>
+  * <b>Output:</b>
   * <code>
   * Array
   * {
@@ -658,25 +725,30 @@ class ts3admin {
   *
   * @author     Par0noid Solutions
   * @access		public
-  * @param		integer $cid channelID [optional]
-  * @param		integer $clid clientID [optional]
-  * @param		integer $cgid groupID [optional]
-  * @return     multidimensional-array channelGroupClientList
+  * @param		integer $cid		channelID [optional]
+  * @param		integer $cldbid		clientDBID [optional]
+  * @param		integer $cgid		channelGroupID [optional]
+  * @return     array channelGroupClientList
   */
-	function channelGroupClientList($cid = '', $clid = '', $cgid = '') {
+	function channelGroupClientList($cid = NULL, $cldbid = NULL, $cgid = NULL) {
 		if(!$this->runtime['selected']) { return $this->checkSelected(); }
 		
-		if(!empty($cid)) { $cid = ' cid='.$cid; }
-		if(!empty($clid)) { $clid = ' clid='.$clid; }
-		if(!empty($cgid)) { $cgid = ' cgid='.$cgid; }
-		
-		return $this->getData('multi', 'channelgroupclientlist '.$cid.$clid.$cgid);
+		return $this->getData('multi', 'channelgroupclientlist'.(!empty($cid) ? ' cid='.$cid : '').(!empty($cldbid) ? ' cldbid='.$cldbid : '').(!empty($cgid) ? ' cgid='.$cgid : ''));
 	}
 
 /**
-  * channelGroupCopy creates a copy of the channel group specified with scgid. If tcgid is set to 0, the server will create a new group. To overwrite an existing group, simply set tcgid to the ID of a designated target group. If a target group is set, the name parameter will be ignored.<br><br><br>
+  * channelGroupCopy
+  * 
+  * Creates a copy of the channel group specified with scgid. If tcgid is set to 0, the server will create a new group. To overwrite an existing group, simply set tcgid to the ID of a designated target group. If a target group is set, the name parameter will be ignored. The type parameter can be used to create ServerQuery groups and template groups.
   *
-  * <b>Output:</b><br>
+  * <b>groupDbTypes:</b>
+  *	<ol start="0">
+  *		<li>template group (used for new virtual servers)</li>
+  *		<li>regular group (used for regular clients)</li>
+  *		<li>global query group (used for ServerQuery clients)</li>
+  *	</ol>
+  *
+  * <b>Output:</b>
   * <code>
   * Array
   * {
@@ -686,23 +758,25 @@ class ts3admin {
   *
   * @author     Par0noid Solutions
   * @access		public
-  * @param		integer	$scgid	sourceChannelGroupId
-  * @param		integer	$tcgid	targetChannelGroupId 
+  * @param		integer	$scgid	sourceChannelGroupID
+  * @param		integer	$tcgid	targetChannelGroupID 
   * @param		integer $name	groupName
-  * @param		integer	$type	groupDbType (0 = template, 1 = normal, 2 = query | Default: 1)
+  * @param		integer	$type	groupDbType
   * @return     array groupId
   */
-	function ChannelGroupCopy($scgid, $tcgid, $name, $type = 1) {
+	function channelGroupCopy($scgid, $tcgid, $name, $type = 1) {
 		if(!$this->runtime['selected']) { return $this->checkSelected(); }
 		return $this->getData('array', 'channelgroupcopy scgid='.$scgid.' tcgid='.$tcgid.' name='.$this->escapeText($name).' type='.$type);
 	}
 
 /**
-  * channelGroupDelete deletes a channel group by ID. If force is set to 1, the channel group will be deleted even if there are clients within.
+  * channelGroupDelete
+  * 
+  * Deletes a channel group by ID. If force is set to 1, the channel group will be deleted even if there are clients within.
   *
   * @author     Par0noid Solutions
   * @access		public
-  * @param		integer $cgid	groupID
+  * @param		integer $cgid	channelGroupID
   * @param		integer $force	forces deleting channelGroup (default: 1)
   * @return     boolean success
   */
@@ -712,29 +786,30 @@ class ts3admin {
 	}
 
 /**
-  * channelGroupDelPerm removes a set of specified permissions from a channel group<br><br><br>
+  * channelGroupDelPerm
+  * 
+  * Removes a set of specified permissions from the channel group. Multiple permissions can be removed at once. A permission can be specified by permid or permsid.
   *
-  * <b>Input-Array like this:</b><br>
+  * <b>Input-Array like this:</b>
   * <code>
-  * <?PHP
   * $permissions = array();
   * $permissions[] = 'permissionID';
-  * ?>
+  * $permissions[] = 'permissionName';
   * </code>
   *
   * @author     Par0noid Solutions
   * @access		public
   * @param		integer		$cgid				channelGroupID
-  * @param		array		$permissionIds		permissionIds
+  * @param		array		$permissions		permissions
   * @return     boolean success
   */
-	function channelGroupDelPerm($cgid, $permissionIds) {
+	function channelGroupDelPerm($cgid, $permissions) {
 		if(!$this->runtime['selected']) { return $this->checkSelected(); }
 		$permissionArray = array();
 		
 		if(count($permissionIds) > 0) {
 			foreach($permissionIds AS $value) {
-				$permissionArray[] = 'permid='.$value;
+				$permissionArray[] = (is_numeric($value) ? 'permid=' : 'permsid=').$value;
 			}
 			return $this->getData('boolean', 'channelgroupdelperm cgid='.$cgid.' '.implode('|', $permissionArray));
 		}else{
@@ -744,23 +819,30 @@ class ts3admin {
 	}
 
 /**
-  * channelGroupList displays a list of channel groups available on the selected virtual server<br><br><br>
-  *
-  * <b>Output:</b><br>
+  * channelGroupList
+  * 
+  * Displays a list of channel groups available on the selected virtual server.
+  * 
+  * <b>Output:</b>
   * <code>
   * Array
   * {
   *  [cgid] => 3
   *  [name] => Testname
   *  [type] => 0
-  *  [iconid] => 300
+  *  [iconid] => 100
   *  [savedb] => 1
+  *  [sortid] => 0
+  *  [namemode] => 0
+  *  [n_modifyp] => 75
+  *  [n_member_addp] => 50
+  *  [n_member_removep] => 50
   * }
   * </code>
   *
   * @author     Par0noid Solutions
   * @access		public
-  * @return     multidimensional-array channelGroupList
+  * @return     array channelGroupList
   */
 	function channelGroupList() {
 		if(!$this->runtime['selected']) { return $this->checkSelected(); }
@@ -769,13 +851,17 @@ class ts3admin {
 	}
 
 /**
-  * channelGroupPermList displays a list of permissions assigned to the channel group specified with cgid<br><br><br>
-  *
-  * <b>Output:</b><br>
+  * channelGroupPermList
+  * 
+  * Displays a list of permissions assigned to the channel group specified with cgid.
+  * If the permsid option is specified, the output will contain the permission names instead of the internal IDs.
+  * 
+  * <b>Output:</b>
   * <code>
   * Array
   * {
-  *  [permid] => 8471
+  *  [permid] => 8471 (displayed if permsid is false)
+  *  [permsid] => i_channel_create_modify_with_codec_latency_factor_min (displayed if permsid is true)
   *  [permvalue] => 1
   *  [permnegated] => 0
   *  [permskip] => 0
@@ -784,19 +870,19 @@ class ts3admin {
   *
   * @author     Par0noid Solutions
   * @access		public
-  * @param		integer		$cgid		groupID
-  * @param		boolean		$permsid	set true to add -permsid param [optional]
-  * @return     multidimensional-array channelGroupPermlist
+  * @param		integer		$cgid		channelGroupID
+  * @param		boolean		$permsid	permsid
+  * @return		array	channelGroupPermlist
   */
-	function channelGroupPermList($cgid, $permsid = false) {
-		if(!$this->runtime['selected']) { return $this->checkSelected(); }
-		if($permsid) { $additional = ' -permsid'; }else{ $additional = ''; }
-		
-		return $this->getData('multi', 'channelgrouppermlist cgid='.$cgid.$additional);
+  	function channelGroupPermList($cgid, $permsid = false) {
+		if(!$this->runtime['selected']) { return $this->checkSelected(); }		
+		return $this->getData('multi', 'channelgrouppermlist cgid='.$cgid.($permsid ? ' -permsid' : ''));
 	}
 
 /**
-  * channelGroupRename changes the name of a specified channel group
+  * channelGroupRename
+  * 
+  * Changes the name of a specified channel group.
   *
   * @author     Par0noid Solutions
   * @access		public
@@ -810,22 +896,24 @@ class ts3admin {
 	}
 
 /**
-  * channelInfo returns informations about a channel<br><br><br>
+  * channelInfo
   *
-  * <b>Output:</b><br>
+  *	Displays detailed configuration information about a channel including ID, topic, description, etc.
+
+  * <b>Output:</b>
   * <code>
   * Array
   * {
   *  [pid] => 0
-  *  [channel_name] => Lobby
+  *  [channel_name] => Test
   *  [channel_topic] => 
   *  [channel_description] => 
-  *  [channel_password] => lvf8bNFzJBrcgQsODESkvPzlcwo=
+  *  [channel_password] => cc97Pm4oOYq0J9fXDAgiWv/qScQ=
   *  [channel_codec] => 2
-  *  [channel_codec_quality] => 10
+  *  [channel_codec_quality] => 7
   *  [channel_maxclients] => -1
   *  [channel_maxfamilyclients] => -1
-  *  [channel_order] => 230
+  *  [channel_order] => 1
   *  [channel_flag_permanent] => 1
   *  [channel_flag_semi_permanent] => 0
   *  [channel_flag_default] => 0
@@ -835,7 +923,7 @@ class ts3admin {
   *  [channel_flag_maxclients_unlimited] => 1
   *  [channel_flag_maxfamilyclients_unlimited] => 0
   *  [channel_flag_maxfamilyclients_inherited] => 1
-  *  [channel_filepath] => files/virtualserver_11/channel_231
+  *  [channel_filepath] => files\\virtualserver_1\\channel_2
   *  [channel_needed_talk_power] => 0
   *  [channel_forced_silence] => 0
   *  [channel_name_phonetic] => 
@@ -845,7 +933,7 @@ class ts3admin {
   *
   * @author     Par0noid Solutions
   * @access		public
-  * @param		integer $cid channelId
+  * @param		integer $cid channelID
   * @return     array channelInfo
   */
 	function channelInfo($cid) {
@@ -854,29 +942,55 @@ class ts3admin {
 	}
 
 /**
-  * channelList returns information about all channels on the selected server<br><br><br>
+  * channelList
+  * 
+  * Displays a list of channels created on a virtual server including their ID, order, name, etc. The output can be modified using several command options.
   *
-  * <b>Possible params:</b> [-topic] [-flags] [-voice] [-limits] [-icon]<br><br><br>
+  * <br><b>Possible parameters:</b> [-topic] [-flags] [-voice] [-limits] [-icon]<br><br>
   *
-  * <b>Output:</b><br>
+  * <b>Output: (without parameters)</b>
   * <code>
   * Array
   * {
-  *  [cid] => 1
+  *  [cid] => 2
   *  [pid] => 0
-  *  [channel_order] => 0
-  *  [channel_name] => Default Channel
-  *  [total_clients] => 2
+  *  [channel_order] => 1
+  *  [channel_name] => Test
+  *  [total_clients] => 0
   *  [channel_needed_subscribe_power] => 0
   * }
-  * </code>
+  * </code><br>
+  * <b>Output: (from parameters)</b>
+  * <code>
+  * Array
+  * {
+  *  [-topic] => [channel_topic] => Default Channel has no topic
+  *  [-flags] => [channel_flag_default] => 1
+  *  [-flags] => [channel_flag_password] => 0
+  *  [-flags] => [channel_flag_permanent] => 1
+  *  [-flags] => [channel_flag_semi_permanent] => 0
+  *  [-voice] => [channel_codec] => 2
+  *  [-voice] => [channel_codec_quality] => 7
+  *  [-voice] => [channel_needed_talk_power] => 0
+  *  [-limits] => [total_clients_family] => 1
+  *  [-limits] => [channel_maxclients] => -1
+  *  [-limits] => [channel_maxfamilyclients] => -1
+  *  [-icon] => [channel_icon_id] => 0
+  * }
+  * </code><br>
+  * <b>Usage:</b>
+  * <code>
+  * $ts3->channelList(); //No parameters
+  * $ts3->channelList("-flags"); //Single parameter
+  * $ts3->channelList("-topic -flags -voice -limits -icon"); //Multiple parameters / all
+  * </code><br>
   *
   * @author     Par0noid Solutions
   * @access		public
-  * @param		string $params	additional parameters [optional]
-  * @return     multidimensional-array	channelList
+  * @param		string		$params		additional parameters [optional]
+  * @return		array	channelList
   */
-	function channelList($params = '') {
+	function channelList($params = null) {
 		if(!$this->runtime['selected']) { return $this->checkSelected(); }
 		if(!empty($params)) { $params = ' '.$params; }
 		
@@ -884,7 +998,9 @@ class ts3admin {
 	}
 
 /**
-  * channelMove moves a channel to a new parent channel with the ID cpid
+  * channelMove
+  * 
+  * Moves a channel to a new parent channel with the ID cpid. If order is specified, the channel will be sorted right under the channel with the specified ID. If order is set to 0, the channel will be sorted right below the new parent.
   *
   * @author     Par0noid Solutions
   * @access		public
@@ -893,21 +1009,23 @@ class ts3admin {
   * @param		integer $order	channelSortOrder
   * @return     boolean success
   */
-	function channelMove($cid, $cpid, $order = '') {
-		if(!$this->runtime['selected']) { return $this->checkSelected(); }
-		if(!empty($order)) { $order = ' order='.$order; }
-		
-		return $this->getData('boolean', 'channelmove cid='.$cid.' cpid='.$cpid.$order);
+	function channelMove($cid, $cpid, $order = null) {
+		if(!$this->runtime['selected']) { return $this->checkSelected(); }		
+		return $this->getData('boolean', 'channelmove cid='.$cid.' cpid='.$cpid.($order != null ? ' order='.$order : ''));
 	}
 
 /**
-  * channelPermList displays a list of permissions defined for a channel<br><br><br>
+  * channelPermList
+  * 
+  * Displays a list of permissions defined for a channel.
   *
-  * <b>Output:</b><br>
+  * <b>Output:</b>
   * <code>
   * Array
   * {
-  *  [permid] => 8471
+  *  [cid] => 2 (only in first result)
+  *  [permid] => 8471 (if permsid = false)
+  *  [permsid] => i_channel_needed_delete_power (if permsid = true)
   *  [permvalue] => 1
   *  [permnegated] => 0
   *  [permskip] => 0
@@ -917,83 +1035,88 @@ class ts3admin {
   * @author     Par0noid Solutions
   * @access		public
   * @param		integer		$cid		channelID
-  * @param		boolean		$permsid	set true to add -permsid param [optional]
-  * @return     multidimensional-array channelpermlist
+  * @param		boolean		$permsid	displays permissionName instead of permissionID [optional]
+  * @return     array channelpermlist
   */
 	function channelPermList($cid, $permsid = false) {
-		if(!$this->runtime['selected']) { return $this->checkSelected(); }
-		if($permsid) { $additional = ' -permsid'; }else{ $additional = ''; }
-		
-		return $this->getData('multi', 'channelpermlist cid='.$cid.$additional);
+		if(!$this->runtime['selected']) { return $this->checkSelected(); }	
+		return $this->getData('multi', 'channelpermlist cid='.$cid.($permsid ? ' -permsid' : ''));
 	}
 
 /**
-  * clientAddPerm adds a set of specified permissions to a client<br><br><br>
+  * clientAddPerm
+  * 
+  * Adds a set of specified permissions to a client. Multiple permissions can be added by providing the three parameters of each permission. A permission can be specified by permid or permsid.
   *
-  * <b>Input-Array like this:</b><br>
+  * <b>Input-Array like this:</b>
   * <code>
-  * <?PHP
   * $permissions = array();
-  * $permissions['permissionID'] = array('permissionValue', 'permskip');
-  * ?>
+  * $permissions['permissionID'] = 'permissionValue';
+  * //or you could use Permission Name
+  * $permissions['permissionName'] = 'permissionValue';
   * </code>
   *
   * @author     Par0noid Solutions
   * @access		public
-  * @param		integer					$cldbid			clientDbId
-  * @param		multidimensional-array	$permissions	permissions
+  * @param		integer	$cldbid			clientDBID
+  * @param		array	$permissions	permissions
   * @return     boolean success
   */
 	function clientAddPerm($cldbid, $permissions) {
 		if(!$this->runtime['selected']) { return $this->checkSelected(); }
-		$error = false;
-        $results = array();
-        
-        if(count($permissions) > 0) {
-     		$new = array();
- 
-    		$i = 0;
-    		$k = 0;
-    		foreach($permissions as $ke => $va) {
-        		if($i > 149){ $i = 0; $k++; }else{ $i++; }
-        		$new[$k][$ke] = $va;
-    		}
-    		
-    		foreach($new as $perms) {
-    			$permissionArray = array();
-    			foreach($perms as $key => $value) {
-    				$permissionArray[] = 'permid='.$key.' permvalue='.$value[0].' permskip='.$value[1];
-    			}
-				$result = $this->getData('boolean', 'clientaddperm cldbid='.$cldbid.' '.implode('|', $permissionArray));
-				if(!$result['success']) { $error = true; }
-    			$results[] = $result;
-    		}
-    		
-    		if($error) {
-    			$returnErrors = array();
-    			foreach($results as $errorResult) {
-    				if(count($errorResult['errors']) > 0) {
-    					foreach($errorResult['errors'] as $errorResultError) {
-    						$returnErrors[] = $errorResultError;
-    					}
-    				}
-    			}
-    			return $this->generateOutput(false, $returnErrors, false);
-    		}else{
-    			return $this->generateOutput(true, array(), true);
-    		}
-        }else{
-            $this->addDebugLog('no permissions given');
-            return $this->generateOutput(false, array('Error: no permissions given'), false);
-        }
+		
+		if(count($permissions) > 0) {
+			//Permissions given
+				
+			//Errorcollector
+			$errors = array();
+				
+			//Split Permissions to prevent query from overload
+			$permissions = array_chunk($permissions, 50, true);
+				
+			//Action for each splitted part of permission
+			foreach($permissions as $permission_part)
+			{
+				//Create command_string for each command that we could use implode later
+				$command_string = array();
+		
+				foreach($permission_part as $key => $value)
+				{
+					$command_string[] = (is_numeric($key) ? "permid=" : "permsid=").$this->escapeText($key).' permvalue='.$value;
+				}
+		
+				$result = $this->getData('boolean', 'clientaddperm cldbid='.$cldbid.' '.implode('|', $command_string));
+		
+				if(!$result['success'])
+				{
+					foreach($result['errors'] as $error)
+					{
+						$errors[] = $error;
+					}
+				}
+			}
+				
+			if(count($errors) == 0)
+			{
+				return $this->generateOutput(true, array(), true);
+			}else{
+				return $this->generateOutput(false, $errors, false);
+			}
+		}else{
+			// No permissions given
+			$this->addDebugLog('no permissions given');
+			return $this->generateOutput(false, array('Error: no permissions given'), false);
+		}
 	}
 
 /**
-  * clientDbDelete deletes a clients properties from the database
+  * clientDbDelete
+  * 
+  * Deletes a clients properties from the database.
   *
   * @author     Par0noid Solutions
   * @access		public
-  * @param		integer $cldbid	clientDbId
+  * @param		integer $cldbid	clientDBID
   * @return     boolean success
   */
 	function clientDbDelete($cldbid) {
@@ -1002,22 +1125,22 @@ class ts3admin {
 	}
 
 /**
-  * clientDbEdit changes a clients settings using given properties<br><br><br>
+  * clientDbEdit
+  * 
+  * Changes a clients settings using given properties.
   *
   * <b>Input-Array like this:</b><br>
   * <br><code>
-  * <?PHP
   * $data = array();
-  *	
-  * $data['setting'] = 'value';
-  * $data['setting'] = 'value';
-  * ?>
+  * 
+  * $data['property'] = 'value';
+  * $data['property'] = 'value';
   * </code>
   *
   * @author     Par0noid Solutions
   * @access		public
-  * @param		integer 				$cldbid		clientDbId
-  * @param		multidimensional-array	$data	 	clientSettings
+  * @param		integer		$cldbid		clientDBID
+  * @param		array		$data	 	clientProperties
   * @return     boolean success
   */
 	function clientDbEdit($cldbid, $data) {
@@ -1033,14 +1156,15 @@ class ts3admin {
 	}
 
 /**
-  * clientDbFind displays a list of client database IDs matching a given pattern<br><br><br>
+  * clientDbFind
+  * 
+  * Displays a list of client database IDs matching a given pattern. You can either search for a clients last known nickname or his unique identity by using the -uid option.
   *
   * <b>Output:</b><br>
   * <code>
   * Array
   * {
-  *  [clid] => 18
-  *  [client_nickname] => par0noid
+  *  [cldbid] => 2
   * }
   *	</code>
   *
@@ -1048,43 +1172,44 @@ class ts3admin {
   * @access		public
   * @param		string	$pattern	clientName
   * @param		boolean	$uid		set true to add -uid param [optional]
-  * @return     multidimensional-array clientList 
+  * @return     array clientList 
   */
 	function clientDbFind($pattern, $uid = false) {
 		if(!$this->runtime['selected']) { return $this->checkSelected(); }
-		
-		if($uid) { $additional = ' -uid'; }else{ $additional = ''; }
-		
-		return $this->getData('multi', 'clientdbfind pattern='.$this->escapeText($pattern).$additional);
+		return $this->getData('multi', 'clientdbfind pattern='.$this->escapeText($pattern).($uid ? ' -uid' : ''));
 	}
 
 /**
-  * clientDbInfo displays detailed database information about a client including unique ID, creation date, etc.<br><br><br>
+  * clientDbInfo
   *
-  * <b>Output:</b><br>
+  * Displays detailed database information about a client including unique ID, creation date, etc.
+  *
+  * <b>Output:</b>
   * <code>
   * Array
   * {
   *  [client_unique_identifier] => nUixbsq/XakrrmbqU8O30R/D8Gc=
-  *  [client_nickname] => Par0noid
+  *  [client_nickname] => par0noid
   *  [client_database_id] => 2
-  *  [client_created] => 1263833443
-  *  [client_lastconnected] => 1292332922
-  *  [client_totalconnections] => 823
+  *  [client_created] => 1361027850
+  *  [client_lastconnected] => 1361027850
+  *  [client_totalconnections] => 1
+  *  [client_flag_avatar] => 
   *  [client_description] => 
-  *  [client_month_bytes_uploaded] => 351492
+  *  [client_month_bytes_uploaded] => 0
   *  [client_month_bytes_downloaded] => 0
-  *  [client_total_bytes_uploaded] => 15511272
-  *  [client_total_bytes_downloaded] => 1753372
+  *  [client_total_bytes_uploaded] => 0
+  *  [client_total_bytes_downloaded] => 0
   *  [client_icon_id] => 0
   *  [client_base64HashClientUID] => jneilbgomklpfnkjclkoggokfdmdlhnbbpmdpagh
+  *  [client_lastip] => 127.0.0.1
   * }
   * </code>
   *
   * @author     Par0noid Solutions
   * @access		public
-  * @param		integer	$cldbid	clientDbID
-  * @return     array	clientInformation
+  * @param		integer		$cldbid		clientDBID
+  * @return     array	clientDbInfo
   */
 	function clientDbInfo($cldbid) {
 		if(!$this->runtime['selected']) { return $this->checkSelected(); }
@@ -1092,51 +1217,56 @@ class ts3admin {
 	}
 
 /**
-  * clientDbList: returns all clients from db<br><br><br>
+  * clientDbList
+  * 
+  * Displays a list of client identities known by the server including their database ID, last nickname, etc.
   *
-  * <b>Possible params:</b> [start={offset}] [duration={limit}] [-count]<br><br><br>
+  * <br><b>Possible params:</b> [start={offset}] [duration={limit}] [-count]<br><br>
   *
-  * <b>Output:</b><br>
+  * <b>Output:</b>
   * <code>
   * Array
   * {
+  *  [count] => 1 (if count parameter is set)
   *  [cldbid] => 2
   *  [client_unique_identifier] => nUixbsq/XakrrmbqU8O30R/D8Gc=
-  *  [client_nickname] => Par0noid
-  *  [client_created] => 1286107981
-  *  [client_lastconnected] => 1286107981
+  *  [client_nickname] => par0noid
+  *  [client_created] => 1361027850
+  *  [client_lastconnected] => 1361027850
   *  [client_totalconnections] => 1
   *  [client_description] => 
+  *  [client_lastip] => 127.0.0.1
   * }
   * </code>
   *
   * @author     Par0noid Solutions
   * @access		public
-  * @param		integer	$start		offset [optional]
-  * @param		integer	$duration	limit [optional]
+  * @param		integer	$start		offset [optional] (Default: 0)
+  * @param		integer	$duration	limit [optional] (Default: -1)
   * @param		boolean	$count		set true to add -count param [optional]
-  * @return     multidimensional-array clientdblist
+  * @return     array clientdblist
   */
-	function clientDbList($start = '', $duration = '', $count = false) {
+	function clientDbList($start = 0, $duration = -1, $count = false) {
 		if(!$this->runtime['selected']) { return $this->checkSelected(); }
-				
-		return $this->getData('multi', 'clientdblist start='.(empty($start) ? '0' : $start).' duration='.(empty($duration) ? '-1' : $duration).($count ? '-count' : ''));
+		return $this->getData('multi', 'clientdblist start='.$start.' duration='.$duration.($count ? ' -count' : ''));
 	}
 
 /**
-  * clientDelPerm removes a set of specified permissions from a client<br><br><br>
+  * clientDelPerm
+  * 
+  * Removes a set of specified permissions from a client. Multiple permissions can be removed at once. A permission can be specified by permid or permsid.
   *
-  * <b>Input-Array like this:</b><br>
+  * <b>Input-Array like this:</b>
   * <code>
-  * <?PHP
   * $permissions = array();
-  * $permissions[] = 'permissionID';
-  * ?>
+  * $permissions['permissionID'] = 'permissionValue';
+  * //or you could use Permission Name
+  * $permissions['permissionName'] = 'permissionValue';
   * </code>
   *
   * @author     Par0noid Solutions
   * @access		public
-  * @param		integer		$cldbid				clientDbId
+  * @param		integer		$cldbid				clientDBID
   * @param		array		$permissionIds		permissionIDs
   * @return     boolean success
   */
@@ -1147,7 +1277,7 @@ class ts3admin {
 		
 		if(count($permissionIds) > 0) {
 			foreach($permissionIds AS $value) {
-				$permissionArray[] = 'permid='.$value;
+				$permissionArray[] = (is_numeric($value) ? 'permid=' : 'permsid=').$value;
 			}
 			return $this->getData('boolean', 'clientdelperm cldbid='.$cldbid.' '.implode('|', $permissionArray));
 		}else{
@@ -1157,16 +1287,16 @@ class ts3admin {
 	}
 
 /**
-  * clientEdit changes client settings using given properties<br><br><br>
+  * clientEdit
+  * 
+  * Changes a clients settings using given properties.
   *
-  * <b>Input-Array like this:</b><br>
-  * <br><code>
-  * <?PHP
+  * <b>Input-Array like this:</b>
+  * <code>
   * $data = array();
   *	
-  * $data['setting'] = 'value';
-  * $data['setting'] = 'value';
-  * ?>
+  * $data['property'] = 'value';
+  * $data['property'] = 'value';
   * </code>
   *
   * @author     Par0noid Solutions
@@ -1188,9 +1318,11 @@ class ts3admin {
 	}
 
 /**
-  * clientFind displays a list of clients matching a given name pattern<br><br><br>
+  * clientFind
+  * 
+  * Displays a list of clients matching a given name pattern.
   *
-  * <b>Output:</b><br>
+  * <b>Output:</b>
   * <code>
   * Array
   * {
@@ -1202,7 +1334,7 @@ class ts3admin {
   * @author     Par0noid Solutions
   * @access		public
   * @param		string	$pattern	clientName
-  * @return     multidimensional-array clienList 
+  * @return     array clienList
   */
 	function clientFind($pattern) {
 		if(!$this->runtime['selected']) { return $this->checkSelected(); }
@@ -1210,9 +1342,11 @@ class ts3admin {
 	}
 
 /**
-  * clientGetDbIdFromUid displays the database ID matching the unique identifier specified by cluid<br><br><br>
+  * clientGetDbIdFromUid
+  * 
+  * Displays the database ID matching the unique identifier specified by cluid.
   *
-  *	<b>Output:</b><br>
+  *	<b>Output:</b>
   * <code>
   * Array
   * {
@@ -1223,7 +1357,7 @@ class ts3admin {
   *
   * @author     Par0noid Solutions
   * @access		public
-  * @param		string	$cluid	clientUniqueId
+  * @param		string	$cluid	clientUID
   * @return     array clientInfo
   */
 	function clientGetDbIdFromUid($cluid) {
@@ -1232,9 +1366,11 @@ class ts3admin {
 	}
 
 /**
-  * clientGetIds displays all client IDs matching the unique identifier specified by cluid<br><br><br>
+  * clientGetIds
+  * 
+  * Displays all client IDs matching the unique identifier specified by cluid.
   *
-  * <b>Output:</b><br>
+  * <b>Output:</b>
   * <code>
   * Array
   * {
@@ -1246,8 +1382,8 @@ class ts3admin {
   *
   * @author     Par0noid Solutions
   * @access		public
-  * @param		string	$cluid	clientUniqueId
-  * @return     multidimensional-array clientList 
+  * @param		string	$cluid	clientUID
+  * @return     array clientList 
   */
 	function clientGetIds($cluid) {
 		if(!$this->runtime['selected']) { return $this->checkSelected(); }
@@ -1255,9 +1391,11 @@ class ts3admin {
 	}
 
 /**
-  * clientGetNameFromDbid displays the database ID matching the unique identifier specified by cluid<br><br><br>
+  * clientGetNameFromDbid
+  * 
+  * Displays the unique identifier and nickname matching the database ID specified by cldbid.
   *
-  *	<b>Output:</b><br>
+  *	<b>Output:</b>
   * <code>
   * Array
   * {
@@ -1269,7 +1407,7 @@ class ts3admin {
   *
   * @author     Par0noid Solutions
   * @access		public
-  * @param		integer	$cldbid	clientDatabaseId
+  * @param		integer	$cldbid	clientDBID
   * @return     array clientInfo
   */
 	function clientGetNameFromDbid($cldbid) {
@@ -1278,9 +1416,11 @@ class ts3admin {
 	}
 	
 /**
-  * clientGetNameFromUid displays the database ID and nickname matching the unique identifier specified by cluid<br><br><br>
+  * clientGetNameFromUid
+  * 
+  * Displays the database ID and nickname matching the unique identifier specified by cluid.
   *
-  *	<b>Output:</b><br>
+  *	<b>Output:</b>
   * <code>
   * Array
   * {
@@ -1292,7 +1432,7 @@ class ts3admin {
   *
   * @author     Par0noid Solutions
   * @access		public
-  * @param		string	$cluid	clientUniqueId
+  * @param		string	$cluid	clientUID
   * @return     array clientInfo
   */
 	function clientGetNameFromUid($cluid) {
@@ -1301,17 +1441,19 @@ class ts3admin {
 	}
 
 /**
-  * clientInfo returns all information about a client<br><br><br>
+  * clientInfo
+  * 
+  * Displays detailed configuration information about a client including unique ID, nickname, client version, etc.
   *
-  * <b>Output:</b><br>
+  * <b>Output:</b>
   * <code>
   * Array
   * {
-  *  [cid] => 1
-  *  [client_idle_time] => 45211
+  *  [cid] => 2
+  *  [client_idle_time] => 4445369
   *  [client_unique_identifier] => nUixbsq/XakrrmbqU8O30R/D8Gc=
-  *  [client_nickname] => Par0noid
-  *  [client_version] => 3.0.0-beta31 [Build: 12451]
+  *  [client_nickname] => par0noid
+  *  [client_version] => 3.0.9.2 [Build: 1351504843]
   *  [client_platform] => Windows
   *  [client_input_muted] => 1
   *  [client_output_muted] => 1
@@ -1323,45 +1465,45 @@ class ts3admin {
   *  [client_is_recording] => 0
   *  [client_login_name] => 
   *  [client_database_id] => 2
-  *  [client_channel_group_id] => 8
+  *  [client_channel_group_id] => 5
   *  [client_servergroups] => 6
-  *  [client_created] => 1263833443
-  *  [client_lastconnected] => 1286589112
-  *  [client_totalconnections] => 656
+  *  [client_created] => 1361027850
+  *  [client_lastconnected] => 1361027850
+  *  [client_totalconnections] => 1
   *  [client_away] => 0
   *  [client_away_message] => 
   *  [client_type] => 0
-  *  [client_flag_avatar] => e892266b06ffd7249014bd077bd4d90c
+  *  [client_flag_avatar] => 
   *  [client_talk_power] => 75
   *  [client_talk_request] => 0
   *  [client_talk_request_msg] => 
   *  [client_description] => 
   *  [client_is_talker] => 0
-  *  [client_month_bytes_uploaded] => 4323682
-  *  [client_month_bytes_downloaded] => 17366
-  *  [client_total_bytes_uploaded] => 4558572
-  *  [client_total_bytes_downloaded] => 1420306
+  *  [client_month_bytes_uploaded] => 0
+  *  [client_month_bytes_downloaded] => 0
+  *  [client_total_bytes_uploaded] => 0
+  *  [client_total_bytes_downloaded] => 0
   *  [client_is_priority_speaker] => 0
-  *  [client_unread_messages] => 0
   *  [client_nickname_phonetic] => 
   *  [client_needed_serverquery_view_power] => 75
   *  [client_default_token] => 
   *  [client_icon_id] => 0
   *  [client_is_channel_commander] => 0
-  *  [client_country] => DE
+  *  [client_country] => 
+  *  [client_channel_group_inherited_channel_id] => 2
   *  [client_base64HashClientUID] => jneilbgomklpfnkjclkoggokfdmdlhnbbpmdpagh
   *  [connection_filetransfer_bandwidth_sent] => 0
   *  [connection_filetransfer_bandwidth_received] => 0
-  *  [connection_packets_sent_total] => 150
-  *  [connection_bytes_sent_total] => 25325
-  *  [connection_packets_received_total] => 150
-  *  [connection_bytes_received_total] => 6941
-  *  [connection_bandwidth_sent_last_second_total] => 81
-  *  [connection_bandwidth_sent_last_minute_total] => 533
-  *  [connection_bandwidth_received_last_second_total] => 83
-  *  [connection_bandwidth_received_last_minute_total] => 147
-  *  [connection_connected_time] => 46145
-  *  [connection_client_ip] => 87.147.35.23
+  *  [connection_packets_sent_total] => 12130
+  *  [connection_bytes_sent_total] => 542353
+  *  [connection_packets_received_total] => 12681
+  *  [connection_bytes_received_total] => 592935
+  *  [connection_bandwidth_sent_last_second_total] => 82
+  *  [connection_bandwidth_sent_last_minute_total] => 92
+  *  [connection_bandwidth_received_last_second_total] => 84
+  *  [connection_bandwidth_received_last_minute_total] => 88
+  *  [connection_connected_time] => 5908749
+  *  [connection_client_ip] => 127.0.0.1
   * } 
   * </code>
   *
@@ -1376,16 +1518,18 @@ class ts3admin {
 	}
 
 /**
-  * clientKick kicks a client from the selected server
+  * clientKick
+  * 
+  * Kicks one or more clients specified with clid from their currently joined channel or from the server, depending on reasonid. The reasonmsg parameter specifies a text message sent to the kicked clients. This parameter is optional and may only have a maximum of 40 characters.
   *
   * @author     Par0noid Solutions
   * @access		public
-  * @param		integer $clid		clientId
-  * @param		string	$kickMode	kickMode (server or channel)
+  * @param		integer $clid		clientID
+  * @param		string	$kickMode	kickMode (server or channel) (Default: servera)
   * @param		string	$kickmsg 	kick reason [optional]
   * @return     boolean success
   */
-	function clientKick($clid, $kickMode, $kickmsg = "") {
+	function clientKick($clid, $kickMode = "server", $kickmsg = "") {
 		if(!$this->runtime['selected']) { return $this->checkSelected(); }
 		
 		if(in_array($kickMode, array('server', 'channel'))) {
@@ -1403,11 +1547,13 @@ class ts3admin {
 	}
 
 /**
-  * clientList returns all online clients on the selected virtual server<br><br><br>
+  * clientList
+  * 
+  * Displays a list of clients online on a virtual server including their ID, nickname, status flags, etc. The output can be modified using several command options. Please note that the output will only contain clients which are currently in channels you're able to subscribe to.
   *
-  * <b>Possible params:</b> [-uid] [-away] [-voice] [-times] [-groups] [-info] [-icon]<br><br><br>
+  * <br><b>Possible params:</b> [-uid] [-away] [-voice] [-times] [-groups] [-info] [-icon] [-country] [-ip]<br><br>
   *
-  * <b>Output:</b><br>
+  * <b>Output: (without parameters)</b>
   * <code>
   * Array
   * {
@@ -1416,15 +1562,45 @@ class ts3admin {
   *  [client_database_id] => 2
   *  [client_nickname] => Par0noid
   *  [client_type] => 0
+  *  [-uid] => [client_unique_identifier] => nUixbsq/XakrrmbqU8O30R/D8Gc=
+  *  [-away] => [client_away] => 0
+  *  [-away] => [client_away_message] => 
+  *  [-voice] => [client_flag_talking] => 0
+  *  [-voice] => [client_input_muted] => 0
+  *  [-voice] => [client_output_muted] => 0
+  *  [-voice] => [client_input_hardware] => 0
+  *  [-voice] => [client_output_hardware] => 0
+  *  [-voice] => [client_talk_power] => 0
+  *  [-voice] => [client_is_talker] => 0
+  *  [-voice] => [client_is_priority_speaker] => 0
+  *  [-voice] => [client_is_recording] => 0
+  *  [-voice] => [client_is_channel_commander] => 0
+  *  [-times] => [client_idle_time] => 1714
+  *  [-times] => [client_created] => 1361027850
+  *  [-times] => [client_lastconnected] => 1361042955
+  *  [-groups] => [client_servergroups] => 6,7
+  *  [-groups] => [client_channel_group_id] => 8
+  *  [-groups] => [client_channel_group_inherited_channel_id] => 1
+  *  [-info] => [client_version] => 3.0.9.2 [Build: 1351504843]
+  *  [-info] => [client_platform] => Windows
+  *  [-icon] => [client_icon_id] => 0
+  *  [-country] => [client_country] => 
+  *  [-ip] => [connection_client_ip] => 127.0.0.1
   * }
-  * </code>
+  * </code><br>
+  * <b>Usage:</b>
+  * <code>
+  * $ts3->clientList(); //No parameters
+  * $ts3->clientList("-uid"); //Single parameter
+  * $ts3->clientList("-uid -away -voice -times -groups -info -country -icon -ip"); //Multiple parameters
+  * </code><br>
   *
   * @author     Par0noid Solutions
   * @access		public
   * @param		string	$params	additional parameters [optional]
-  * @return     multidimensional-array clientList 
+  * @return     array clientList 
   */
-	function clientList($params = '') {
+	function clientList($params = null) {
 		if(!$this->runtime['selected']) { return $this->checkSelected(); }
 		
 		if(!empty($params)) { $params = ' '.$params; }
@@ -1433,28 +1609,34 @@ class ts3admin {
 	}
 
 /**
-  * clientMove moves a client on the selected server
+  * clientMove
+  * 
+  * Moves one or more clients specified with clid to the channel with ID cid. If the target channel has a password, it needs to be specified with cpw. If the channel has no password, the parameter can be omitted.
   *
   * @author     Par0noid Solutions
   * @access		public
   * @param		integer $clid	clientID
   * @param		integer $cid	channelID
+  * @param		string	$cpw	channelPassword [optional]
   * @return     boolean success
   */
-	function clientMove($clid, $cid) {
+	function clientMove($clid, $cid, $cpw = null) {
 		if(!$this->runtime['selected']) { return $this->checkSelected(); }
-		return $this->getData('boolean', 'clientmove clid='.$clid.' cid='.$cid);
+		return $this->getData('boolean', 'clientmove clid='.$clid.' cid='.$cid.(!empty($cpw) ? ' cpw='.$this->escapeText($cpw) : ''));
 	}
 
 /**
-  * clientPermList displays a list of permissions defined for a client<br><br><br>
+  * clientPermList
+  * 
+  * Displays a list of permissions defined for a client.
   *
-  * <b>Output:</b><br>
+  * <b>Output:</b>
   * <code>
   * Array
   * {
-  *  [permid] => 13690
-  *  [permvalue] => 1000
+  *  [permid] => 20654 //with permsid = false
+  *  [permsid] => b_client_ignore_bans //with permsid = true
+  *  [permvalue] => 1
   *  [permnegated] => 0
   *  [permskip] => 0
   * }
@@ -1462,20 +1644,19 @@ class ts3admin {
   *
   * @author     Par0noid Solutions
   * @access		public
-  * @param		intege		$cldbid 	clientDbId
+  * @param		intege		$cldbid 	clientDBID
   * @param		boolean		$permsid	set true to add -permsid param [optional]
-  * @return     multidimensional-array clientPermList
+  * @return     array clientPermList
   */
 	function clientPermList($cldbid, $permsid = false) {
-		if(!$this->runtime['selected']) { return $this->checkSelected(); }
-
-		if($permsid) { $additional = ' -permsid'; }else{ $additional = ''; }
-		
-		return $this->getData('multi', 'clientpermlist cldbid='.$cldbid.$additional);
+		if(!$this->runtime['selected']) { return $this->checkSelected(); }		
+		return $this->getData('multi', 'clientpermlist cldbid='.$cldbid.($permsid ? ' -permsid' : ''));
 	}
 
 /**
-  * clientPoke pokes a client on the selected server
+  * clientPoke
+  * 
+  * Sends a poke message to the client specified with clid.
   *
   * @author     Par0noid Solutions
   * @access		public
@@ -1489,10 +1670,11 @@ class ts3admin {
 	}
 
 /**
-  * clientSetServerQueryLogin updates your own ServerQuery login credentials using a specified username<br>
-  * The password will be auto-generated<br><br><br>
+  * clientSetServerQueryLogin
   * 
-  * <b>Output:</b><br>
+  * Updates your own ServerQuery login credentials using a specified username. The password will be auto-generated.
+  * 
+  * <b>Output:</b>
   * <code>
   * Array
   * {
@@ -1510,30 +1692,15 @@ class ts3admin {
 	}
 
 /**
-  * complainAdd submits a complaint about the client with database ID tcldbid to the server
-  *
-  * @author     Par0noid Solutions
-  * @access		public
-  * @param		integer $tcldbid	targetClientDbId
-  * @param		string	$msg		complainMessage
-  * @return     boolean success
-  */
-	function complainAdd($tcldbid, $msg) {
-		if(!$this->runtime['selected']) { return $this->checkSelected(); }
-		return $this->getData('boolean', 'complainadd tcldbid='.$tcldbid.' message='.$this->escapeText($msg));
-	}
-
-/**
-  * clientUpdate changes your ServerQuery clients settings using given properties<br><br><br>
-  *
-  * <b>Input-Array like this:</b><br>
-  * <br><code>
-  * <?PHP
+  * clientUpdate
+  * 
+  * Change your ServerQuery clients settings using given properties.
+  * 
+  * <b>Input-Array like this:</b>
+  * <code>
   * $data = array();
-  *	
-  * $data['propertie'] = 'value';
-  * $data['propertie'] = 'value';
-  * ?>
+  * $data['property'] = 'value';
+  * $data['property'] = 'value';
   * </code>
   *
   * @author     Par0noid Solutions
@@ -1552,7 +1719,25 @@ class ts3admin {
 	}
 
 /**
-  * complainDelete deletes the complaint about the client with ID tcldbid submitted by the client with ID fcldbid from the server
+  * complainAdd
+  *
+  * Submits a complaint about the client with database ID tcldbid to the server.
+  *
+  * @author     Par0noid Solutions
+  * @access		public
+  * @param		integer $tcldbid	targetClientDBID
+  * @param		string	$msg		complainMessage
+  * @return     boolean success
+  */
+	function complainAdd($tcldbid, $msg) {
+		if(!$this->runtime['selected']) { return $this->checkSelected(); }
+		return $this->getData('boolean', 'complainadd tcldbid='.$tcldbid.' message='.$this->escapeText($msg));
+	}
+
+/**
+  * complainDelete
+  * 
+  * Deletes the complaint about the client with ID tcldbid submitted by the client with ID fcldbid from the server.
   *
   * @author     Par0noid Solutions
   * @access		public
@@ -1566,7 +1751,9 @@ class ts3admin {
 	}
 
 /**
-  * complainDeleteAll deletes all complaints about the client with database ID tcldbid from the server
+  * complainDeleteAll
+  * 
+  * Deletes all complaints about the client with database ID tcldbid from the server.
   *
   * @author     Par0noid Solutions
   * @access		public
@@ -1579,47 +1766,50 @@ class ts3admin {
 	}
 
 /**
-  * complainList displays a list of complaints on the selected virtual server<br>
-  * If "tcldbid" is specified, only complaints about the targeted client will be shown<br><br><br>
+  * complainList
+  * 
+  * Displays a list of complaints on the selected virtual server. If tcldbid is specified, only complaints about the targeted client will be shown.
   *
-  * <b>Output:</b><br>
+  * <b>Output:</b>
   * <code>
   * Array
   * {
   *  [tcldbid] => 2
-  *  [tname] => Par0noid
+  *  [tname] => par0noid
   *  [fcldbid] => 1
-  *  [fname] => serveradmin
-  *  [message] => insult
-  *  [timestamp] => 1286591073
+  *  [fname] => serveradmin from 127.0.0.1:6814
+  *  [message] => Steals crayons
+  *  [timestamp] => 1361044090
   * }
   * </code>
   *
   * @author     Par0noid Solutions
   * @access		public
-  * @param		string $tcldbid	targetClientDbId [optional]
-  * @return     multidimensional-array complainList
+  * @param		string $tcldbid	targetClientDBID [optional]
+  * @return     array complainList
   */
-	function complainList($tcldbid = '') {
+	function complainList($tcldbid = null) {
 		if(!$this->runtime['selected']) { return $this->checkSelected(); }
 		if(!empty($tcldbid)) { $tcldbid = ' tcldbid='.$tcldbid; }
 		return $this->getData('multi', 'complainlist'.$tcldbid);
 	}
 
 /**
-  * execOwnCommand executes a command and returns data if you want<br><br><br>
+  * execOwnCommand
   * 
-  * <b>Mods:</b>
+  * executes a command that isn't defined in class and returns data like your propose
+  * 
+  * <b>Modes:</b>
   * <ul>
   * 	<li><b>0:</b> execute -> return boolean</li>
   * 	<li><b>1:</b> execute -> return normal array</li>
   * 	<li><b>2:</b> execute -> return multidimensional array</li>
-  * 	<li><b>3:</b> execute -> return plaintext serverquery)</li>
+  * 	<li><b>3:</b> execute -> return plaintext serverquery</li>
   * </ul>
   *
   * @author     Par0noid Solutions
   * @access		public
-  * @param		string	$mode		execMode
+  * @param		string	$mode		executionMode
   * @param		string	$command	command
   * @return     mixed result
   */
@@ -1639,7 +1829,9 @@ class ts3admin {
 	}
 
 /**
-  * ftCreateDir creates new directory in a channels file repository
+  * ftCreateDir
+  * 
+  * Creates new directory in a channels file repository.
   *
   * @author     Par0noid Solutions
   * @access		public
@@ -1648,28 +1840,28 @@ class ts3admin {
   * @param		string	$dirname	dirPath
   * @return     boolean success
   */
-	function ftCreateDir($cid, $cpw = '', $dirname) {
+	function ftCreateDir($cid, $cpw = null, $dirname) {
 		if(!$this->runtime['selected']) { return $this->checkSelected(); }
 		return $this->getData('boolean', 'ftcreatedir cid='.$cid.' cpw='.$this->escapeText($cpw).' dirname='.$this->escapeText($dirname));
 	}
 
 /**
-  * ftDeleteFile deletes one or more files stored in a channels file repository<br><br><br>
+  * ftDeleteFile
+  * 
+  * Deletes one or more files stored in a channels file repository.
   *
-  * <b>Input-Array like this:</b><br>
-  * <br><code>
-  * <?PHP
+  * <b>Input-Array like this:</b>
+  * <code>
   * $files = array();
   *	
   * $files[] = '/pic1.jpg';
   * $files[] = '/dokumente/test.txt';
   * $files[] = '/dokumente';
-  * ?>
   * </code>
   *
   * @author     Par0noid Solutions
   * @access		public
-  * @param		string	$cid	channelId
+  * @param		string	$cid	channelID
   * @param		string	$cpw	channelPassword (leave blank if not needed)
   * @param		array	$files	files
   * @return     boolean success
@@ -1690,7 +1882,9 @@ class ts3admin {
 	}
 
 /**
-  * ftDownloadFile downloads a file and return its contents
+  * ftDownloadFile
+  * 
+  * Ddownloads a file and returns its contents
   *
   * @author     Par0noid Solutions
   * @access		public
@@ -1712,20 +1906,19 @@ class ts3admin {
 	}
 	
 /**
-  * ftGetFileInfo displays detailed information about one or more specified files stored in a channels file repository<br><br><br>
+  * ftGetFileInfo
+  * 
+  * Displays detailed information about one or more specified files stored in a channels file repository.
   *
-  * <b>Input-Array like this:</b><br>
-  * <br><code>
-  * <?PHP
+  * <b>Input-Array like this:</b>
+  * <code>
   * $files = array();
   *	
   * $files[] = '/pic1.jpg';
   * $files[] = '/dokumente/test.txt';
   * $files[] = '/dokumente';
-  * ?>
-  * </code><br><br><br>
-  * 
-  * <b>Output:</b><br>
+  * </code><br>
+  * <b>Output:</b>
   * <code>
   * Array
   * {
@@ -1739,7 +1932,7 @@ class ts3admin {
   *
   * @author     Par0noid Solutions
   * @access		public
-  * @param		string	$cid	channelId
+  * @param		string	$cid	channelID
   * @param		string	$cpw	channelPassword (leave blank if not needed)
   * @param		array	$files	files
   * @return     boolean success
@@ -1760,9 +1953,11 @@ class ts3admin {
 	}
 
 /**
-  * ftGetFileList displays a list of files and directories stored in the specified channels file repository<br><br><br>
+  * ftGetFileList
   *
-  * <b>Output:</b><br>
+  * Displays a list of files and directories stored in the specified channels file repository.
+  *
+  * <b>Output:</b>
   * <code>
   * Array
   * {
@@ -1777,10 +1972,10 @@ class ts3admin {
   *
   * @author     Par0noid Solutions
   * @access		public
-  * @param		string	$cid	channelId
+  * @param		string	$cid	channelID
   * @param		string	$cpw	channelPassword (leave blank if not needed)
   * @param		string	$path	filePath
-  * @return     multidimensional-array	fileList
+  * @return     array	fileList
   */
 	function ftGetFileList($cid, $cpw = '', $path) {
 		if(!$this->runtime['selected']) { return $this->checkSelected(); }
@@ -1788,9 +1983,11 @@ class ts3admin {
 	}
 	
 /**
-  * ftInitDownload initializes a file transfer download<br><br><br>
+  * ftInitDownload
+  * 
+  * Initializes a file transfer download. clientftfid is an arbitrary ID to identify the file transfer on client-side. On success, the server generates a new ftkey which is required to start downloading the file through TeamSpeak 3's file transfer interface.
   *
-  * <b>Output:</b><br>
+  * <b>Output:</b>
   * <code>
   * Array
   * {
@@ -1804,21 +2001,23 @@ class ts3admin {
   *
   * @author     Par0noid Solutions
   * @access		public
-  * @param		string	$filename	filePath
-  * @param		string	$cid		channelId
-  * @param		string	$cpw		channelPassword (leave blank if not needed)
-  * @param		integer	$seekpos	seekpos (default = 0) [optional]
+  * @param		string	$name			filePath
+  * @param		string	$cid			channelID
+  * @param		string	$cpw			channelPassword (leave blank if not needed)
+  * @param		integer	$seekpos		seekpos (default = 0) [optional]
   * @return     array	initDownloadFileInfo
   */	
-	function ftInitDownload($filename, $cid, $cpw = '', $seekpos = 0) {
+	function ftInitDownload($name, $cid, $cpw = '', $seekpos = 0) {
 		if(!$this->runtime['selected']) { return $this->checkSelected(); }
-		return $this->getData('array', 'ftinitdownload clientftfid='.rand(1,99).' name='.$this->escapeText($filename).' cid='.$cid.' cpw='.$this->escapeText($cpw).' seekpos='.$seekpos);
+		return $this->getData('array', 'ftinitdownload clientftfid='.rand(1,99).' name='.$this->escapeText($name).' cid='.$cid.' cpw='.$this->escapeText($cpw).' seekpos='.$seekpos);
 	}
 
 /**
-  * ftInitUpload initializes a file transfer upload<br><br><br>
+  * ftInitUpload
+  * 
+  * Initializes a file transfer upload. clientftfid is an arbitrary ID to identify the file transfer on client-side. On success, the server generates a new ftkey which is required to start uploading the file through TeamSpeak 3's file transfer interface.
   *
-  * <b>Output:</b><br>
+  * <b>Output:</b>
   * <code>
   * Array
   * {
@@ -1833,8 +2032,8 @@ class ts3admin {
   * @author     Par0noid Solutions
   * @access		public
   * @param		string	$filename	filePath
-  * @param		string	$cid		channelId
-  * @param		integer	$size		fileSize in byte
+  * @param		string	$cid		channelID
+  * @param		integer	$size		fileSize in bytes
   * @param		string	$cpw		channelPassword (leave blank if not needed)
   * @param		boolean	$overwrite	overwrite	[optional] (default = 0)
   * @param		boolean	$resume		resume		[optional] (default = 0)
@@ -1850,10 +2049,11 @@ class ts3admin {
 	}
 	
 /**
-  * ftList displays a list of running file transfers on the selected virtual server<br>
-  * The output contains the path to which a file is uploaded to, the current transfer rate in bytes per second, etc.<br><br><br>
+  * ftList
+  * 
+  * Displays a list of running file transfers on the selected virtual server. The output contains the path to which a file is uploaded to, the current transfer rate in bytes per second, etc
   *
-  * <b>Output:</b><br>
+  * <b>Output:</b>
   * <code>
   * Array
   * {
@@ -1875,7 +2075,7 @@ class ts3admin {
   *
   * @author     Par0noid Solutions
   * @access		public
-  * @return     multidimensional-array	fileTransferList
+  * @return     array	fileTransferList
   */
 	function ftList() {
 		if(!$this->runtime['selected']) { return $this->checkSelected(); }
@@ -1883,48 +2083,52 @@ class ts3admin {
 	}
 
 /**
-  * ftRenameFile renames a file in a channels file repository
+  * ftRenameFile
+  * 
+  * Renames a file in a channels file repository. If the two parameters tcid and tcpw are specified, the file will be moved into another channels file repository.
   *
   * @author     Par0noid Solutions
   * @access		public
-  * @param		integer	$cid		channelId
+  * @param		integer	$cid		channelID
   * @param		string	$cpw		channelPassword (leave blank if not needed)
   * @param		string	$oldname	oldFilePath
   * @param		string	$newname	newFilePath
+  * @param		string  $tcid		targetChannelID [optional]
+  * @param		string  $tcpw		targetChannelPassword [optional]
   * @return     boolean success
   */
-	function ftRenameFile($cid, $cpw = '', $oldname, $newname) {
+	function ftRenameFile($cid, $cpw = null, $oldname, $newname, $tcid = null,  $tcpw = null) {
 		if(!$this->runtime['selected']) { return $this->checkSelected(); }
-
-		return $this->getData('boolean', 'ftrenamefile cid='.$cid.' cpw='.$cpw.' oldname='.$this->escapeText($oldname).' newname='.$this->escapeText($newname));
+		$newTarget = ($tcid != null ? ' tcid='.$tcid.' '.$tcpw : '');
+		return $this->getData('boolean', 'ftrenamefile cid='.$cid.' cpw='.$cpw.' oldname='.$this->escapeText($oldname).' newname='.$this->escapeText($newname).$newTarget);
 	}
 
 /**
-  * ftStop stops the running file transfer with server-side ID serverftfid
+  * ftStop
+  * 
+  * Stops the running file transfer with server-side ID serverftfid.
   *
   * @author     Par0noid Solutions
   * @access		public
-  * @param		integer	$sftid	serverFileTransferID
-  * @param		boolean	$delete	delete incomplete file (default = true) [optional]
+  * @param		integer	$serverftfid	serverFileTransferID
+  * @param		boolean	$delete			delete incomplete file [optional] (default: true) 
   * @return     boolean success
   */
-	function ftStop($sftid, $delete = true) {
-		if(!$this->runtime['selected']) { return $this->checkSelected(); }
-		
-		if($delete) { $delete = '1'; }else{ $delete = '0'; } 
-		
-		return $this->getData('boolean', 'ftstop serverftfid='.$sftid.' delete='.$delete);
+	function ftStop($serverftfid, $delete = true) {
+		if(!$this->runtime['selected']) { return $this->checkSelected(); }		
+		return $this->getData('boolean', 'ftstop serverftfid='.$serverftfid.' delete='.($delete ? '1' : '0'));
 	}
 
 /**
-  * ftUploadFile uploads a file to server<br><br><br>
-  *
+  * ftUploadFile
+  * 
+  * Uploads a file to server
   * To check if upload was successful, you have to search for this file in fileList after
   *
   * @author     Par0noid Solutions
   * @access		public
-  * @param		array	$data		return of ftInitUpload
-  * @param		string	$uploadData	data which should be uploaded
+  * @param		array	$data			return of ftInitUpload
+  * @param		string	$uploadData		data which should be uploaded
   * @return     array response
   */
 	function ftUploadFile($data, $uploadData) {
@@ -1942,7 +2146,9 @@ class ts3admin {
 	}
 
 /**
-  * gm sends a text message to all clients on all virtual servers in the TeamSpeak 3 Server instance
+  * gm
+  * 
+  * Sends a text message to all clients on all virtual servers in the TeamSpeak 3 Server instance.
   *
   * @author     Par0noid Solutions
   * @access		public
@@ -1958,28 +2164,32 @@ class ts3admin {
 	}
 
 /**
-  * hostInfo returns all information about the connected host<br><br><br>
+  * hostInfo
+  * 
+  * Displays detailed connection information about the server instance including uptime, number of virtual servers online, traffic information, etc.
   *
-  * <b>Output:</b><br>
+  * <b>Output:</b>
   * <code>
   * Array
   * {
-  *  [instance_uptime] => 571
-  *  [host_timestamp_utc] => 1286631700
-  *  [virtualservers_running_total] => 7
-  *  [virtualservers_total_maxclients] => 481
-  *  [virtualservers_total_clients_online] => 23
-  *  [virtualservers_total_channels_online] => 126
+  *  [instance_uptime] => 19038
+  *  [host_timestamp_utc] => 1361046825
+  *  [virtualservers_running_total] => 1
+  *  [virtualservers_total_maxclients] => 32
+  *  [virtualservers_total_clients_online] => 1
+  *  [virtualservers_total_channels_online] => 2
   *  [connection_filetransfer_bandwidth_sent] => 0
   *  [connection_filetransfer_bandwidth_received] => 0
-  *  [connection_packets_sent_total] => 149750
-  *  [connection_bytes_sent_total] => 27297156
-  *  [connection_packets_received_total] => 58848
-  *  [connection_bytes_received_total] => 7457688
-  *  [connection_bandwidth_sent_last_second_total] => 1886
-  *  [connection_bandwidth_sent_last_minute_total] => 33270
-  *  [connection_bandwidth_received_last_second_total] => 1932
-  *  [connection_bandwidth_received_last_minute_total] => 9043
+  *  [connection_filetransfer_bytes_sent_total] => 0
+  *  [connection_filetransfer_bytes_received_total] => 0
+  *  [connection_packets_sent_total] => 24853
+  *  [connection_bytes_sent_total] => 1096128
+  *  [connection_packets_received_total] => 25404
+  *  [connection_bytes_received_total] => 1153918
+  *  [connection_bandwidth_sent_last_second_total] => 82
+  *  [connection_bandwidth_sent_last_minute_total] => 81
+  *  [connection_bandwidth_received_last_second_total] => 84
+  *  [connection_bandwidth_received_last_minute_total] => 87
   * }
   * </code>
   *
@@ -1992,16 +2202,16 @@ class ts3admin {
 	}
 
 /**
-  * instanceEdit changes the server instance configuration using given properties<br><br><br>
+  * instanceEdit
+  * 
+  * Changes the server instance configuration using given properties.
   *
-  * <b>Input-Array like this:</b><br>
-  * <br><code>
-  * <?PHP
+  * <b>Input-Array like this:</b>
+  * <code>
   * $data = array();
   *	
   * $data['setting'] = 'value';
   * $data['setting'] = 'value';
-  * ?>
   * </code>
   *
   * @author     Par0noid Solutions
@@ -2019,18 +2229,20 @@ class ts3admin {
 			return $this->getData('boolean', 'instanceedit '.$settingsString);
 		}else{
 			$this->addDebugLog('empty array entered');
-			return $this->generateOutput(false, array('empty array entered'), false);
+			return $this->generateOutput(false, array('Error: You can \'t give an empty array'), false);
 		}
 	}
 
 /**
-  * instanceInfo returns all information about the teamspeak instance<br><br><br>
+  * instanceInfo
+  * 
+  * Displays the server instance configuration including database revision number, the file transfer port, default group IDs, etc.
   *
-  * <b>Output:</b><br>
+  * <b>Output:</b>
   * <code>
   * Array
   * {
-  *  [serverinstance_database_version] => 15
+  *  [serverinstance_database_version] => 20
   *  [serverinstance_filetransfer_port] => 30033
   *  [serverinstance_max_download_total_bandwidth] => 18446744073709551615
   *  [serverinstance_max_upload_total_bandwidth] => 18446744073709551615
@@ -2042,7 +2254,7 @@ class ts3admin {
   *  [serverinstance_template_serverdefault_group] => 5
   *  [serverinstance_template_channeladmin_group] => 1
   *  [serverinstance_template_channeldefault_group] => 4
-  *  [serverinstance_permissions_version] => 8
+  *  [serverinstance_permissions_version] => 15
   * }
   * </code>
   *
@@ -2055,7 +2267,9 @@ class ts3admin {
 	}
 
 /**
-  * logAdd writes a custom entry into the servers log
+  * logAdd
+  * 
+  * Writes a custom entry into the servers log. Depending on your permissions, you'll be able to add entries into the server instance log and/or your virtual servers log. The loglevel parameter specifies the type of the entry.
   *
   * @author     Par0noid Solutions
   * @access		public
@@ -2078,7 +2292,9 @@ class ts3admin {
 	}
 
 /**
-  * login verifies your login data and grant additional access
+  * login
+  * 
+  * Authenticates with the TeamSpeak 3 Server instance using given ServerQuery login credentials.
   *
   * @author     Par0noid Solutions
   * @access		public
@@ -2091,7 +2307,9 @@ class ts3admin {
 	}
 
 /**
-  * logout deselects the selected virtual server and log out the user
+  * logout
+  * 
+  * Deselects the active virtual server and logs out from the server instance.
   *
   * @author     Par0noid Solutions
   * @access		public
@@ -2103,51 +2321,55 @@ class ts3admin {
 	}
 
 /**
-  * logView displays a specified number of entries from the servers log<br><br><br>
+  * logView
   * 
-  * <b>Output:</b><br>
+  * Displays a specified number of entries from the servers log. If instance is set to 1, the server will return lines from the master logfile (ts3server_0.log) instead of the selected virtual server logfile.
+  * 
+  * <b>Output:</b>
   * <code>
   * Array
   * {
-  *  [timestamp] => 1286147873
-  *  [level] => 4
-  *  [channel] => ServerParser
-  *  [msg] => deleted VirtualServer(2)
+  *  [last_pos] => 0
+  *  [file_size] => 1085
+  *  [l] => 2012-01-10 20:34:31.379260|INFO    |ServerLibPriv |   | TeamSpeak 3 Server 3.0.1 (2011-11-17 07:34:30)
+  * }
+  * {
+  *  [l] => 2012-01-10 20:34:31.380260|INFO    |DatabaseQuery |   | dbPlugin name:    SQLite3 plugin, Version 2, (c)TeamSpeak Systems GmbH
+  * }
+  * {
+  *  [l] => 2012-01-10 20:34:31.380260|INFO    |DatabaseQuery |   | dbPlugin version: 3.7.3
   * }
   * </code>
   *
   * @author     Par0noid Solutions
   * @access		public
-  * @param		integer	$limit	between 1 and 500
-  * @param		string	$comparator	{<|>|=} [optional]
-  * @param		string	$timestamp	YYYY-MM-DD\shh:mm:ss [optional]
+  * @param		integer	$lines	between 1 and 100
+  * @param		integer	$reverse	{1|0} [optional]
+  * @param		integer	$instance	{1|0} [optional]
+  * @param		integer	$begin_pos	{1|0} [optional]
   * @return     multidimensional-array logEntries
   */
-	function logView($limit, $comparator = '', $timestamp = '') {
-		if(!empty($comparator)) { $comparator = ' comparator='.$this->escapeText($comparator); }
-		if(!empty($timestamp)) { $timestamp = ' timestamp='.$this->escapeText($timestamp); }
-		if($limit >=1 and $limit <=500) {
-			return $this->getData('multi', 'logview limitcount='.$limit.$comparator.$timestamp);
+	function logView($lines, $reverse = 0, $instance = 0, $begin_pos = 0) {		
+		if($lines >=1 and $lines <=100) {
+			return $this->getData('multi', 'logview lines='.$lines.' reverse='.($reverse == 0 ? '0' : '1').' instance='.($instance == 0 ? '0' : '1').' begin_pos='.($begin_pos == 0 ? '0' : '1'));
 		}else{
-			$this->addDebugLog('please choose a limit between 1 and 500');
-			$this->generateOutput(false, array('Error: please choose a limit between 1 and 500'), false);
+			$this->addDebugLog('please choose a limit between 1 and 100');
+			$this->generateOutput(false, array('Error: please choose a limit between 1 and 100'), false);
 		}
 	}
 
 /**
-  * permIdGetByName displays the database ID of one or more permissions specified by permsid<br><br><br>
+  * permIdGetByName
+  * 
+  * Displays the database ID of one or more permissions specified by permsid.
   *
-  * <b>Input-Array like this:</b><br>
+  * <b>Input-Array like this:</b>
   * <code>
-  * <?PHP
   * $permissions = array();
   * $permissions[] = 'permissionName';
-  * ?>
-  * </code>
-  *
-  * <b>Output:</b><br>
+  * </code><br>
+  * <b>Output:</b>
   * <code>
-  * Array
   * Array
   * {
   *  [permsid] => b_serverinstance_help_view
@@ -2158,7 +2380,7 @@ class ts3admin {
   * @author     Par0noid Solutions
   * @access		public
   * @param		string	$permsids		permNames
-  * @return     multidimensional-array	permissionList 
+  * @return     array	permissionList 
   */
 	function permIdGetByName($permsids) {
 		$permissionArray = array();
@@ -2177,31 +2399,135 @@ class ts3admin {
 
 
 /**
-  * permissionList displays a list of permissions available on the server instance including ID, name and description<br><br><br>
+  * permissionList
+  * 
+  * Displays a list of permissions available on the server instance including ID, name and description.
+  * If the new parameter is set the permissionlist will return with the new output format.
   *
-  * <b>Output:</b><br>
+  * <b>Output: (with new parameter)</b>
   * <code>
-  * Array
-  * {
-  *  [permid] => 4353
-  *  [permname] => b_serverinstance_help_view
-  *  [permdesc] => Retrieve information about ServerQuery commands
-  * }
+  * [0] => Array
+  *     (
+  *         [num] => 1
+  *         [group_id_end] => 0
+  *         [pcount] => 0
+  *     )
+
+  * [1] => Array
+  *     (
+  *         [num] => 2
+  *         [group_id_end] => 7
+  *         [pcount] => 7
+  *         [permissions] => Array
+  *             (
+  *                 [0] => Array
+  *                     (
+  *                         [permid] => 1
+  *                         [permname] => b_serverinstance_help_view
+  *                         [permdesc] => Retrieve information about ServerQuery commands
+  *                         [grantpermid] => 32769
+  *                     )
+
+  *                 [1] => Array
+  *                     (
+  *                         [permid] => 2
+  *                         [permname] => b_serverinstance_version_view
+  *                         [permdesc] => Retrieve global server version (including platform and build number)
+  *                         [grantpermid] => 32770
+  *                     )
+
+  *                 [2] => Array
+  *                     (
+  *                         [permid] => 3
+  *                         [permname] => b_serverinstance_info_view
+  *                         [permdesc] => Retrieve global server information
+  *                         [grantpermid] => 32771
+  *                     )
+
+  *                 [3] => Array
+  *                     (
+  *                         [permid] => 4
+  *                         [permname] => b_serverinstance_virtualserver_list
+  *                         [permdesc] => List virtual servers stored in the database
+  *                         [grantpermid] => 32772
+  *                     )
+  *
+  *                 [4] => Array
+  *                     (
+  *                         [permid] => 5
+  *                         [permname] => b_serverinstance_binding_list
+  *                         [permdesc] => List active IP bindings on multi-homed machines
+  *                         [grantpermid] => 32773
+  *                     )
+  *
+  *                [5] => Array
+  *                     (
+  *                         [permid] => 6
+  *                         [permname] => b_serverinstance_permission_list
+  *                         [permdesc] => List permissions available available on the server instance
+  *                         [grantpermid] => 32774
+  *                     )
+  *
+  *                 [6] => Array
+  *                     (
+  *                         [permid] => 7
+  *                         [permname] => b_serverinstance_permission_find
+  *                         [permdesc] => Search permission assignments by name or ID
+  *                         [grantpermid] => 32775
+  *                     )
+  *
+  *             )
+  *
+  *     )
   * </code>
   *
   * @author     Par0noid Solutions
   * @access		public
-  * @return     multidimensonal-array permissionList
+  * @param		boolean		$new		[optional] add new parameter
+  * @return     array permissionList
   */
-	function permissionList() {
-		return $this->getData('multi', 'permissionlist');
+	function permissionList($new = false) {
+		if($new === true) {
+			$groups = array();
+			$permissions = array();
+			
+			$response = $this->getElement('data', $this->getData('multi', 'permissionlist -new'));
+			
+			$gc = 1;
+			
+			foreach($response as $field) {
+				if(isset($field['group_id_end'])) {
+					$groups[] = array('num' => $gc, 'group_id_end' => $field['group_id_end']);
+					$gc++;
+				}else{
+					$permissions[] = $field;
+				}
+			}
+			
+			$counter = 0;
+			
+			for($i = 0; $i < count($groups); $i++) {
+				$rounds = $groups[$i]['group_id_end'] - $counter;
+				$groups[$i]['pcount'] = $rounds;
+				for($j = 0; $j < $rounds; $j++) {
+					$groups[$i]['permissions'][] = array('permid' => ($counter + 1), 'permname' => $permissions[$counter]['permname'], 'permdesc' => $permissions[$counter]['permdesc'], 'grantpermid' => ($counter + 32769));
+					$counter++;
+				}
+			}
+			
+			return $groups;
+			
+		}else{
+			return $this->getData('multi', 'permissionlist');
+		}
 	}
 
 /**
-  * permOverview Displays all permissions assigned to a client for the channel specified with cid<br>
-  * If permid is set to 0, all permissions will be displayed. A permission can be specified by permid or permsid<br><br><br>
+  * permOverview
+  * 
+  * Displays all permissions assigned to a client for the channel specified with cid. If permid is set to 0, all permissions will be displayed. A permission can be specified by permid or permsid.
   *
-  * <b>Output:</b><br>
+  * <b>Output:</b>
   * <code>
   * Array
   * {
@@ -2219,17 +2545,17 @@ class ts3admin {
   * @access		public
   * @param		integer		$cid		cchannelId
   * @param		integer 	$cldbid		clientDbId
-  * @param		integer 	$permid		permId
+  * @param		integer 	$permid		permId (Default: 0)
   * @param		string	 	$permsid	permName
-  * @return     multidimensonal-array permOverview
+  * @return     array permOverview
   */
-	function permOverview($cid, $cldbid, $permid='0', $permsid=false ) {
-		if(!$this->runtime['selected']) { return $this->checkSelected(); }
-		if($permsid) { $additional = ' permsid='.$permsid; }else{ $additional = ''; }
-		
-		return $this->getData('multi', 'permoverview cid='.$cid.' cldbid='.$cldbid.' permid='.$permid.$additional);
-	}
-
+	function permOverview($cid, $cldbid, $permid='0', $permsid=false ) { 
+        if(!$this->runtime['selected']) { return $this->checkSelected(); } 
+        if($permsid) { $additional = ' permsid='.$permsid; }else{ $additional = ''; } 
+         
+        return $this->getData('multi', 'permoverview cid='.$cid.' cldbid='.$cldbid.' permid='.$permid.$additional); 
+    }
+ 
 /**
   * quit closes the connection to host 
   *
@@ -2244,39 +2570,44 @@ class ts3admin {
 	}
 
 /**
-  * selectServer selects a server by port or serverId
+  * selectServer
+  * 
+  * Selects the virtual server specified with sid or port to allow further interaction. The ServerQuery client will appear on the virtual server and acts like a real TeamSpeak 3 Client, except it's unable to send or receive voice data. If your database contains multiple virtual servers using the same UDP port, use will select a random virtual server using the specified port.
   *
   * @author     Par0noid Solutions
   * @access		public
-  * @param		integer	$value		clientIP
+  * @param		integer	$value		Port or ID
   * @param		string	$type		value type ('port', 'serverId') (default='port')
   * @param		boolean	$virtual	set true to add -virtual param [optional]
   * @return     boolean success
   */
-	function selectServer($value, $type = 'port', $virtual = false) {
-		if(in_array($type, array('port', 'serverId'))) {
-			if($type == 'port') {
-				if($virtual) { $virtual = ' -virtual'; }else{ $virtual = ''; }
-				$res = $this->getData('boolean', 'use port='.$value.$virtual);
-				if($res['success']) {
-					$this->runtime['selected'] = true;
-				}
-				return $res;
-			}else{
-				$res = $this->getData('boolean', 'use sid='.$value);
-				if($res['success']) {
-					$this->runtime['selected'] = true;
-				}
-				return $res;
-			}
-		}else{
-			$this->addDebugLog('wrong value type');
-			return $this->generateOutput(false, array('Error: wrong value type'), false);
-		}
-	}
+	function selectServer($value, $type = 'port', $virtual = false) { 
+        if(in_array($type, array('port', 'serverId'))) { 
+            if($type == 'port') { 
+                if($virtual) { $virtual = ' -virtual'; }else{ $virtual = ''; } 
+                $res = $this->getData('boolean', 'use port='.$value.$virtual); 
+                if($res['success']) { 
+                    $this->runtime['selected'] = true; 
+                } 
+                return $res; 
+            }else{ 
+                if($virtual) { $virtual = ' -virtual'; }else{ $virtual = ''; } 
+                $res = $this->getData('boolean', 'use sid='.$value.$virtual); 
+                if($res['success']) { 
+                    $this->runtime['selected'] = true; 
+                } 
+                return $res; 
+            } 
+        }else{ 
+            $this->addDebugLog('wrong value type'); 
+            return $this->generateOutput(false, array('Error: wrong value type'), false); 
+        } 
+    }
 
 /**
-  * sendMessage sends a text message a specified target
+  * sendMessage
+  * 
+  * Sends a text message a specified target. The type of the target is determined by targetmode while target specifies the ID of the recipient, whether it be a virtual server, a channel or a client.
   *
   * @author     Par0noid Solutions
   * @access		public
@@ -2292,19 +2623,19 @@ class ts3admin {
 	}
 
 /**
-  * serverCreate creates a server on the selected instance<br><br><br>
+  * serverCreate
   * 
-  * <b>Input-Array like this:</b><br>
-  * <br><code>
-  * <?PHP
+  * Creates a new virtual server using the given properties and displays its ID, port and initial administrator privilege key. If virtualserver_port is not specified, the server will test for the first unused UDP port. The first virtual server will be running on UDP port 9987 by default. Subsequently started virtual servers will be running on increasing UDP port numbers.
+  * 
+  * <b>Input-Array like this:</b>
+  * <code>
   * $data = array();
   *	
   * $data['setting'] = 'value';
   * $data['setting'] = 'value';
-  * ?>
-  * </code><br><br><br>
+  * </code><br>
   *
-  * <b>Output:</b><br>
+  * <b>Output:</b>
   * <code>
   * Array
   * {
@@ -2333,7 +2664,9 @@ class ts3admin {
 	}
 
 /**
-  * serverDelete deletes a server on the selected instance
+  * serverDelete
+  * 
+  * Deletes the virtual server specified with sid. Please note that only virtual servers in stopped state can be deleted.
   *
   * @author     Par0noid Solutions
   * @access		public
@@ -2346,16 +2679,16 @@ class ts3admin {
 	}
 
 /**
-  * serverEdit edits server settings on selected virtualserver<br><br><br>
+  * serverEdit
+  * 
+  * Changes the selected virtual servers configuration using given properties. Note that this command accepts multiple properties which means that you're able to change all settings of the selected virtual server at once.
   *
-  * <b>Input-Array like this:</b><br>
-  * <br><code>
-  * <?PHP
+  * <b>Input-Array like this:</b>
+  * <code>
   * $data = array();
   *	
   * $data['setting'] = 'value';
   * $data['setting'] = 'value';
-  * ?>
   * </code>
   *
   * @author     Par0noid Solutions
@@ -2376,9 +2709,11 @@ class ts3admin {
 	}
 
 /**
-  * serverGroupAdd creates a new server group using the name specified with name and displays its ID<br><br><br>
+  * serverGroupAdd
+  * 
+  * Creates a new server group using the name specified with name and displays its ID. The optional type parameter can be used to create ServerQuery groups and template groups. For detailed information, see
   *
-  * <b>Output:</b><br>
+  * <b>Output:</b>
   * <code>
   * Array
   * {
@@ -2398,13 +2733,14 @@ class ts3admin {
 	}
 
 /**
-  * serverGroupAddClient adds a client to the server group specified with sgid<br>
-  *	Please note that a client cannot be added to default groups or template groups
+  * serverGroupAddClient
+  * 
+  * Adds a client to the server group specified with sgid. Please note that a client cannot be added to default groups or template groups.
   *
   * @author     Par0noid Solutions
   * @access		public
   * @param		integer $sgid	serverGroupId
-  * @param		integer $cldbid	clientDbId
+  * @param		integer $cldbid	clientDBID
   * @return     boolean success
   */
 	function serverGroupAddClient($sgid, $cldbid) {
@@ -2413,24 +2749,72 @@ class ts3admin {
 	}
 
 /**
-  * serverGroupAddPerm adds a set of specified permissions to the server group specified with sgid<br><br><br>
+  * serverGroupAddPerm
+  * 
+  * Adds a set of specified permissions to the server group specified with sgid. Multiple permissions can be added by providing the four parameters of each permission. A permission can be specified by permid or permsid.
   *
-  * <b>Input-Array like this:</b><br>
+  * <b>Input-Array like this:</b>
   * <code>
-  * <?PHP
   * $permissions = array();
   * $permissions['permissionID'] = array('permissionValue', 'permskip', 'permnegated');
-  * ?>
+  * //or you could use
+  * $permissions['permissionName'] = array('permissionValue', 'permskip', 'permnegated');
   * </code>
   * 
   * @author     Par0noid Solutions
   * @access		public
   * @param		integer $sgid	groupID
-  * @param		multidimensional-array	$permissions	permissions
+  * @param		array	$permissions	permissions
   * @return     boolean success
   */
 	function serverGroupAddPerm($sgid, $permissions) {
 		if(!$this->runtime['selected']) { return $this->checkSelected(); }
+		
+		if(count($permissions) > 0) {
+			//Permissions given
+				
+			//Errorcollector
+			$errors = array();
+				
+			//Split Permissions to prevent query from overload
+			$permissions = array_chunk($permissions, 50, true);
+				
+			//Action for each splitted part of permission
+			foreach($permissions as $permission_part)
+			{
+				//Create command_string for each command that we could use implode later
+				$command_string = array();
+		
+				foreach($permission_part as $key => $value)
+				{
+					$command_string[] = (is_numeric($key) ? "permid=" : "permsid=").$this->escapeText($key).' permvalue='.$value[0].' permskip='.$value[1].' permnegated='.$value[2];
+				}
+		
+				$result = $this->getData('boolean', 'servergroupaddperm sgid='.$sgid.' '.implode('|', $command_string));
+		
+				if(!$result['success'])
+				{
+					foreach($result['errors'] as $error)
+					{
+						$errors[] = $error;
+					}
+				}
+			}
+				
+			if(count($errors) == 0)
+			{
+				return $this->generateOutput(true, array(), true);
+			}else{
+				return $this->generateOutput(false, $errors, false);
+			}
+				
+		}else{
+			// No permissions given
+			$this->addDebugLog('no permissions given');
+			return $this->generateOutput(false, array('Error: no permissions given'), false);
+		}
+		/*
+		old code
 		
         $error = false;
         $results = array();
@@ -2471,21 +2855,23 @@ class ts3admin {
         }else{
             $this->addDebugLog('no permissions given');
             return $this->generateOutput(false, array('Error: no permissions given'), false);
-        }
+        }*/
+		
 	}
 
 /**
-  * serverGroupClientList displays the IDs of all clients currently residing in the server group specified with sgid<br>
-  * If you're using the -names option, the output will also contain the last known nickname and the unique identifier of the clients<br><br><br>
+  * serverGroupClientList
+  * 
+  * Displays the IDs of all clients currently residing in the server group specified with sgid. If you're using the optional -names option, the output will also contain the last known nickname and the unique identifier of the clients.
   *
-  * <b>Possible params:</b> -names<br><br><br>
+  * <br><b>Possible params:</b> -names
   *
-  * <b>Output: (with -names param)</b><br>
+  * <b>Output: (with -names param)</b>
   * <code>
   * Array
   * {
   *  [cldbid] => 2017
-  *  [client_nickname] => Par0noid
+  *  [client_nickname] => Par0noid //with -names parameter
   *  [client_unique_identifier] => nUixbsq/XakrrmbqU8O30R/D8Gc=
   * }
   * </code>
@@ -2503,9 +2889,11 @@ class ts3admin {
 	}
 
 /**
-  * serverGroupCopy creates a copy of the server group specified with ssgid. If tsgid is set to 0, the server will create a new group. To overwrite an existing group, simply set tsgid to the ID of a designated target group. If a target group is set, the name parameter will be ignored.<br><br><br>
+  * serverGroupCopy
+  * 
+  * Creates a copy of the server group specified with ssgid. If tsgid is set to 0, the server will create a new group. To overwrite an existing group, simply set tsgid to the ID of a designated target group. If a target group is set, the name parameter will be ignored.
   *
-  * <b>Output:</b><br>
+  * <b>Output:</b>
   * <code>
   * Array
   * {
@@ -2515,8 +2903,8 @@ class ts3admin {
   *
   * @author     Par0noid Solutions
   * @access		public
-  * @param		integer	$ssgid	sourceServerGroupId
-  * @param		integer	$tsgid	targetServerGroupId 
+  * @param		integer	$ssgid	sourceGroupID
+  * @param		integer	$tsgid	targetGroupID
   * @param		integer $name	groupName
   * @param		integer	$type	groupDbType (0 = template, 1 = normal, 2 = query | Default: 1)
   * @return     array groupId
@@ -2527,13 +2915,14 @@ class ts3admin {
 	}
 
 /**
-  * serverGroupDelete Deletes the server group specified with sgid<br>
-  *	If force is set to 1, the server group will be deleted even if there are clients within.
+  * serverGroupDelete
+  * 
+  * Deletes the server group specified with sgid. If force is set to 1, the server group will be deleted even if there are clients within.
   *
   * @author     Par0noid Solutions
   * @access		public
   * @param		integer $sgid	serverGroupID
-  * @param		integer $force 	forces deleting group (default: 1)
+  * @param		integer $force 	forces deleting group (Default: 1)
   * @return     boolean success
   */
 	function serverGroupDelete($sgid, $force = 1) {
@@ -2542,12 +2931,14 @@ class ts3admin {
 	}
 
 /**
-  * serverGroupDeleteClient removes a client from the server group specified with sgid
+  * serverGroupDeleteClient
+  * 
+  * Removes a client specified with cldbid from the server group specified with sgid.
   *
   * @author     Par0noid Solutions
   * @access		public
   * @param		integer $sgid	groupID
-  * @param		integer $cldbid	clientDbId
+  * @param		integer $cldbid	clientDBID
   * @return     boolean success
   */
 	function serverGroupDeleteClient($sgid, $cldbid) {
@@ -2556,14 +2947,16 @@ class ts3admin {
 	}
 
 /**
-  * serverGroupDeletePerm removes a set of specified permissions from the server group specified with sgid<br><br><br>
+  * serverGroupDeletePerm
+  * 
+  * Removes a set of specified permissions from the server group specified with sgid. Multiple permissions can be removed at once. A permission can be specified by permid or permsid.
   *
-  * <b>Input-Array like this:</b><br>
+  * <b>Input-Array like this:</b>
   * <code>
-  * <?PHP
   * $permissions = array();
   * $permissions[] = 'permissionID';
-  * ?>
+  * //or you could use
+  * $permissions[] = 'permissionName';
   * </code>
   *
   * @author     Par0noid Solutions
@@ -2578,7 +2971,7 @@ class ts3admin {
 		
 		if(count($permissionIds) > 0) {
 			foreach($permissionIds AS $value) {
-				$permissionArray[] = 'permid='.$value;
+				$permissionArray[] = is_numeric($value) ? 'permid='.$value : 'permsid='.$this->escapeText($value);
 			}
 			return $this->getData('boolean', 'servergroupdelperm sgid='.$sgid.' '.implode('|', $permissionArray));
 		}else{
@@ -2588,10 +2981,11 @@ class ts3admin {
 	}
 
 /**
-  * serverGroupList displays a list of server groups available<br>
-  * Depending on your permissions, the output may also contain global ServerQuery groups and template groups.<br><br><br>
+  * serverGroupList
+  * 
+  * Displays a list of server groups available. Depending on your permissions, the output may also contain global ServerQuery groups and template groups.
   *
-  * <b>Output:</b><br>
+  * <b>Output:</b>
   * <code>
   * Array
   * {
@@ -2605,7 +2999,7 @@ class ts3admin {
   *
   * @author     Par0noid Solutions
   * @access		public
-  * @return     multidimensional-array serverGroupList
+  * @return     array serverGroupList
   */
 	function serverGroupList() {
 		if(!$this->runtime['selected']) { return $this->checkSelected(); }
@@ -2613,13 +3007,16 @@ class ts3admin {
 	}
 
 /**
-  * serverGroupPermList displays a list of permissions assigned to the server group specified with sgid<br><br><br>
+  * serverGroupPermList
+  * 
+  * Displays a list of permissions assigned to the server group specified with sgid. If the permsid option is specified, the output will contain the permission names instead of the internal IDs.
   *
-  * <b>Output:</b><br>
+  * <b>Output:</b>
   * <code>
   * Array
   * {
-  *  [permid] => 8470
+  *  [permid] => 12876 (if permsid = false)
+  *  [permsid] => b_client_info_view (if permsid = true)
   *  [permvalue] => 1
   *  [permnegated] => 0
   *  [permskip] => 0
@@ -2630,7 +3027,7 @@ class ts3admin {
   * @access		public
   * @param		integer	$sgid		serverGroupID
   * @param		boolean	$permsid	set true to add -permsid param [optional]
-  * @return     multidimensional-array serverGroupPermList
+  * @return     array serverGroupPermList
   */
 	function serverGroupPermList($sgid, $permsid = false) {
 		if(!$this->runtime['selected']) { return $this->checkSelected(); }
@@ -2639,7 +3036,9 @@ class ts3admin {
 	}
 
 /**
-  * serverGroupRename changes the name of the server group specified with sgid
+  * serverGroupRename
+  * 
+  * Changes the name of the server group specified with sgid.
   *
   * @author     Par0noid Solutions
   * @access		public
@@ -2653,9 +3052,11 @@ class ts3admin {
 	}
 
 /**
-  * serverGroupsByClientID displays all server groups the client specified with cldbid is currently residing in<br><br><br>
+  * serverGroupsByClientID
+  * 
+  * Displays all server groups the client specified with cldbid is currently residing in.
   *
-  * <b>Output:</b><br>
+  * <b>Output:</b>
   * <code>
   * Array
   * {
@@ -2667,8 +3068,8 @@ class ts3admin {
   *
   * @author     Par0noid Solutions
   * @access		public
-  * @param		integer	$cldbid	clientDbId
-  * @return     multidimensional-array serverGroupsByClientId
+  * @param		integer	$cldbid	clientDBID
+  * @return     array serverGroupsByClientId
   */
 	function serverGroupsByClientID($cldbid) {
 		if(!$this->runtime['selected']) { return $this->checkSelected(); }
@@ -2676,9 +3077,11 @@ class ts3admin {
 	}
 
 /**
-  * serverIdGetByPort displays the database ID of the virtual server running on the UDP port specified by virtualserver_port<br><br><br>
+  * serverIdGetByPort
   * 
-  * <b>Output:</b><br>
+  * Displays the database ID of the virtual server running on the UDP port specified by virtualserver_port.
+  * 
+  * <b>Output:</b>
   * <code>
   * Array
   * {
@@ -2696,31 +3099,33 @@ class ts3admin {
 	}
 
 /**
-  * serverInfo returns all information about the selected virtual server<br><br><br>
+  * serverInfo
+  * 
+  * Displays detailed configuration information about the selected virtual server including unique ID, number of clients online, configuration, etc.
   *	
-  * <b>Output:</b><br>
+  * <b>Output:</b>
   * <code>
   * Array
   * {
   *  [virtualserver_unique_identifier] => 2T3SRCPoWKojKlNMx6qxV7gOe8A=
-  *  [virtualserver_name] => testii
-  *  [virtualserver_welcomemessage] => Welcome to TeamSpeak, check [URL]www.teamspeak.com[/URL] for latest infos.
-  *  [virtualserver_platform] => Linux
-  *  [virtualserver_version] => 3.0.0-beta29 [Build: 12473]
+  *  [virtualserver_name] => TeamSpeak ]I[ Server
+  *  [virtualserver_welcomemessage] => Welcome to TeamSpeak
+  *  [virtualserver_platform] => Windows
+  *  [virtualserver_version] => 3.0.6.1 [Build: 1340956745]
   *  [virtualserver_maxclients] => 32
   *  [virtualserver_password] => 
   *  [virtualserver_clientsonline] => 2
-  *  [virtualserver_channelsonline] => 1
-  *  [virtualserver_created] => 1286622661
-  *  [virtualserver_uptime] => 2503
+  *  [virtualserver_channelsonline] => 2
+  *  [virtualserver_created] => 1361027787
+  *  [virtualserver_uptime] => 2804
   *  [virtualserver_codec_encryption_mode] => 0
   *  [virtualserver_hostmessage] => 
   *  [virtualserver_hostmessage_mode] => 0
-  *  [virtualserver_filebase] => files/virtualserver_11
-  *  [virtualserver_default_server_group] => 73
-  *  [virtualserver_default_channel_group] => 49
+  *  [virtualserver_filebase] => files\\virtualserver_1
+  *  [virtualserver_default_server_group] => 8
+  *  [virtualserver_default_channel_group] => 8
   *  [virtualserver_flag_password] => 0
-  *  [virtualserver_default_channel_admin_group] => 46
+  *  [virtualserver_default_channel_admin_group] => 5
   *  [virtualserver_max_download_total_bandwidth] => 18446744073709551615
   *  [virtualserver_max_upload_total_bandwidth] => 18446744073709551615
   *  [virtualserver_hostbanner_url] => 
@@ -2731,14 +3136,12 @@ class ts3admin {
   *  [virtualserver_complain_remove_time] => 3600
   *  [virtualserver_min_clients_in_channel_before_forced_silence] => 100
   *  [virtualserver_priority_speaker_dimm_modificator] => -18.0000
-  *  [virtualserver_id] => 11
+  *  [virtualserver_id] => 1
   *  [virtualserver_antiflood_points_tick_reduce] => 5
-  *  [virtualserver_antiflood_points_needed_warning] => 150
-  *  [virtualserver_antiflood_points_needed_kick] => 250
-  *  [virtualserver_antiflood_points_needed_ban] => 350
-  *  [virtualserver_antiflood_ban_time] => 300
+  *  [virtualserver_antiflood_points_needed_command_block] => 150
+  *  [virtualserver_antiflood_points_needed_ip_block] => 250
   *  [virtualserver_client_connections] => 1
-  *  [virtualserver_query_client_connections] => 11
+  *  [virtualserver_query_client_connections] => 6
   *  [virtualserver_hostbutton_tooltip] => 
   *  [virtualserver_hostbutton_url] => 
   *  [virtualserver_hostbutton_gfx_url] => 
@@ -2749,7 +3152,7 @@ class ts3admin {
   *  [virtualserver_month_bytes_uploaded] => 0
   *  [virtualserver_total_bytes_downloaded] => 0
   *  [virtualserver_total_bytes_uploaded] => 0
-  *  [virtualserver_port] => 44413
+  *  [virtualserver_port] => 9987
   *  [virtualserver_autostart] => 1
   *  [virtualserver_machine_id] => 
   *  [virtualserver_needed_identity_security_level] => 8
@@ -2767,20 +3170,36 @@ class ts3admin {
   *  [virtualserver_total_packetloss_keepalive] => 0.0000
   *  [virtualserver_total_packetloss_control] => 0.0000
   *  [virtualserver_total_packetloss_total] => 0.0000
-  *  [virtualserver_total_ping] => 30.0000
+  *  [virtualserver_total_ping] => 0.0000
   *  [virtualserver_ip] => 
   *  [virtualserver_weblist_enabled] => 1
+  *  [virtualserver_ask_for_privilegekey] => 0
+  *  [virtualserver_hostbanner_mode] => 0
   *  [virtualserver_status] => online
   *  [connection_filetransfer_bandwidth_sent] => 0
   *  [connection_filetransfer_bandwidth_received] => 0
-  *  [connection_packets_sent_total] => 5160
-  *  [connection_bytes_sent_total] => 291275
-  *  [connection_packets_received_total] => 5147
-  *  [connection_bytes_received_total] => 217247
-  *  [connection_bandwidth_sent_last_second_total] => 81
+  *  [connection_filetransfer_bytes_sent_total] => 0
+  *  [connection_filetransfer_bytes_received_total] => 0
+  *  [connection_packets_sent_speech] => 0
+  *  [connection_bytes_sent_speech] => 0
+  *  [connection_packets_received_speech] => 0
+  *  [connection_bytes_received_speech] => 0
+  *  [connection_packets_sent_keepalive] => 2055
+  *  [connection_bytes_sent_keepalive] => 84255
+  *  [connection_packets_received_keepalive] => 2055
+  *  [connection_bytes_received_keepalive] => 86309
+  *  [connection_packets_sent_control] => 90
+  *  [connection_bytes_sent_control] => 13343
+  *  [connection_packets_received_control] => 90
+  *  [connection_bytes_received_control] => 9176
+  *  [connection_packets_sent_total] => 2145
+  *  [connection_bytes_sent_total] => 97598
+  *  [connection_packets_received_total] => 2145
+  *  [connection_bytes_received_total] => 95485
+  *  [connection_bandwidth_sent_last_second_total] => 82
   *  [connection_bandwidth_sent_last_minute_total] => 81
-  *  [connection_bandwidth_received_last_second_total] => 83
-  *  [connection_bandwidth_received_last_minute_total] => 83
+  *  [connection_bandwidth_received_last_second_total] => 84
+  *  [connection_bandwidth_received_last_minute_total] => 87
   * }
   * </code>
   *
@@ -2794,38 +3213,43 @@ class ts3admin {
 	}
 
 /**
-  * serverList: returns all server data from selected instance<br><br><br>
+  * serverList
+  * 
+  * Displays a list of virtual servers including their ID, status, number of clients online, etc. If you're using the -all option, the server will list all virtual servers stored in the database. This can be useful when multiple server instances with different machine IDs are using the same database. The machine ID is used to identify the server instance a virtual server is associated with. The status of a virtual server can be either online, offline, deploy running, booting up, shutting down and virtual online. While most of them are self-explanatory, virtual online is a bit more complicated. Please note that whenever you select a virtual server which is currently stopped, it will be started in virtual mode which means you are able to change its configuration, create channels or change permissions, but no regular TeamSpeak 3 Client can connect. As soon as the last ServerQuery client deselects the virtual server, its status will be changed back to offline.
   *
-  * <b>Possible params:</b> [-uid] [-short] [-all]<br><br><br>
+  * <b>Possible params:</b> [-uid] [-short] [-all] [-onlyoffline]<br>
   *
-  * <b>Output:</b><br>
+  * <b>Output:</b>
   * <code>
   * Array
   * {
-  *  [virtualserver_id] => 1
-  *  [virtualserver_port] => 9987
-  *  [virtualserver_status] => online
+  *  [virtualserver_id] => 1 //displayed on -short
+  *  [virtualserver_port] => 9987 //displayed on -short
+  *  [virtualserver_status] => online //displayed on -short
   *  [virtualserver_clientsonline] => 2
-  *  [virtualserver_queryclientsonline] => 0
-  *  [virtualserver_maxclients] => 100
-  *  [virtualserver_uptime] => 28342
-  *  [virtualserver_name] => DSO-Gaming Teamspeak
+  *  [virtualserver_queryclientsonline] => 1
+  *  [virtualserver_maxclients] => 32
+  *  [virtualserver_uptime] => 3045
+  *  [virtualserver_name] => TeamSpeak ]I[ Server
   *  [virtualserver_autostart] => 1
-  *  [virtualserver_machine_id] => 
+  *  [virtualserver_machine_id] =>
+  *  [-uid] => [virtualserver_unique_identifier] => bYrybKl/APfKq7xzpIJ1Xb6C06U= 
   * }
   * </code>
   *
   * @author     Par0noid Solutions
   * @access		public
-  * @return     multidimensional-array serverList
+  * @param		string		$options		optional parameters
+  * @return     array serverList
   */
-	function serverList($params = "") {
-		if(!empty($params)) { $params = ' '.$params; }
-		return $this->getData('multi', 'serverlist'.$params);
+	function serverList($options = NULL) {
+		return $this->getData('multi', 'serverlist'.(!empty($options) ? ' '.$options : ''));
 	}
 
 /**
-  * serverProcessStop stops the entire TeamSpeak 3 Server instance by shutting down the process
+  * serverProcessStop
+  * 
+  * Stops the entire TeamSpeak 3 Server instance by shutting down the process.
   *
   * @author     Par0noid Solutions
   * @access		public
@@ -2836,25 +3260,29 @@ class ts3admin {
 	}
 
 /**
-  * serverRequestConnectionInfo displays detailed connection information about the selected virtual server<br><br><br>
+  * serverRequestConnectionInfo
+  * 
+  * Displays detailed connection information about the selected virtual server including uptime, traffic information, etc.
   *
-  * <b>Output:</b><br>
+  * <b>Output:</b>
   * <code>
   * Array
   * {
   *  [connection_filetransfer_bandwidth_sent] => 0
   *  [connection_filetransfer_bandwidth_received] => 0
-  *  [connection_packets_sent_total] => 5886
-  *  [connection_bytes_sent_total] => 323662
-  *  [connection_packets_received_total] => 5873
-  *  [connection_bytes_received_total] => 247881
-  *  [connection_bandwidth_sent_last_second_total] => 82
-  *  [connection_bandwidth_sent_last_minute_total] => 100
-  *  [connection_bandwidth_received_last_second_total] => 84
-  *  [connection_bandwidth_received_last_minute_total] => 89
-  *  [connection_connected_time] => 2857
+  *  [connection_filetransfer_bytes_sent_total] => 0
+  *  [connection_filetransfer_bytes_received_total] => 0
+  *  [connection_packets_sent_total] => 3333
+  *  [connection_bytes_sent_total] => 149687
+  *  [connection_packets_received_total] => 3333
+  *  [connection_bytes_received_total] => 147653
+  *  [connection_bandwidth_sent_last_second_total] => 123
+  *  [connection_bandwidth_sent_last_minute_total] => 81
+  *  [connection_bandwidth_received_last_second_total] => 352
+  *  [connection_bandwidth_received_last_minute_total] => 87
+  *  [connection_connected_time] => 3387
   *  [connection_packetloss_total] => 0.0000
-  *  [connection_ping] => 32.0000
+  *  [connection_ping] => 0.0000
   * }
   * </code>
   *
@@ -2868,7 +3296,9 @@ class ts3admin {
 	}
 
 /**
-  * serverSnapshotCreate starts a server on the selected instance
+  * serverSnapshotCreate
+  * 
+  * Displays a snapshot of the selected virtual server containing all settings, groups and known client identities. The data from a server snapshot can be used to restore a virtual servers configuration, channels and permissions using the serversnapshotdeploy command.
   *
   * @author     Par0noid Solutions
   * @access		public
@@ -2880,10 +3310,9 @@ class ts3admin {
 	}
 
 /**
-  * serverSnapshotDeploy restores the selected virtual servers configuration<br>
-  * using the data from a previously created server snapshot.<br>
-  * Please note that the TeamSpeak 3 Server does NOT check for necessary permissions while deploying a snapshot<br>
-  * so the command could be abused to gain additional privileges
+  * serverSnapshotDeploy
+  * 
+  * Restores the selected virtual servers configuration using the data from a previously created server snapshot. Please note that the TeamSpeak 3 Server does NOT check for necessary permissions while deploying a snapshot so the command could be abused to gain additional privileges.
   *
   * @author     Par0noid Solutions
   * @access		public
@@ -2896,7 +3325,9 @@ class ts3admin {
 	}
 	
 /**
-  * serverStart starts a server on the selected instance
+  * serverStart
+  * 
+  * Starts the virtual server specified with sid. Depending on your permissions, you're able to start either your own virtual server only or all virtual servers in the server instance.
   *
   * @author     Par0noid Solutions
   * @access		public
@@ -2908,7 +3339,9 @@ class ts3admin {
 	}	
 
 /**
-  * serverStop stops a server on the selected instance
+  * serverStop
+  * 
+  * Stops the virtual server specified with sid. Depending on your permissions, you're able to stop either your own virtual server only or all virtual servers in the server instance.
   *
   * @author     Par0noid Solutions
   * @access		public
@@ -2920,13 +3353,78 @@ class ts3admin {
 	}
 
 /**
-  * setclientchannelgroup sets the channel group of a client to the ID specified with cgid
+  * serverTemppasswordAdd
+  * 
+  * Sets a new temporary server password specified with pw. The temporary password will be valid for the number of seconds specified with duration. The client connecting with this password will automatically join the channel specified with tcid. If tcid is set to 0, the client will join the default channel.
   *
   * @author     Par0noid Solutions
   * @access		public
-  * @param		integer $cid	channelID
-  * @param		integer $clid	clientID
+  * @param		string	$pw				temporary password
+  * @param		string	$duration		durations in seconds
+  * @param		string	$desc			description [optional]
+  * @param		string	$tcid			cid user enters on connect (0 = Default channel) [optional]
+  * @param		string	$tcpw			channelPW
+  * @return     boolean success
+  */
+	function serverTempPasswordAdd($pw, $duration, $desc = 'none', $tcid = 0, $tcpw = null) {
+		if(!$this->runtime['selected']) { return $this->checkSelected(); }
+		return $this->getdata('boolean', 'servertemppasswordadd pw='.$this->escapeText($pw).' desc='.(!empty($desc) ? $this->escapeText($desc) : 'none').' duration='.$duration.' tcid='.$tcid.(!empty($tcpw) ? ' tcpw='.$this->escapeText($tcpw) : ''));
+	}
+
+/**
+  * serverTemppasswordDel
+  * 
+  * Deletes the temporary server password specified with pw.
+  * 
+  * @author     Par0noid Solutions
+  * @access		public
+  * @param		string	$pw		temporary password
+  * @return     boolean success
+  */	
+	function serverTempPasswordDel($pw) {
+		if(!$this->runtime['selected']) { return $this->checkSelected(); }
+		return $this->getdata('boolean', 'servertemppassworddel pw='.$this->escapeText($pw));
+	}
+
+/**
+  * serverTemppasswordList
+  * 
+  * Returns a list of active temporary server passwords. The output contains the clear-text password, the nickname and unique identifier of the creating client.
+  *
+  * <b>Output:</b>
+  * <code>
+  * Array
+  * {
+  *  [nickname] => serveradmin
+  *  [uid] => 1
+  *  [desc] => none
+  *  [pw_clear] => test
+  *  [start] => 1334996838
+  *  [end] => 1335000438
+  *  [tcid] => 0
+  * }
+  * </code>
+  *
+  * @author     Par0noid Solutions
+  * @access		public
+  * @return     array	serverTemppasswordList
+  */
+	function serverTempPasswordList() {
+		if(!$this->runtime['selected']) { return $this->checkSelected(); }
+		return $this->getData('multi', 'servertemppasswordlist');
+	}
+	
+
+/**
+  *	setClientChannelGroup
+  *
+  * Sets the channel group of a client to the ID specified with cgid.
+  *
+  * @author     Par0noid Solutions
+  * @access		public
   * @param		integer $cgid	groupID
+  * @param		integer $cid	channelID
+  * @param		integer $cldbid	clientDBID
   * @return     boolean success
   */
 	function setClientChannelGroup($cgid, $cid, $cldbid) {
@@ -2935,7 +3433,9 @@ class ts3admin {
 	}
 
 /**
-  * setName sets your nickname in server query
+  * setName
+  * 
+  * Sets your nickname in server query
   *
   * @author     Par0noid Solutions
   * @access		public
@@ -2947,17 +3447,17 @@ class ts3admin {
 	}
 
 /**
-  * tokenAdd creates a new token. If tokentype is set to 0, the ID specified with tokenid1 will be a server group ID<br>
-  * Otherwise, tokenid1 is used as a channel group ID and you need to provide a valid channel ID using tokenid2<br><br><br>
+  * tokenAdd
+  * 
+  * Create a new token. If tokentype is set to 0, the ID specified with tokenid1 will be a server group ID. Otherwise, tokenid1 is used as a channel group ID and you need to provide a valid channel ID using tokenid2. The tokencustomset parameter allows you to specify a set of custom client properties. This feature can be used when generating tokens to combine a website account database with a TeamSpeak user. The syntax of the value needs to be escaped using the ServerQuery escape patterns and has to follow the general syntax of:<br>
+  * ident=ident1 value=value1|ident=ident2 value=value2|ident=ident3 value=value3
   *
-  * <b>Input-Array like this:</b><br>
-  * <br><code>
-  * <?PHP
+  * <b>Input-Array like this:</b>
+  * <code>
   * $customFieldSet = array();
   *	
   * $customFieldSet['ident'] = 'value';
   * $customFieldSet['ident'] = 'value';
-  * ?>
   * </code>
   *
   * @author     Par0noid Solutions
@@ -2990,7 +3490,9 @@ class ts3admin {
 	}
 
 /**
-  * tokenDelete deletes an existing token matching the token key specified with token
+  * tokenDelete
+  * 
+  * Deletes an existing token matching the token key specified with token.
   *
   * @author     Par0noid Solutions
   * @access		public
@@ -3003,9 +3505,11 @@ class ts3admin {
 	}
 
 /**
-  * tokenList displays a list of tokens available including their type and group IDs<br><br><br>
+  * tokenList
+  * 
+  * Displays a list of privilege keys available including their type and group IDs. Tokens can be used to gain access to specified server or channel groups. A privilege key is similar to a client with administrator privileges that adds you to a certain permission group, but without the necessity of a such a client with administrator privileges to actually exist. It is a long (random looking) string that can be used as a ticket into a specific server group.
   *
-  * <b>Output:</b><br>
+  * <b>Output:</b>
   * <code>
   * Array
   * {
@@ -3020,7 +3524,7 @@ class ts3admin {
   *
   * @author     Par0noid Solutions
   * @access		public
-  * @return     multidimensional-array tokenListist 
+  * @return     array tokenListist 
   */
 	function tokenList() {
 		if(!$this->runtime['selected']) { return $this->checkSelected(); }
@@ -3029,8 +3533,9 @@ class ts3admin {
 	}
 
 /**
-  * tokenUse uses a token key gain access to a server or channel group<br>
-  * Please note that the server will automatically delete the token after it has been used
+  * tokenUse
+  * 
+  * Use a token key gain access to a server or channel group. Please note that the server will automatically delete the token after it has been used.
   *
   * @author     Par0noid Solutions
   * @access		public
@@ -3043,15 +3548,17 @@ class ts3admin {
 	}
 
 /**
-  * version displays the servers version information including platform and build number<br><br><br>
+  * version
+  * 
+  * Displays the servers version information including platform and build number.
   *
-  * <b>Output:</b><br>
+  * <b>Output:</b>
   * <code>
   * Array
   * {
-  *  [version] => 3.0.0-beta29
-  *  [build] => 12473
-  *  [platform] => Linux
+  *  [version] => 3.0.6.1
+  *  [build] => 1340956745
+  *  [platform] => Windows
   * }
   * </code>
   *
@@ -3064,22 +3571,25 @@ class ts3admin {
 	}
 
 /**
-  * whoAmI returns informations about you<br><br><br>
+  * whoAmI
+  * 
+  * Displays information about your current ServerQuery connection including your loginname, etc.
   *
-  * <b>Output:</b><br>
+  * <b>Output:</b>
   * <code>
   * Array
   * {
   *  [virtualserver_status] => online
   *  [virtualserver_id] => 1
-  *  [virtualserver_unique_identifier] => 4L0HyB3rUZ1EsU43QaB+XFEs30o=
+  *  [virtualserver_unique_identifier] => bYrybKl/APfKq7xzpIJ1Xb6C06U=
   *  [virtualserver_port] => 9987
-  *  [client_id] => 7
+  *  [client_id] => 5
   *  [client_channel_id] => 1
-  *  [client_nickname] => serveradmin from 89.147.30.25:52914
+  *  [client_nickname] => serveradmin from 127.0.0.1:15208
   *  [client_database_id] => 1
   *  [client_login_name] => serveradmin
   *  [client_unique_identifier] => serveradmin
+  *  [client_origin_server_id] => 0
   * }
   * </code>
   *
@@ -3119,7 +3629,9 @@ class ts3admin {
 	}
 
 /**
-  * convertSecondsToStrTime converts seconds to a strTime (bsp. 5d 1h 23m 19s)
+  * convertSecondsToStrTime
+  * 
+  * Converts seconds to a strTime (bsp. 5d 1h 23m 19s)
   *
   * @author     Par0noid Solutions
   * @access		public
@@ -3132,9 +3644,11 @@ class ts3admin {
 	}
 
 /**
-  * convertSecondsToArrayTime converts seconds to a array: time<br><br><br>
+  * convertSecondsToArrayTime
+  * 
+  * Converts seconds to a array: time
   *
-  * <b>Output:</b><br>
+  * <b>Output:</b>
   * <code>
   * Array
   * {
@@ -3160,11 +3674,12 @@ class ts3admin {
 	}
 
 /**
-  * getElement returns a special element from array<br><br>
+  * getElement
   * 
+  * Returns the given associated element from an array<br>
   * This can be used to get a result in a one line operation<br><br>
   * 
-  * Example, you got this array:
+  * For example you got this array:
   * <code>
   * Array
   * {
@@ -3172,17 +3687,14 @@ class ts3admin {
   *  [errors] => Array 
   *  [data] => false
   * }
-  * </code><br><br><br>
-  * 
-  * Now you can grab the element like this:<br>
+  * </code><br>
+  * Now you can grab the element like this:
   * <code>
-  * <?PHP
   * $ts = new ts3admin('***', '***');
   * 
   * if($ts->getElement('success', $ts->connect())) {
   *  //operation
   * }
-  * ?>
   * </code>
   *
   * @author     Par0noid Solutions
@@ -3195,17 +3707,47 @@ class ts3admin {
 		return $array[$element];
 	}
 
+/**
+  * succeeded
+  * 
+  * Succeeded will check the success element of a return array<br>
+  * <code>
+  * $ts = new ts3admin('***', '***');
+  * 
+  * if($ts->succeeded($ts->connect())) {
+  *  //operation
+  * }
+  * </code>
+  *
+  * @author     Par0noid Solutions
+  * @access		public
+  * @param		array	$array	result
+  * @return     boolean
+  */
+	public function succeeded($array) {
+		if(isset($array['success'])) {
+			return $array['success'];
+		}else{
+			return false;
+		}
+	}
+	
+	
+
 //*******************************************************************************************	
 //*********************************** Internal Functions ************************************
 //*******************************************************************************************
 
 /**
+ * __construct
+ * 
+ * @ignore
  * @author	Par0noid Solutions
  * @access	private
  * @param	string	$host		ts3host
  * @param	integer	$queryport	ts3queryport
  * @param	integer	$timeout	socket timeout (default = 2) [optional]
- * @return	none
+ * @return	void
 */
 	function __construct($host, $queryport, $timeout = 2) {
 		if($queryport >= 1 and $queryport <= 65536) {
@@ -3222,23 +3764,28 @@ class ts3admin {
 	}
 
 /**
+ * __destruct
+ * 
+ * @ignore
  * @author	Par0noid Solutions
  * @access	private
- * @return	none
+ * @return	void
 */
 	function __destruct() {
 		$this->quit();
 	}
 
 /**
- * __call prevents your website from php errors if you want to execute
- * a method which doesn't exists
+ * __call
  * 
+ * prevents your website from php errors if you want to execute a method which doesn't exists
+ * 
+ * @ignore
  * @author	Par0noid Solutions
  * @access	private
  * @param	string	$name	method name
  * @param	array	$args	method arguments
- * @return	none
+ * @return	void
 */
 	function __call($name, $args) {
 		$this->addDebugLog('Method '.$name.' doesn\'t exist', $name, 0);
@@ -3246,7 +3793,9 @@ class ts3admin {
 	}
 
 /**
-  * isConnected checks if the connection is established
+  * isConnected
+  * 
+  * Checks if the connection is established
   *
   * @author     Par0noid Solutions
   * @access		private
@@ -3261,7 +3810,9 @@ class ts3admin {
 	}
 
 /**
-  * generateOutput builds a method return as array
+  * generateOutput
+  * 
+  * Builds a method return as array
   *
   * @author     Par0noid Solutions
   * @access		private
@@ -3275,7 +3826,9 @@ class ts3admin {
 	}
 
 /**
-  * unEscapeText turns escaped chars to normals
+  * unEscapeText
+  * 
+  * Turns escaped chars to normals
   *
   * @author     Par0noid Solutions
   * @access		private
@@ -3290,7 +3843,9 @@ class ts3admin {
 	}
 
 /**
-  * escapeText escapes chars that we can use it in the query
+  * escapeText
+  * 
+  * Escapes chars that we can use it in the query
   *
   * @author     Par0noid Solutions
   * @access		private
@@ -3310,7 +3865,9 @@ class ts3admin {
 	}
 
 /**
-  * splitBanIds splits banIds to array
+  * splitBanIds
+  * 
+  * Splits banIds to array
   *
   * @author     Par0noid Solutions
   * @access		private
@@ -3330,7 +3887,9 @@ class ts3admin {
 //*******************************************************************************************
 
 /**
-  * connect connects to ts3instance
+  * connect
+  * 
+  * Connects to a ts3instance query port
   *
   * @author     Par0noid Solutions
   * @access		public
@@ -3359,7 +3918,9 @@ class ts3admin {
 	}
 
 /**
-  * executeCommand executes a command and fetches the response
+  * executeCommand
+  * 
+  * Executes a command and fetches the response
   *
   * @author     Par0noid Solutions
   * @access		private
@@ -3410,7 +3971,9 @@ class ts3admin {
 	}
 
 /**
- * parse data from query and returns an array
+ * getData
+ * 
+ * Parses data from query and returns an array
  * 
  * @author		Par0noid Solutions
  * @access		private
@@ -3507,21 +4070,28 @@ class ts3admin {
 	}
 
 /**
- * ftSendKey sends down/upload-key to ftHost
- * 
+  * ftSendKey
+  * 
+  * Sends down/upload-key to ftHost
+  * 
   * @author     Par0noid Solutions
   * @access		private
+  * @param		string	$key
+  * @param		string $additional
   * @return     none
  */
-	private function ftSendKey($key, $additional = "") {
+	private function ftSendKey($key, $additional = NULL) {
 		fputs($this->runtime['fileSocket'], $key.$additional);
 	}
 
 /**
- * ftSendData sends data to ftHost
- * 
+  * ftSendData
+  * 
+  * Sends data to ftHost
+  * 
   * @author     Par0noid Solutions
   * @access		private
+  * @param		mixed	$data
   * @return     none
  */
 	private function ftSendData($data) {
@@ -3532,10 +4102,13 @@ class ts3admin {
 	}
 
 /**
- * ftRead reads data from ftHost
- * 
+  * ftRead
+  * 
+  * Reads data from ftHost
+  * 
   * @author     Par0noid Solutions
   * @access		private
+  * @param		int	$size
   * @return     string data
  */
 	private function ftRead($size) {
@@ -3551,9 +4124,11 @@ class ts3admin {
 //*******************************************************************************************
 
 /**
-  * getDebugLog returns the debug log<br><br><br>
+  * getDebugLog
+  * 
+  * Returns the debug log
   *
-  * <b>Output:</b><br>
+  * <b>Output:</b>
   * <code>
   * Array
   * {
@@ -3571,7 +4146,9 @@ class ts3admin {
 	}
 
 /**
-  * addDebugLog adds an entry to debugLog
+  * addDebugLog
+  * 
+  * Adds an entry to debugLog
   *
   * @author     Par0noid Solutions
   * @access		private
@@ -3588,7 +4165,27 @@ class ts3admin {
 		}
 		$this->runtime['debug'][] = 'Error in '.$methodName.'() on line '.$line.': '.$text;	
 	}
-	
 }
 
+
+/*///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+TTTTTTTTTTTTTTTTTTTTTTTHHHHHHHHH     HHHHHHHHHEEEEEEEEEEEEEEEEEEEEEE     EEEEEEEEEEEEEEEEEEEEEENNNNNNNN        NNNNNNNNDDDDDDDDDDDDD        
+T:::::::::::::::::::::TH:::::::H     H:::::::HE::::::::::::::::::::E     E::::::::::::::::::::EN:::::::N       N::::::ND::::::::::::DDD     
+T:::::::::::::::::::::TH:::::::H     H:::::::HE::::::::::::::::::::E     E::::::::::::::::::::EN::::::::N      N::::::ND:::::::::::::::DD   
+T:::::TT:::::::TT:::::THH::::::H     H::::::HHEE::::::EEEEEEEEE::::E     EE::::::EEEEEEEEE::::EN:::::::::N     N::::::NDDD:::::DDDDD:::::D  
+TTTTTT  T:::::T  TTTTTT  H:::::H     H:::::H    E:::::E       EEEEEE       E:::::E       EEEEEEN::::::::::N    N::::::N  D:::::D    D:::::D 
+        T:::::T          H:::::H     H:::::H    E:::::E                    E:::::E             N:::::::::::N   N::::::N  D:::::D     D:::::D
+        T:::::T          H::::::HHHHH::::::H    E::::::EEEEEEEEEE          E::::::EEEEEEEEEE   N:::::::N::::N  N::::::N  D:::::D     D:::::D
+        T:::::T          H:::::::::::::::::H    E:::::::::::::::E          E:::::::::::::::E   N::::::N N::::N N::::::N  D:::::D     D:::::D
+        T:::::T          H:::::::::::::::::H    E:::::::::::::::E          E:::::::::::::::E   N::::::N  N::::N:::::::N  D:::::D     D:::::D
+        T:::::T          H::::::HHHHH::::::H    E::::::EEEEEEEEEE          E::::::EEEEEEEEEE   N::::::N   N:::::::::::N  D:::::D     D:::::D
+        T:::::T          H:::::H     H:::::H    E:::::E                    E:::::E             N::::::N    N::::::::::N  D:::::D     D:::::D
+        T:::::T          H:::::H     H:::::H    E:::::E       EEEEEE       E:::::E       EEEEEEN::::::N     N:::::::::N  D:::::D    D:::::D 
+      TT:::::::TT      HH::::::H     H::::::HHEE::::::EEEEEEEE:::::E     EE::::::EEEEEEEE:::::EN::::::N      N::::::::NDDD:::::DDDDD:::::D  
+      T:::::::::T      H:::::::H     H:::::::HE::::::::::::::::::::E     E::::::::::::::::::::EN::::::N       N:::::::ND:::::::::::::::DD   
+      T:::::::::T      H:::::::H     H:::::::HE::::::::::::::::::::E     E::::::::::::::::::::EN::::::N        N::::::ND::::::::::::DDD     
+      TTTTTTTTTTT      HHHHHHHHH     HHHHHHHHHEEEEEEEEEEEEEEEEEEEEEE     EEEEEEEEEEEEEEEEEEEEEENNNNNNNN         NNNNNNNDDDDDDDDDDDDD
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////*/
 ?>

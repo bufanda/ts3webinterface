@@ -1,6 +1,6 @@
 <?php
 /*
-*Copyright (C) 2010-2011  Psychokiller
+*Copyright (C) 2012-2013  Psychokiller
 *
 *This program is free software; you can redistribute it and/or modify it under the terms of 
 *the GNU General Public License as published by the Free Software Foundation; either 
@@ -65,7 +65,7 @@ if(!empty($servergroups))
 	{
 	foreach($servergroups AS $key => $value)
 		{
-		if ($hoststatus===false AND $serverhost===true AND $value['type']=='2' OR $hoststatus===false AND $serverhost===true AND $value['type']=='0')
+		if ($hoststatus===false AND $value['type']=='2' OR $hoststatus===false AND $value['type']=='0')
 			{
 			unset($servergroups[$key]);
 			}

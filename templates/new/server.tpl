@@ -25,7 +25,7 @@
 		<td class="thead" colspan="7">{$lang['msgtoall']}</td>
 	</tr>
 	<tr>
-		<td class="green1"><input style="width:830px" type="text" name="msgtoall" size="100" value=""/></td>
+		<td class="green1"><textarea style="width:830px" type="text" name="msgtoall" size="100"></textarea></td>
 		<td class="green1"><input style="width:60px" class="button" type="submit" name="sendmsg" value="{$lang['send']}" /></td>
 	</tr>
 </table>

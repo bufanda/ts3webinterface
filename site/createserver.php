@@ -1,6 +1,6 @@
 <?php 
 /*
-*Copyright (C) 2010-2011  Psychokiller
+*Copyright (C) 2012-2013  Psychokiller
 *
 *This program is free software; you can redistribute it and/or modify it under the terms of 
 *the GNU General Public License as published by the Free Software Foundation; either 
@@ -13,7 +13,7 @@
 *You should have received a copy of the GNU General Public License along with this program; if not, see <http://www.gnu.org/licenses/>. 
 */
 if(!defined("SECURECHECK")) {die($lang['error_file_alone']);} 
-if($hoststatus===false AND $serverhost===true) { echo $lang['nohoster']; } else {
+if($hoststatus===false) { echo $lang['nohoster']; } else {
 
 include('screate_config.php');
 

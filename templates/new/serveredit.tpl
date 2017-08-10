@@ -156,7 +156,7 @@
 				{if isset($permoverview['b_virtualserver_modify_icon_id']) AND empty($permoverview['b_virtualserver_modify_icon_id'])}
 					-
 				{else}
-					<input id="iconid" type="text" name="newsettings[virtualserver_icon_id]" value="{$serverinfo['virtualserver_icon_id']}" /><a href="javascript:oeffnefenster('site/showallicons.php?ip={$smarty.session.server_ip}&amp;sid={$sid}');">{$lang['set']}</a>
+					<input id="iconid" type="text" name="newsettings[virtualserver_icon_id]" value="{$serverinfo['virtualserver_icon_id']}" /><a href="javascript:oeffnefenster('site/showallicons.php?ip={$smarty.session.server_ip}&amp;sid={$sid}&amp;port={$serverinfo['virtualserver_port']}');">{$lang['set']}</a>
 				{/if}
 				</td>
 			</tr>
@@ -258,6 +258,9 @@
 				{if isset($permoverview['b_virtualserver_modify_hostbanner']) AND empty($permoverview['b_virtualserver_modify_hostbanner'])}
 					-
 				{else}
+					{if $serverinfo['virtualserver_hostbanner_gfx_url']!=''}
+					<img style="width:350px" src="{$serverinfo['virtualserver_hostbanner_gfx_url']}" alt="" /><br />
+					{/if}
 					<input type="text" name="newsettings[virtualserver_hostbanner_gfx_url]" value="{$serverinfo['virtualserver_hostbanner_gfx_url']}" />
 				{/if}
 				</td>
@@ -357,7 +360,7 @@
 				{if isset($permoverview['b_virtualserver_modify_antiflood']) AND empty($permoverview['b_virtualserver_modify_antiflood'])}
 					-
 				{else}
-					<input type="text" name="newsettings[virtualserver_antiflood_points_needed_command_stop]" value="{$serverinfo['virtualserver_antiflood_points_needed_command_stop']}" />
+					<input type="text" name="newsettings[virtualserver_antiflood_points_needed_command_block]" value="{$serverinfo['virtualserver_antiflood_points_needed_command_block']}" />
 				{/if}
 				</td>
 			</tr>
@@ -367,7 +370,7 @@
 				{if isset($permoverview['b_virtualserver_modify_antiflood']) AND empty($permoverview['b_virtualserver_modify_antiflood'])}
 					-
 				{else}
-					<input type="text" name="newsettings[virtualserver_antiflood_points_needed_ip_ban]" value="{$serverinfo['virtualserver_antiflood_points_needed_ip_ban']}" />
+					<input type="text" name="newsettings[virtualserver_antiflood_points_needed_ip_block]" value="{$serverinfo['virtualserver_antiflood_points_needed_ip_block']}" />
 				{/if}
 				</td>
 			</tr>

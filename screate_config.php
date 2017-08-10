@@ -1,6 +1,6 @@
 <?php
 /*
-*Copyright (C) 2010-2011  Psychokiller
+*Copyright (C) 2012-2013  Psychokiller
 *
 *This program is free software; you can redistribute it and/or modify it under the terms of 
 *the GNU General Public License as published by the Free Software Foundation; either 
@@ -40,10 +40,8 @@ $screate_tmp['autobantime']="";						// Autoban time
 $screate_tmp['removetime']="";						// Remove time
 
 $screate_tmp['pointstickreduce']="";				// Points tick reduce
-$screate_tmp['pointsneededwarning']="";				// Points needed warning
-$screate_tmp['pointsneededkick']="";				// Points needed kick
-$screate_tmp['pointsneededban']="";					// Points needed ban
-$screate_tmp['pointsbantime']="";					// Points ban time
+$screate_tmp['pointsneededblockcmd']="";			// Points needed warning
+$screate_tmp['pointsneededblockip']="";				// Points needed kick
 
 $screate_tmp['uploadbandwidthlimit']="";			// Upload Bandwidth Limit  unlimited = -1
 $screate_tmp['uploadquota']="";						// Upload Quota  unlimited = -1

@@ -1,3 +1,21 @@
+<?php /* Smarty version Smarty3rc4, created on 2016-06-27 22:18:27
+         compiled from "E:\xampp_php7\htdocs\test\templates/new\index.tpl" */ ?>
+<?php /*%%SmartyHeaderCode:2065157718a13a23215-08074230%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
+$_smarty_tpl->decodeProperties(array (
+  'file_dependency' => 
+  array (
+    'ab847af03924765e1f53e1b7546453dec64bb95c' => 
+    array (
+      0 => 'E:\\xampp_php7\\htdocs\\test\\templates/new\\index.tpl',
+      1 => 1467058254,
+    ),
+  ),
+  'nocache_hash' => '2065157718a13a23215-08074230',
+  'function' => 
+  array (
+  ),
+  'has_nocache_code' => false,
+)); /*/%%SmartyHeaderCode%%*/?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!--
 *Copyright (C) 2012-2013  Psychokiller
@@ -17,8 +35,10 @@
 <title>Teamspeak 3 - Webinterface</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
-<link rel="stylesheet" href="templates/{$tmpl}/gfx/style.css" type="text/css" media="screen" />
-<link rel="stylesheet" href="templates/{$tmpl}/gfx/tsview.css" type="text/css" media="screen" />
+<link rel="stylesheet" href="templates/<?php echo $_smarty_tpl->getVariable('tmpl')->value;?>
+/gfx/style.css" type="text/css" media="screen" />
+<link rel="stylesheet" href="templates/<?php echo $_smarty_tpl->getVariable('tmpl')->value;?>
+/gfx/tsview.css" type="text/css" media="screen" />
 <script type="text/javascript">
 //<![CDATA[
 function Klappen(Id) 
@@ -187,18 +207,23 @@ function confirmAction()
 <body>
 <table align="center" class="border" style="width:1000px; background-color:#FFFFFF;" cellpadding="1" cellspacing="0">
 	<tr>
-		<td colspan="2">{include file="{$tmpl}/head.tpl"}</td>
+		<td colspan="2"><?php $_template = new Smarty_Internal_Template(($_smarty_tpl->getVariable('tmpl')->value)."/head.tpl", $_smarty_tpl->smarty, $_smarty_tpl, $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, null, null);
+ echo $_template->getRenderedTemplate();?><?php $_template->updateParentVariables(0);?><?php unset($_template);?></td>
 	</tr>
-	{include file="{$tmpl}/showupdate.tpl"}
+	<?php $_template = new Smarty_Internal_Template(($_smarty_tpl->getVariable('tmpl')->value)."/showupdate.tpl", $_smarty_tpl->smarty, $_smarty_tpl, $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, null, null);
+ echo $_template->getRenderedTemplate();?><?php $_template->updateParentVariables(0);?><?php unset($_template);?>
 	<tr valign="top">	
-		{include file="{$tmpl}/mainbar.tpl"}
+		<?php $_template = new Smarty_Internal_Template(($_smarty_tpl->getVariable('tmpl')->value)."/mainbar.tpl", $_smarty_tpl->smarty, $_smarty_tpl, $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, null, null);
+ echo $_template->getRenderedTemplate();?><?php $_template->updateParentVariables(0);?><?php unset($_template);?>
 		<td align="center">
-		{include file="{$tmpl}/{$site}.tpl"}
+		<?php $_template = new Smarty_Internal_Template(($_smarty_tpl->getVariable('tmpl')->value)."/".($_smarty_tpl->getVariable('site')->value).".tpl", $_smarty_tpl->smarty, $_smarty_tpl, $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, null, null);
+ echo $_template->getRenderedTemplate();?><?php $_template->updateParentVariables(0);?><?php unset($_template);?>
 		</td>
 	</tr>
 	<tr>
 		<td colspan="2" class="footer">
-		{$footer}
+		<?php echo $_smarty_tpl->getVariable('footer')->value;?>
+
 		powered by <a href='http://www.ts-rent.de'>www.TS-Rent.de</a><br />This interface contains images from <a href='http://www.teamspeak.com'>www.teamspeak.com</a>.<br />
        <a href='http://www.psychoscripts.de/donate.php'><img alt="" border="0" src="https://www.paypalobjects.com/de_DE/DE/i/btn/btn_donate_SM.gif" width="86" height="21"></a>
 		</td>

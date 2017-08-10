@@ -16,10 +16,11 @@
 		<tr><td class="green2"><a class="mainbarlink" href="index.php?site=serverview&amp;sid={$sid}">{$lang['serverview']}</a></td></tr>
 		<tr><td class="green1"><a class="mainbarlink" href="index.php?site=servertraffic&amp;sid={$sid}">{$lang['virtualtraffic']}</a></td></tr>
 		<tr><td class="green2"><a class="mainbarlink" href="index.php?site=serveredit&amp;sid={$sid}">{$lang['serveredit']}</a></td></tr>
-		<tr><td class="green1"><a class="mainbarlink" href="index.php?site=fileupload&amp;sid={$sid}">{$lang['iconupload']}</a></td></tr>
-		<tr><td class="green2"><a class="mainbarlink" href="index.php?site=logview&amp;sid={$sid}">{$lang['logview']}</a></td></tr>
-		<tr><td class="green1"><a class="mainbarlink" href="index.php?site=filelist&amp;sid={$sid}">{$lang['filelist']}</a></td></tr>				
-		<tr><td class="green2"><a class="mainbarlink" href="javascript:oeffnefenster('site/interactive.php?sid={$sid}&amp;action=action');">{$lang['massaction']}</a></td></tr>
+		<tr><td class="green1"><a class="mainbarlink" href="index.php?site=temppw&amp;sid={$sid}">{$lang['temppw']}</a></td></tr>
+		<tr><td class="green2"><a class="mainbarlink" href="index.php?site=fileupload&amp;sid={$sid}">{$lang['iconupload']}</a></td></tr>
+		<tr><td class="green1"><a class="mainbarlink" href="index.php?site=logview&amp;sid={$sid}">{$lang['logview']}</a></td></tr>
+		<tr><td class="green2"><a class="mainbarlink" href="index.php?site=filelist&amp;sid={$sid}">{$lang['filelist']}</a></td></tr>				
+		<tr><td class="green1"><a class="mainbarlink" href="javascript:oeffnefenster('site/interactive.php?sid={$sid}&amp;action=action');">{$lang['massaction']}</a></td></tr>
 		<tr><td class="maincat">{$lang['channel']}</td></tr>
 		<tr><td class="green1"><a class="mainbarlink" href="index.php?site=channel&amp;sid={$sid}">{$lang['channellist']}</a></td></tr>
 		<tr><td class="green2"><a class="mainbarlink" href="index.php?site=createchannel&amp;sid={$sid}">{$lang['createchannel']}</a></td></tr>

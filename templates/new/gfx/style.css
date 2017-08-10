@@ -137,35 +137,17 @@ td.noerror
 	}
 .login
 	{
+	background-color:#E4EDFB;
 	color:#000000;
+	border:1px solid black;
+	border-radius: 10px;
 	}
 .loginhead
 	{
-	color:#ffffff; 
+	color:#478ADB; 
 	text-shadow: -1px -1px 0px #000000;
 	text-align:center;
-	font-size:30px;
-	}
-
-td.logintop
-	{
-	background-image:url(images/login_top.gif);
-	height:12px;
-	width:400px;
-	}
-
-td.loginpuff
-	{
-	background-image:url(images/login_puff.gif);
-	width:400px;
-	}
-
-td.loginbottom
-	{
-	background-image:url(images/login_bottom.gif);
-	width:400px;
-	height:12px;
-	line-height:12px;
+	font-size:25px;
 	}
 
 td.thead
@@ -208,7 +190,24 @@ table.border
 	border:1px solid #CCCCCC;
 	border-collapse:collapse;
 	}
+
+select
+	{
+	border:1px solid black;
+	border-radius: 5px;
+	}
 	
+textarea
+	{
+	border:1px solid black;
+	border-radius: 5px;
+	}
+
+input
+	{
+	border-radius: 5px;
+	}
+
 input.bild
 	{
 	border:0px;
@@ -265,12 +264,11 @@ input.clients
 	height:16px;
 	background:url(images/clients.png);
 	}
-	
+
 input.button
 	{
 	border:1px solid black;
 	height:20px;
-	background:url(images/button.gif);
 	}
 	
 input.select

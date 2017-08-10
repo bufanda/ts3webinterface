@@ -1,6 +1,6 @@
 <?php
 /*
-*Copyright (C) 2010-2011  Psychokiller
+*Copyright (C) 2012-2013  Psychokiller
 *
 *This program is free software; you can redistribute it and/or modify it under the terms of 
 *the GNU General Public License as published by the Free Software Foundation; either 
@@ -35,9 +35,9 @@ $server[2]['tport']= "30033";
 
 $server[0]['alias']= "Lokaler Server";
 $server[0]['ip']= "127.0.0.1";
-$server[0]['tport']= "10011";
+$server[0]['tport']= 10011;
 
-$cfglang	=	"de";			//Language German = de, English = en, Netherlandish=nl (by pd1evl)
+$cfglang	=	"de";			//Language German = de, English = en, Netherlandish=nl (by pd1evl), French = fr (by supra63200)
 
 $duration = "100";				//Set the Limit for Clients show per Page on Client List
 
@@ -50,4 +50,6 @@ $style="new";					//Chose your design  set 'new' for the default design or the n
 $msgsend_name="Webinterface";	//This Name will be show if you send a message to a Server
 
 $show_motd=true;				// Set it to false to not show the message of the day window
+
+$show_version=true;				// Set it to false to not show the Webinterface Version on the footer
 ?>

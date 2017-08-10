@@ -1,6 +1,6 @@
 <?php 
 /*
-*Copyright (C) 2010-2011  Psychokiller
+*Copyright (C) 2012-2013  Psychokiller
 *
 *This program is free software; you can redistribute it and/or modify it under the terms of 
 *the GNU General Public License as published by the Free Software Foundation; either 
@@ -21,7 +21,7 @@ if(isset($_POST['command']))
 	$data=strtr($_POST['command'], array("\n\n" => '\n', "\r\n" => '\n', "\r" => '\n', "\n" => '\n'));
 	$commands=explode('\n', $data);
 	$use_error=0;
-	if($serverhost===true AND $hoststatus===false)
+	if($hoststatus===false)
 		{
 		foreach($commands AS $key=>$value)
 			{

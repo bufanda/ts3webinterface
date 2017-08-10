@@ -1,3 +1,42 @@
+//Beta 3.4.3.1
+- Fixed some url problems 
+
+//Beta 3.4.3
+- Fixed bug with the serverbackup function
+- Remove some code because security reason!
+
+//Beta 3.4.2
++ Add the new option $show_version to the config.php to show the webinterface version on the footer or not
+* The server msg field on the serverview is now a textarea field
+* The live view on serverview will now show the name of the group if you do a mouseover on the icons
+- Fixed bug that the new channel codecs not show on all settings and infos
+- Fixed bug with the public viewer that join on a subchannel not work
+
+//Beta 3.4.1
+- Fixed bug with the channel backup function. (All channel backups created with 3.4 are broken!) (thx to Terminal-Access)
+- Fixed bug with instanz server backup
+
+//Beta 3.4
+! This version will not Work 100% with server versions < 3.0.7
+* Add french to the language file
+* The server msg field on the serverlist is now a textarea field
+* The serverbackups will now sorted by date groups
+* The channelbackups will now save more settings
+* Add the new Codecs of server 3.0.7
+- Fixed bug with the permissionlists on server version 3.0.7
+
+//Beta 3.3
++ Add function for temporary passwords
+* The Host Banner will now show a small preview
+* It will now show error messages if there is a error on edit Permissions
+* There is now a select all field on the icon delete function
+- Fixed bug with the fast server select window
+- Fixed bug that server not will go in virtual online mode if there are offline
+- Fixed bug that the Start and Stop button not will show on the Serverview
+- Fixed bug that Icons will be deleted if the external Serverviewer loaded
+- Fixed bug that Icons will not all show on icon set window
+
+
 //Beta 3.2
 !This version will not Work with server versions < 3.0.2
 * The welcomemessage and the hostmessage are now textarea fields

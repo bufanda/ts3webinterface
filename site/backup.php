@@ -1,6 +1,6 @@
 <?php 
 /*
-*Copyright (C) 2010-2011  Psychokiller
+*Copyright (C) 2012-2013  Psychokiller
 *
 *This program is free software; you can redistribute it and/or modify it under the terms of 
 *the GNU General Public License as published by the Free Software Foundation; either 
@@ -32,6 +32,19 @@ if(isset($_POST['create']))
 	{
 	$filename="channel_".time()."_".$_SESSION['server_ip']."-".$whoami['virtualserver_port'].".txt";
 	$channellist=$ts3->channelList("-topic -flags -voice -limits");
+	foreach($channellist['data'] AS $key=>$value)
+		{
+		$channelinfo=$ts3->getElement('data', $ts3->channelInfo($value['cid']));
+		unset($channelinfo['channel_password']);
+		unset($channelinfo['channel_filepath']);
+		foreach($channelinfo AS $key2=>$value2)
+			{
+			if(!isset($channellist['data'][$key][$key2]))
+				{
+				$channellist['data'][$key][$key2]=$value2;
+				}
+			}
+		}
 	if($channellist['success']!==false)
 		{
 		if(channel_backup_create($path.$filename, $channellist['data'])===true)

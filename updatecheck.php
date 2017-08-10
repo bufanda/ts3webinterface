@@ -1,6 +1,6 @@
 <?php
 /*
-*Copyright (C) 2010-2011  Psychokiller
+*Copyright (C) 2012-2013  Psychokiller
 *
 *This program is free software; you can redistribute it and/or modify it under the terms of 
 *the GNU General Public License as published by the Free Software Foundation; either 
@@ -17,5 +17,5 @@ $wiversionurl="http://www.ts3.cs-united.de/ts3wi/wiversion.html";
 $seversionurl="http://www.ts3.cs-united.de/ts3wi/seversion.html";
 
 $neededversionkey="aHR0cDovL3d3dy50czMuY3MtdW5pdGVkLmRlL3RzM3dpL2RpcnR5bGlzdC5odG1s";
-$wiversion="beta3.1";
+$wiversion="beta3.4.3.1";
 ?>

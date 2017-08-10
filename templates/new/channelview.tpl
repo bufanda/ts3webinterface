@@ -77,6 +77,10 @@
 				{$lang['codec2']}
 			{elseif $channelinfo['channel_codec']=='3'}
 				{$lang['codec3']}
+			{elseif $channelinfo['channel_codec']=='4'}
+				{$lang['codec4']}
+			{elseif $channelinfo['channel_codec']=='5'}
+				{$lang['codec5']}
 			{/if}
 			</td>
 		</tr>
@@ -86,7 +90,13 @@
 		</tr>
 		<tr>
 			<td class="green2">{$lang['codecunencrypted']}</td>
-			<td class="green2">{$channelinfo['channel_codec_is_unencrypted']}</td>
+			<td class="green2">
+			{if $channelinfo['channel_codec_is_unencrypted']=='1'}
+			{$lang['yes']}
+			{elseif $channelinfo['channel_codec_is_unencrypted']=='0'}
+			{$lang['no']}
+			{/if}
+			</td>
 		</tr>
 		<tr>
 			<td class="green1">{$lang['neededtalkpower']}:</td>

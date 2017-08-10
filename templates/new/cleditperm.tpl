@@ -38,12 +38,14 @@
 		<td class="thead" style="width:100px">{$lang['grant']} <input type="text" name="granttoall" size="3" maxlength="3" /></td>
 	</tr>
 	{foreach key=key item=value from=$allperms}
-		{if $key == 43}
+		{if $key == 0}
 			<tr>
 				<td class='maincat left' colspan="7">
 				&nbsp;<a href="javascript:Klappen(1)"><img src="gfx/images/{$disp_pic}.png" id="Pic1" border="0" alt="aus/ein-klappen" /></a>&nbsp;{$lang['global']}
 				</td>
 			</tr>
+		{/if}
+		{if $key == 1}
 			<tr>
 				<td style="width:100%" colspan="7">
 				<div style="display:{$display}" id="Lay1">
@@ -57,7 +59,7 @@
 					<div style="display:{$display}" id="Lay2">
 					<table style="width:100%;border-collapse:collapse;border:0" cellpadding="0" cellspacing="0">
 		{/if}
-		{if $key == 46}
+		{if $key == 2}
 					</table>
 					</div>
 					</td>
@@ -70,7 +72,7 @@
 					<div style="display:{$display}" id="Lay3">
 					<table style="width:100%;border-collapse:collapse;border:0" cellpadding="0" cellspacing="0">
 		{/if}
-		{if $key == 48}
+		{if $key == 3}
 					</table>
 					</div>
 					</td>
@@ -84,7 +86,7 @@
 					<div style="display:{$display}" id="Lay4">
 					<table style="width:100%;border-collapse:collapse;border:0" cellpadding="0" cellspacing="0">
 		{/if}
-		{if $key == 51}
+		{if $key == 4}
 			 		</table>
 					</div>
 					</td>
@@ -98,7 +100,7 @@
 					<div style="display:{$display}" id="Lay5">
 					<table style="width:100%;border-collapse:collapse;border:0" cellpadding="0" cellspacing="0">
 		{/if}
-		{if $key == 84}
+		{if $key == 5}
 					</table>
 					</div>
 					</td>
@@ -123,7 +125,7 @@
 						<div style="display:{$display}" id="Lay7">
 						<table style="width:100%;border-collapse:collapse;border:0" cellpadding="0" cellspacing="0">
 		{/if}
-		{if $key == 87}
+		{if $key == 7}
 			 			</table>
 						</div>
 						</td>
@@ -137,7 +139,7 @@
 						<div style="display:{$display}" id="Lay8">
 						<table style="width:100%;border-collapse:collapse;border:0" cellpadding="0" cellspacing="0">
 		{/if}
-		{if $key == 90}
+		{if $key == 8}
 			 			</table>
 						</div>
 						</td>
@@ -151,7 +153,7 @@
 						<div style="display:{$display}" id="Lay9">
 						<table style="width:100%;border-collapse:collapse;border:0" cellpadding="0" cellspacing="0">
 		{/if}
-		{if $key == 123}
+		{if $key == 9}
 						</table>
 						</div>
 						</td>
@@ -168,7 +170,7 @@
 				<div style="display:{$display}" id="Lay10">
 				<table style="width:100%;border-collapse:collapse;" cellpadding="0" cellspacing="0">
 		{/if}
-		{if $key == 126}
+		{if $key == 10}
 					<tr>
 						<td class='subcat' style='width:51px'>&nbsp;</td>
 						<td class='subcat' colspan="6">&nbsp;<a href="javascript:Klappen(11)"><img src="gfx/images/{$disp_pic}.png" id="Pic11" border="0" alt="aus/ein-klappen" /></a>&nbsp;{$lang['information']}</td>
@@ -178,7 +180,7 @@
 						<div style="display:{$display}" id="Lay11">
 						<table style="width:100%;border-collapse:collapse;border:0" cellpadding="0" cellspacing="0">
 		{/if}
-		{if $key == 128}
+		{if $key == 11}
 			 			</table>
 						</div>
 						</td>
@@ -192,7 +194,7 @@
 						<div style="display:{$display}" id="Lay12">
 						<table style="width:100%;border-collapse:collapse;border:0" cellpadding="0" cellspacing="0">
 		{/if}
-		{if $key == 131}
+		{if $key == 12}
 			 			</table>
 						</div>
 						</td>
@@ -206,7 +208,7 @@
 						<div style="display:{$display}" id="Lay13">
 						<table style="width:100%;border-collapse:collapse;border:0" cellpadding="0" cellspacing="0">
 		{/if}
-		{if $key == 134}
+		{if $key == 13}
 			 			</table>
 						</div>
 						</td>
@@ -220,7 +222,7 @@
 						<div style="display:{$display}" id="Lay14">
 						<table style="width:100%;border-collapse:collapse;border:0" cellpadding="0" cellspacing="0">
 		{/if}
-		{if $key == 136}
+		{if $key == 14}
 			 			</table>
 						</div>
 						</td>
@@ -234,7 +236,7 @@
 						<div style="display:{$display}" id="Lay15">
 						<table style="width:100%;border-collapse:collapse;border:0" cellpadding="0" cellspacing="0">
 		{/if}
-		{if $key == 165}
+		{if $key == 15}
 			 			</table>
 						</div>
 						</td>
@@ -251,7 +253,7 @@
 				<div style="display:{$display}" id="Lay16">
 				<table style="width:100%;border-collapse:collapse;" cellpadding="0" cellspacing="0">
 		{/if}
-		{if $key == 167}
+		{if $key == 16}
 					<tr>
 						<td class='subcat' style='width:51px'>&nbsp;</td>
 						<td class='subcat' colspan="6">&nbsp;<a href="javascript:Klappen(17)"><img src="gfx/images/{$disp_pic}.png" id="Pic17" border="0" alt="aus/ein-klappen" /></a>&nbsp;{$lang['information']}</td>
@@ -261,7 +263,7 @@
 						<div style="display:{$display}" id="Lay17">
 						<table style="width:100%;border-collapse:collapse;border:0" cellpadding="0" cellspacing="0">
 		{/if}
-		{if $key == 170}
+		{if $key == 17}
 			 			</table>
 						</div>
 						</td>
@@ -275,7 +277,7 @@
 						<div style="display:{$display}" id="Lay18">
 						<table style="width:100%;border-collapse:collapse;border:0" cellpadding="0" cellspacing="0">
 		{/if}
-		{if $key == 173}
+		{if $key == 18}
 			 			</table>
 						</div>
 						</td>
@@ -289,7 +291,7 @@
 						<div style="display:{$display}" id="Lay19">
 						<table style="width:100%;border-collapse:collapse;border:0" cellpadding="0" cellspacing="0">
 		{/if}
-		{if $key == 175}
+		{if $key == 19}
 			 			</table>
 						</div>
 						</td>
@@ -303,7 +305,7 @@
 						<div style="display:{$display}" id="Lay20">
 						<table style="width:100%;border-collapse:collapse;border:0" cellpadding="0" cellspacing="0">
 		{/if}
-		{if $key == 206}
+		{if $key == 20}
 						</table>
 						</div>
 						</td>
@@ -320,7 +322,7 @@
 				 <div style="display:{$display}" id="Lay21">
 				 <table style="width:100%;border-collapse:collapse;" cellpadding="0" cellspacing="0">
 		{/if}
-		{if $key == 209}
+		{if $key == 21}
 					<tr>
 						<td class='subcat' style='width:51px'>&nbsp;</td>
 						<td class='subcat' colspan="6">&nbsp;<a href="javascript:Klappen(22)"><img src="gfx/images/{$disp_pic}.png" id="Pic22" border="0" alt="aus/ein-klappen" /></a>&nbsp;{$lang['information']}</td>
@@ -330,7 +332,7 @@
 						<div style="display:{$display}" id="Lay22">
 						<table style="width:100%;border-collapse:collapse;border:0" cellpadding="0" cellspacing="0">
 		{/if}
-		{if $key == 211}
+		{if $key == 22}
 			 			</table>
 						</div>
 						</td>
@@ -344,7 +346,7 @@
 						<div style="display:{$display}" id="Lay23">
 						<table style="width:100%;border-collapse:collapse;border:0" cellpadding="0" cellspacing="0">
 		{/if}
-		{if $key == 214}
+		{if $key == 23}
 			 			</table>
 						</div>
 						</td>
@@ -358,7 +360,7 @@
 						<div style="display:{$display}" id="Lay24">
 						<table style="width:100%;border-collapse:collapse;border:0" cellpadding="0" cellspacing="0">
 		{/if}
-		{if $key == 217}
+		{if $key == 24}
 			 			</table>
 						</div>
 						</td>
@@ -372,7 +374,7 @@
 						<div style="display:{$display}" id="Lay25">
 						<table style="width:100%;border-collapse:collapse;border:0" cellpadding="0" cellspacing="0">
 		{/if}
-		{if $key == 24}
+		{if $key == 25}
 			 			</table>
 						</div>
 						</td>
@@ -388,7 +390,7 @@
 				 <div style="display:{$display}" id="Lay26">
 				 <table style="width:100%;border-collapse:collapse;" cellpadding="0" cellspacing="0">
 		{/if}
-		{foreach key=key2 item=value2 from=$value}
+		{foreach key=key2 item=value2 from=$value.permissions}
 			{if $change_col % 2} {assign var=td_col value="green1"} {else} {assign var=td_col value="green2"} {/if}	
 			{if $showmyperms == 0 AND empty($searchperms) OR $showmyperms == 1 AND $value2['available'] == 1 OR $showmyperms == 0 AND $value2['permname']|strpos:{$searchperms} !== false OR $showmyperms == 0 AND $value2['permid']|strpos:{$searchperms} !== false}
 			<tr>

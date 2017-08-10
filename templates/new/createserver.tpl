@@ -144,20 +144,12 @@
 				<td class="green1"><input type="text" name="newsettings[virtualserver_antiflood_points_tick_reduce]" value="{$screate_tmp['pointstickreduce']}"/></td>
 			</tr>
 			<tr>
-				<td class="green2">{$lang['pointsneededwarning']}:</td>
-				<td class="green2"><input type="text" name="newsettings[virtualserver_antiflood_points_needed_warning]" value="{$screate_tmp['pointsneededwarning']}"/></td>
+				<td class="green2">{$lang['pointsneededblockcmd']}:</td>
+				<td class="green2"><input type="text" name="newsettings[virtualserver_antiflood_points_needed_command_block]" value="{$screate_tmp['pointsneededblockcmd']}"/></td>
 			</tr>
 			<tr>
-				<td class="green1">{$lang['pointsneededkick']}:</td>
-				<td class="green1"><input type="text" name="newsettings[virtualserver_antiflood_points_needed_kick]" value="{$screate_tmp['pointsneededkick']}"/></td>
-			</tr>
-			<tr>
-				<td class="green2">{$lang['pointsneededban']}:</td>
-				<td class="green2"><input type="text" name="newsettings[virtualserver_antiflood_points_needed_ban]" value="{$screate_tmp['pointsneededban']}"/></td>
-			</tr>
-			<tr>
-				<td class="green1">{$lang['pointsbantime']}:</td>
-				<td class="green1"><input type="text" name="newsettings[virtualserver_antiflood_ban_time]" value="{$screate_tmp['pointsbantime']}"/></td>
+				<td class="green1">{$lang['pointsneededblockip']}:</td>
+				<td class="green1"><input type="text" name="newsettings[virtualserver_antiflood_points_needed_ip_block]" value="{$screate_tmp['pointsneededblockip']}"/></td>
 			</tr>
 			<tr>
 				<td class="thead" colspan="2">{$lang['transfers']}</td>

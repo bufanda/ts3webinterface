@@ -78,6 +78,12 @@
 				{if !isset($permoverview['b_channel_create_modify_with_codec_celtmono48']) OR $permoverview['b_channel_create_modify_with_codec_celtmono48']==1}
 					<option value="3">{$lang['codec3']}</option>
 				{/if}
+				{if !isset($permoverview['b_channel_create_modify_with_codec_opusvoice']) OR $permoverview['b_channel_create_modify_with_codec_opusvoice']==1}
+					<option value="3">{$lang['codec4']}</option>
+				{/if}
+				{if !isset($permoverview['b_channel_create_modify_with_codec_opusmusic']) OR $permoverview['b_channel_create_modify_with_codec_opusmusic']==1}
+					<option value="3">{$lang['codec5']}</option>
+				{/if}
 				</select>
 				</td>
 			</tr>

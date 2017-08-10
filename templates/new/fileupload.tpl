@@ -42,7 +42,7 @@
 		<td class="thead">{$lang['id']}</td>
 		<td class="thead">Ma&szlig;e</td>
 		<td class="thead">Type</td>
-		<td class="thead">{$lang['delete']}</td>
+		<td class="thead">{$lang['delete']} {$lang['selectall']}<input type="checkbox" name="checkall" value="0" onclick="check(2)" /></td>
 	</tr>
 	{foreach key=key item=value from=$allicons}
 	<tr>
@@ -59,7 +59,7 @@
 		.png
 		{/if}
 		</td>
-		<td><input type="checkbox" name="delicons[]" value="/{$key}" /></td>
+		<td><input type="checkbox" id="list{$value['virtualserver_id']}" name="delicons[]" value="/{$key}" /></td>
 	</tr>
 	{/foreach}
 	<tr>

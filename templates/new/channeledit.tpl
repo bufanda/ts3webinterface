@@ -67,6 +67,8 @@
 					<option value="1" {if $channelinfo['channel_codec'] == '1'}selected="selected"{/if}>{$lang['codec1']}</option>
 					<option value="2" {if $channelinfo['channel_codec'] == '2'}selected="selected"{/if}>{$lang['codec2']}</option>
 					<option value="3" {if $channelinfo['channel_codec'] == '3'}selected="selected"{/if}>{$lang['codec3']}</option>
+					<option value="4" {if $channelinfo['channel_codec'] == '4'}selected="selected"{/if}>{$lang['codec4']}</option>
+					<option value="5" {if $channelinfo['channel_codec'] == '5'}selected="selected"{/if}>{$lang['codec5']}</option>
 					</select>
 				{/if}
 				</td>
@@ -99,7 +101,10 @@
 				{if isset($permoverview['b_channel_modify_maxclients']) AND empty($permoverview['b_channel_modify_maxclients'])}
 					-
 				{else}
-					<input type="text" name="newsettings[channel_codec_is_unencrypted]" value="{$channelinfo['channel_codec_is_unencrypted']}" />
+				<select name="newsettings[channel_codec_is_unencrypted]">
+					<option value="1" {if $channelinfo['channel_codec_is_unencrypted']==1}selected="selected"{/if}>{$lang['yes']}</option>
+					<option value="0" {if $channelinfo['channel_codec_is_unencrypted']==0}selected="selected"{/if}>{$lang['no']}</option>
+				</select>
 				{/if}
 				</td>
 			</tr>

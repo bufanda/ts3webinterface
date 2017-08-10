@@ -1,6 +1,6 @@
 <?php
 /*
-*Copyright (C) 2010-2011  Psychokiller
+*Copyright (C) 2012-2013  Psychokiller
 *
 *This program is free software; you can redistribute it and/or modify it under the terms of 
 *the GNU General Public License as published by the Free Software Foundation; either 
@@ -12,7 +12,7 @@
 *
 *You should have received a copy of the GNU General Public License along with this program; if not, see <http://www.gnu.org/licenses/>. 
 */
-error_reporting(E_ALL & ~E_NOTICE);
+error_reporting(E_ALL ^ E_NOTICE);
 header("Content-Type: text/html; charset=utf-8");
 if(version_compare(PHP_VERSION, '5.0.0', '<')) {die("Require PHP 5 or higher");}
 
@@ -28,9 +28,11 @@ require_once('config.php');
 require_once('functions.inc.php');
 require_once('updatecheck.php');
 require_once('site/lang.php');
-require_once('libs/Smarty/libs/Smarty.class.php');
+require_once(SMARTY_DIR.'Smarty.class.php');
 
 $smarty=new Smarty();
+
+
 
 $smarty->template_dir = TS3WI_DIR.DS.'templates/';
 $smarty->compile_dir = TS3WI_DIR.DS.'templates_c/';
@@ -193,8 +195,7 @@ require_once('site/footer.php');
 
 
 $footer=implode("", file('templates/'.$style.DS.'index.tpl'));
-
-if(md5($footer2)!='e84ea7308f3e293adcda8b1927b61c3d' OR strpos($footer, '{$footer}')===false)
+if(md5($footer2.$footer3)!='3065534252aa6d5e72504589c7910335' OR strpos($footer, '{$footer}')===false)
 	{
 	die();
 	}
@@ -202,12 +203,10 @@ if(md5($footer2)!='e84ea7308f3e293adcda8b1927b61c3d' OR strpos($footer, '{$foote
 $smarty->assign("tmpl", $style);
 $smarty->assign("site", $site);
 $smarty->assign("lang", $lang);
-
 $smarty->assign("hoststatus", $hoststatus);
-$smarty->assign("serverhost", $serverhost);
 $smarty->assign("loginstatus", $loginstatus);
 $smarty->assign("instances", $server);
-$smarty->assign("permoverview", $permoverview);
+if(isset($permoverview)) $smarty->assign("permoverview", $permoverview);
 
 if(isset($sid))
 	{

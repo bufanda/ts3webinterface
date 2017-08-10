@@ -1,6 +1,6 @@
 <?php 
 /*
-*Copyright (C) 2010-2011  Psychokiller
+*Copyright (C) 2012-2013  Psychokiller
 *
 *This program is free software; you can redistribute it and/or modify it under the terms of 
 *the GNU General Public License as published by the Free Software Foundation; either 
@@ -18,7 +18,7 @@ define("SECURECHECK", 1);
 session_start();
 $_SESSION['pubviewer']=true;
 
-function create_tree($pid, $place, $alldata, $sid, $ip, $showicons)
+function create_tree($pid, $place, $alldata, $sid, $ip, $showicons, $sub)
 	{
 	global $lang;
 	global $ts3;
@@ -78,6 +78,10 @@ function create_tree($pid, $place, $alldata, $sid, $ip, $showicons)
 						{
 						$chan_img.="<img style=\"height:16px;width:16px\" src=\"gfx/images/default.png\" alt=\"\" />";
 						}
+					if($value['channel_codec']==3 OR $value['channel_codec']==5)
+						{
+						$chan_img.="<img style=\"height:13px;width:16px\" src=\"gfx/images/music.png\" alt=\"\" />";
+						}
 					if($value['channel_needed_talk_power']>0)
 						{
 						$chan_img.="<img style=\"height:14px;width:14px\" src=\"gfx/images/moderated.png\" alt=\"\" />";
@@ -104,19 +108,19 @@ function create_tree($pid, $place, $alldata, $sid, $ip, $showicons)
 						
 					if($chanmaxclient<=$value['total_clients'] AND $value['channel_flag_password']==1)
 						{
-						$gettree .= "<div class='channel'>".$place."<div class='fullimg'></div><div class='channame'><a href=\"ts3server://".$ip."?port=".$alldata['server']['virtualserver_port']."&channel=".secure($value['channel_name'])."\" >".secure($value['channel_name'])."</a>&nbsp;</div><div style=\"float:".$showicons."\">".$chan_img."</div><div class='clear'></div></div>\n";
+						$gettree .= "<div class='channel'>".$place."<div class='fullimg'></div><div class='channame'><a href=\"ts3server://".$ip."?port=".$alldata['server']['virtualserver_port']."&channel=".secure((empty($sub) ? '':$sub.'/').$value['channel_name'])."\" >".secure($value['channel_name'])."</a>&nbsp;</div><div style=\"float:".$showicons."\">".$chan_img."</div><div class='clear'></div></div>\n";
 						}
 						elseif($chanmaxclient<=$value['total_clients'])
 						{
-						$gettree .= "<div class='channel'>".$place."<div class='fullimg'></div><div class='channame'><a href=\"ts3server://".$ip."?port=".$alldata['server']['virtualserver_port']."&channel=".secure($value['channel_name'])."\" >".secure($value['channel_name'])."</a>&nbsp;</div><div style=\"float:".$showicons."\">".$chan_img."</div><div class='clear'></div></div>\n";
+						$gettree .= "<div class='channel'>".$place."<div class='fullimg'></div><div class='channame'><a href=\"ts3server://".$ip."?port=".$alldata['server']['virtualserver_port']."&channel=".secure((empty($sub) ? '':$sub.'/').$value['channel_name'])."\" >".secure($value['channel_name'])."</a>&nbsp;</div><div style=\"float:".$showicons."\">".$chan_img."</div><div class='clear'></div></div>\n";
 						}
 						elseif($value['channel_flag_password']==1)
 						{
-						$gettree .= "<div class='channel'>".$place."<div class='pwchanimg'></div><div class='channame'><a href=\"ts3server://".$ip."?port=".$alldata['server']['virtualserver_port']."&channel=".secure($value['channel_name'])."\" >".secure($value['channel_name'])."</a>&nbsp;</div><div style=\"float:".$showicons."\">".$chan_img."</div><div class='clear'></div></div>\n";
+						$gettree .= "<div class='channel'>".$place."<div class='pwchanimg'></div><div class='channame'><a href=\"ts3server://".$ip."?port=".$alldata['server']['virtualserver_port']."&channel=".secure((empty($sub) ? '':$sub.'/').$value['channel_name'])."\" >".secure($value['channel_name'])."</a>&nbsp;</div><div style=\"float:".$showicons."\">".$chan_img."</div><div class='clear'></div></div>\n";
 						}
 						else
 						{
-						$gettree .= "<div class='channel'>".$place."<div class='chanimg'></div><div class='channame'><a href=\"ts3server://".$ip."?port=".$alldata['server']['virtualserver_port']."&channel=".secure($value['channel_name'])."\" >".secure($value['channel_name'])."</a>&nbsp;</div><div style=\"float:".$showicons."\">".$chan_img."</div><div class='clear'></div></div>\n";
+						$gettree .= "<div class='channel'>".$place."<div class='chanimg'></div><div class='channame'><a href=\"ts3server://".$ip."?port=".$alldata['server']['virtualserver_port']."&channel=".secure((empty($sub) ? '':$sub.'/').$value['channel_name'])."\" >".secure($value['channel_name'])."</a>&nbsp;</div><div style=\"float:".$showicons."\">".$chan_img."</div><div class='clear'></div></div>\n";
 						}
 					}
 				if($value['total_clients']>=1)
@@ -187,12 +191,12 @@ function create_tree($pid, $place, $alldata, $sid, $ip, $showicons)
 													{
 													if(file_exists('icons/'.$ip.'-'.$alldata['server']['virtualserver_port'].'/icon_'.$iconid))
 														{
-														$g_img.="<img src=\"site/showfile.php?name=icon_".$iconid."&amp;ip=".$ip."&amp;port=".$alldata['server']['virtualserver_port']."\" />";
+														$g_img.="<img title=\"".$cg_value['name']."\" src=\"site/showfile.php?name=icon_".$iconid."&amp;ip=".$ip."&amp;port=".$alldata['server']['virtualserver_port']."\" />";
 														}
 													}
 													else
 													{
-													$g_img.="<img src=\"site/showfile.php?name=icon_".$iconid."\" />";
+													$g_img.="<img title=\"".$cg_value['name']."\" src=\"site/showfile.php?name=icon_".$iconid."\" />";
 													}
 												}
 											}
@@ -217,12 +221,12 @@ function create_tree($pid, $place, $alldata, $sid, $ip, $showicons)
 													{
 													if(file_exists('icons/'.$ip.'-'.$alldata['server']['virtualserver_port'].'/icon_'.$iconid))
 														{
-														$g_img.="<img src=\"site/showfile.php?name=icon_".$iconid."&amp;ip=".$ip."&amp;port=".$alldata['server']['virtualserver_port']."\" />";
+														$g_img.="<img title=\"".$sg_value['name']."\" src=\"site/showfile.php?name=icon_".$iconid."&amp;ip=".$ip."&amp;port=".$alldata['server']['virtualserver_port']."\" />";
 														}
 													}
 													else
 													{
-													$g_img.="<img src=\"site/showfile.php?name=icon_".$iconid."\" />";
+													$g_img.="<img title=\"".$sg_value['name']."\" src=\"site/showfile.php?name=icon_".$iconid."\" />";
 													}
 												}
 											}
@@ -239,12 +243,12 @@ function create_tree($pid, $place, $alldata, $sid, $ip, $showicons)
 										{
 										if(file_exists('icons/'.$ip.'-'.$alldata['server']['virtualserver_port'].'/icon_'.$u_value['client_icon_id']))
 											{
-											$g_img.="<img src=\"site/showfile.php?name=icon_".$u_value['client_icon_id']."&amp;ip=".$ip."&amp;port=".$alldata['server']['virtualserver_port']."\" />";
+											$g_img.="<img title=\"Client Icon\" src=\"site/showfile.php?name=icon_".$u_value['client_icon_id']."&amp;ip=".$ip."&amp;port=".$alldata['server']['virtualserver_port']."\" />";
 											}
 										}
 										else
 										{
-										$g_img.="<img src=\"site/showfile.php?name=icon_".$u_value['client_icon_id']."\" />";
+										$g_img.="<img title=\"Client Icon\" src=\"site/showfile.php?name=icon_".$u_value['client_icon_id']."\" />";
 										}
 									}
 							
@@ -258,7 +262,15 @@ function create_tree($pid, $place, $alldata, $sid, $ip, $showicons)
 							}
 						}
 					}
-				$gettree.=create_tree($value['cid'], $place."<div class='place'></div>", $alldata, $sid, $ip, $showicons);
+					if(empty($sub))
+						{
+						$sub2=$value['channel_name'];
+						}
+						else
+						{
+						$sub2=$sub.'/'.$value['channel_name'];
+						}
+				$gettree.=create_tree($value['cid'], $place."<div class='place'></div>", $alldata, $sid, $ip, $showicons, $sub2);
 				}
 			}
 		}
@@ -334,9 +346,9 @@ if($con['success']!==true)
 					$servericon=false;
 					}	
 				}
-			$tree.="<div class='server_img'></div><div class='servername'><a href=\"ts3server://".$server[$_GET['skey']]['ip']."?port=".$alldata['server']['virtualserver_port']."\">".secure($alldata['server']['virtualserver_name'])."</a>&nbsp;</div><div style=\"float:".$showicons.";width:16px\">".($alldata['server']['virtualserver_icon_id']!=0 ? "<img src=\"site/showfile.php?name=icon_".$alldata['server']['virtualserver_icon_id']."&amp;ip=".$server[$_GET['skey']]['ip']."&amp;sid=".$_GET['sid']."\" />":'')."</div><div class='clear'></div>";
+			$tree.="<div class='server_img'></div><div class='servername'><a href=\"ts3server://".$server[$_GET['skey']]['ip']."?port=".$alldata['server']['virtualserver_port']."\">".secure($alldata['server']['virtualserver_name'])."</a>&nbsp;</div><div style=\"float:".$showicons.";width:16px\">".($alldata['server']['virtualserver_icon_id']!=0 ? "<img src=\"site/showfile.php?name=icon_".$alldata['server']['virtualserver_icon_id']."&amp;ip=".$server[$_GET['skey']]['ip']."&amp;port=".$alldata['server']['virtualserver_port']."\" />":'')."</div><div class='clear'></div>";
 
-			$tree.= create_tree(0, "<div class='place'></div>", $alldata, $_GET['sid'], $server[$_GET['skey']]['ip'], $showicons);
+			$tree.= create_tree(0, "<div class='place'></div>", $alldata, $_GET['sid'], $server[$_GET['skey']]['ip'], $showicons, '');
 			}
 			else
 			{

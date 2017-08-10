@@ -39,7 +39,7 @@
 			<td class="thead" colspan="7">{$lang['msgtoserver']}</td>
 		</tr>
 		<tr>
-			<td class="green1"><input style="width:375px" type="text" name="msgtoserver" value=""/></td>
+			<td class="green1"><textarea style="width:375px" type="text" name="msgtoserver" size="100"></textarea></td>
 			<td class="green1">
 			<input type="hidden" name="sid" value="{$serverinfo['virtualserver_id']}" />
 			<input style="width:60px" class="button" type="submit" name="sendmsg" value="{$lang['send']}" />
@@ -49,7 +49,6 @@
 	</form>
 	<br />
 	<table style="width:100%" class="border" cellpadding="1" cellspacing="0">
-	{if $serverhost === true AND $hoststatus === false}
 		<tr>
 			<td class="center">
 			<form method="post" action="index.php?site=serverview&amp;sid={$sid}">
@@ -64,7 +63,6 @@
 			</form>
 			</td>
 		</tr>
-	{/if}
 			<tr>
 				<td class="thead" colspan="2">{$lang['virtualserver']} #{$serverinfo['virtualserver_id']}</td>
 			</tr>
@@ -255,7 +253,11 @@
 			</tr>
 			<tr>
 				<td class="green2">{$lang['hostbannerurl']}:</td>
-				<td class="green2">{$serverinfo['virtualserver_hostbanner_gfx_url']}</td>
+				<td class="green2">
+				{if $serverinfo['virtualserver_hostbanner_gfx_url']!=''}
+				<img style="width:350px" src="{$serverinfo['virtualserver_hostbanner_gfx_url']}" alt="" /><br />
+				{/if}
+				{$serverinfo['virtualserver_hostbanner_gfx_url']}</td>
 			</tr>
 			<tr>
 				<td class="green1">{$lang['hostbannerintval']}:</td>
@@ -300,11 +302,11 @@
 			</tr>
 			<tr>
 				<td class="green2">{$lang['pointsneededblockcmd']}:</td>
-				<td class="green2">{$serverinfo['virtualserver_antiflood_points_needed_command_stop']}</td>
+				<td class="green2">{$serverinfo['virtualserver_antiflood_points_needed_command_block']}</td>
 			</tr>
 			<tr>
 				<td class="green1">{$lang['pointsneededblockip']}:</td>
-				<td class="green1">{$serverinfo['virtualserver_antiflood_points_needed_ip_ban']}</td>
+				<td class="green1">{$serverinfo['virtualserver_antiflood_points_needed_ip_block']}</td>
 			</tr>
 			<tr>
 				<td class="thead" colspan="2">{$lang['transfers']}</td>

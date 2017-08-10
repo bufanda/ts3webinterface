@@ -1,6 +1,6 @@
 <?php
 /*
-*Copyright (C) 2010-2011  Psychokiller
+*Copyright (C) 2012-2013  Psychokiller
 *
 *This program is free software; you can redistribute it and/or modify it under the terms of 
 *the GNU General Public License as published by the Free Software Foundation; either 
@@ -121,7 +121,7 @@ if(isset($geticons) AND $geticons==1)
 							}
 					}
 				}
-			elseif($ft['errors'][0]!='ErrorID: 2568 | Message: insufficient client permissions failed_permid=16519')
+			elseif(strpos($ft['errors'][0], 'ErrorID: 2568 | Message: insufficient client permissions failed_permid')===false)
 				{
 				if($value!="." AND $value!="..")
 					{

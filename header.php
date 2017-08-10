@@ -1,6 +1,6 @@
 <?php 
 /*
-*Copyright (C) 2010-2011  Psychokiller
+*Copyright (C) 2012-2013  Psychokiller
 *
 *This program is free software; you can redistribute it and/or modify it under the terms of 
 *the GNU General Public License as published by the Free Software Foundation; either 
@@ -105,10 +105,9 @@ if($site=='logout' AND $loginstatus===true)
 	
 require_once('site/footer.php');
 
-
 $footer=implode("", file('templates/'.$style.DS.'index.tpl'));
-
-if(md5($footer2)!='e84ea7308f3e293adcda8b1927b61c3d' OR strpos($footer, '{$footer}')===false)
+ 
+if(md5($footer2.$footer3)!='3065534252aa6d5e72504589c7910335' OR strpos($footer, '{$footer}')===false)
 	{
 	die();
 	}

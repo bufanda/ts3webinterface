@@ -1,6 +1,6 @@
 <?php 
 /*
-*Copyright (C) 2010-2011  Psychokiller
+*Copyright (C) 2012-2013  Psychokiller
 *
 *This program is free software; you can redistribute it and/or modify it under the terms of 
 *the GNU General Public License as published by the Free Software Foundation; either 
@@ -15,7 +15,6 @@
 if(!defined("SECURECHECK")) {die($lang['error_file_alone']);}
 $error = '';
 $noerror = '';
-
 if(isset($_POST['sendmassmove']))
 	{
 	$clientlist=$ts3->clientList("-groups");
@@ -436,7 +435,7 @@ if(!empty($serverinfo))
 		}	
 		
 	$sversion=explode(' ', $serverinfo['virtualserver_version']);
-	$sversion2=date('d.m.Y H:i:s',str_replace(']', ' ', $sversion[2]));
+	$sversion2=date('d.m.Y H:i:s',str_replace(']', '', $sversion[2]));
 	$serverinfo['virtualserver_version']=$sversion[0].' '.$sversion[1].' '.$sversion2.']';
 	
 	$serverinfo['virtualserver_welcomemessage']=parse_bbcode(str_replace('\r\n', '<br />', $serverinfo['virtualserver_welcomemessage']));
@@ -452,6 +451,5 @@ $smarty->assign("serverinfo", $serverinfo);
 $smarty->assign("servergroups", $servergroups);
 $smarty->assign("channelgroups", $channelgroups);
 $smarty->assign("newserverversion", $newserverversion);
-$smarty->assign("tree", $tree);
 
 ?>

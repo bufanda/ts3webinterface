@@ -1,6 +1,6 @@
 <?php
 /*
-*Copyright (C) 2010-2011  Psychokiller
+*Copyright (C) 2012-2013  Psychokiller
 *
 *This program is free software; you can redistribute it and/or modify it under the terms of 
 *the GNU General Public License as published by the Free Software Foundation; either 
@@ -23,13 +23,12 @@ if(!is_dir("site/backups/server/hostbackups/".$_SESSION['server_ip'].'-'.$_SESSI
 	mkdir("site/backups/server/hostbackups/".$_SESSION['server_ip'].'-'.$_SESSION['server_tport'].'/',0777);
 	}
 
-if($hoststatus===false AND $serverhost===true) { echo $lang['nohoster']; } else { 
 $error = '';
 $noerror = '';
 $files='';
 $serverlist=$ts3->serverList();
 
-if(isset($_POST['hostbackup']))
+if(isset($_POST['hostbackup']) AND $hoststatus===true)
 		{
 		$path="site/backups/server/hostbackups/";
 		}
@@ -43,7 +42,11 @@ if(isset($_POST['create']))
 	$serversnapshot=$ts3->serverSnapshotCreate();
 	if($serversnapshot['success']!==false)
 		{
-		$handler=fopen($path.$_SESSION['server_ip'].'-'.$_SESSION['server_tport'].'/'."server_".time()."_".$_SESSION['server_ip']."-".$whoami['virtualserver_port'].".txt", "a+");
+		if(!is_dir($path.$_SESSION['server_ip'].'-'.$_SESSION['server_tport'].'/'.date("d-m-Y", time()).'/'))
+			{
+			mkdir($path.$_SESSION['server_ip'].'-'.$_SESSION['server_tport'].'/'.date("d-m-Y", time()).'/',0777);
+			}
+		$handler=fopen($path.$_SESSION['server_ip'].'-'.$_SESSION['server_tport'].'/'.date("d-m-Y", time()).'/server_'.time().'_'.$_SESSION['server_ip'].'-'.$whoami['virtualserver_port'].'.txt', 'a+');
 		fwrite($handler, $serversnapshot['data']);
 		fclose($handler);
 		$noerror .= sprintf($lang['serverbackupok'], $_SESSION['server_ip'], $whoami['virtualserver_port'])."<br />";
@@ -56,7 +59,7 @@ if(isset($_POST['create']))
 
 if(isset($_POST['deploy']))
 	{
-	$handler=file($path.$_SESSION['server_ip'].'-'.$_SESSION['server_tport'].'/'."server_".$_POST['backupid']."_".$_POST['fileport'].".txt");
+	$handler=file($path.$_SESSION['server_ip'].'-'.$_SESSION['server_tport'].'/'.$_POST['backupdate'].'/server_'.$_POST['backupid'].'_'.$_POST['fileport'].'.txt');
 	$snapshot_deploy=$ts3->serverSnapshotDeploy($handler[0]);
 	if($snapshot_deploy['success']===false)
 		{
@@ -73,7 +76,7 @@ if(isset($_POST['deploy']))
 	
 if(isset($_POST['delete']))
 	{
-	if(@unlink($path.$_SESSION['server_ip'].'-'.$_SESSION['server_tport'].'/'."server_".$_POST['backupid']."_".$_POST['fileport'].".txt"))
+	if(@unlink($path.$_SESSION['server_ip'].'-'.$_SESSION['server_tport'].'/'.$_POST['backupdate'].'/server_'.$_POST['backupid'].'_'.$_POST['fileport'].'.txt'))
 		{
 		$noerror .= $lang['serverbackdelok']."<br />";
 		}
@@ -82,32 +85,126 @@ if(isset($_POST['delete']))
 		$error .= $lang['serverbackdelerr']."<br />";
 		}
 	}
-	
-$handler=opendir("site/backups/server/".$_SESSION['server_ip'].'-'.$_SESSION['server_tport'].'/');
-while($datei=readdir($handler))
-	{
-	if($datei!='.' AND $datei!='..' AND $datei!='hostbackups')
-		{
-		$datei=str_replace('.txt', '', $datei);
-		$datei_info=explode('_', $datei);
-		$files[0][]=array("timestamp"=>$datei_info[1], "server"=>$datei_info[2]);
-		}
-	}	
 
-$handler=opendir("site/backups/server/hostbackups/".$_SESSION['server_ip'].'-'.$_SESSION['server_tport'].'/');
-while($datei=readdir($handler))
+if(isset($_POST['deleteall']))
+	{
+	$handler=opendir($path.$_SESSION['server_ip'].'-'.$_SESSION['server_tport'].'/'.$_POST['backupdate'].'/');
+	while($datei=readdir($handler))
+		{
+		if($datei!='.' AND $datei!='..')
+			{
+				
+			$datei2=str_replace('.txt', '', $datei);
+			$datei_info=explode('_', $datei2);
+			if($hoststatus===true OR $datei_info[2]==$_SESSION['server_ip']."-".$whoami['virtualserver_port'])
+				{
+				@unlink($path.$_SESSION['server_ip'].'-'.$_SESSION['server_tport'].'/'.$_POST['backupdate'].'/'.$datei);
+				}
+			}
+		}	
+	if(@rmdir($path.$_SESSION['server_ip'].'-'.$_SESSION['server_tport'].'/'.$_POST['backupdate'].'/') OR $hoststatus===false)
+		{
+		$noerror .= $lang['serverbackdelok']."<br />";
+		}
+		else
+		{
+		$error .= $lang['serverbackdelerr']."<br />";
+		}
+	unset($_POST['backupdate']);
+	}
+if(isset($_POST['backupdate']))
+	{
+	$handler=@opendir('site/backups/server/'.$_SESSION['server_ip'].'-'.$_SESSION['server_tport'].'/'.$_POST['backupdate'].'/');
+	while($datei=@readdir($handler))
+		{
+		if($datei!='.' AND $datei!='..' AND $datei!='hostbackups')
+			{
+			$datei=str_replace('.txt', '', $datei);
+			$datei_info=explode('_', $datei);
+			if($hoststatus===true OR $datei_info[2]==$_SESSION['server_ip']."-".$whoami['virtualserver_port'])
+				{
+			$files[0][]=array('timestamp'=>$datei_info[1], 'server'=>$datei_info[2]);
+				}
+			}
+		}
+	}
+$handler=@opendir('site/backups/server/hostbackups/'.$_SESSION['server_ip'].'-'.$_SESSION['server_tport'].'/');
+while($datei=@readdir($handler))
 	{
 	if($datei!='.' AND $datei!='..')
 		{
-		$datei=str_replace('.txt', '', $datei);
-		$datei_info=explode('_', $datei);
-		$files[1][]=array("timestamp"=>$datei_info[1], "server"=>$datei_info[2]);
+		$folder[1][]=$datei;
+		}
+	}
+$handler=@opendir('site/backups/server/'.$_SESSION['server_ip'].'-'.$_SESSION['server_tport'].'/');
+while($datei=@readdir($handler))
+	{
+	if($datei!='.' AND $datei!='..')
+		{
+		$folder[2][]=$datei;
+		}
+	}
+if($hoststatus===false AND !empty($folder[2]))
+	{
+		foreach($folder[2] AS $key=>$value)
+			{
+			$foundfiles=false;
+			$handler=@opendir('site/backups/server/'.$_SESSION['server_ip'].'-'.$_SESSION['server_tport'].'/'.$value.'/');
+			while($datei=@readdir($handler))
+				{
+				if($datei!='.' AND $datei!='..' AND $datei!='hostbackups')
+					{
+					$datei=str_replace('.txt', '', $datei);
+					$datei_info=explode('_', $datei);
+					if($hoststatus===true OR $datei_info[2]==$_SESSION['server_ip']."-".$whoami['virtualserver_port'])
+						{
+						$foundfiles=true;
+						}
+					}
+				}
+			if($foundfiles===false)
+				{
+					unset($folder[2][$key]);
+				}
+			}
+	}
+
+if(isset($_POST['backupdate']))
+	{
+	$handler=@opendir('site/backups/server/hostbackups/'.$_SESSION['server_ip'].'-'.$_SESSION['server_tport'].'/'.$_POST['backupdate'].'/');
+	while($datei=@readdir($handler))
+		{
+		if($datei!='.' AND $datei!='..')
+			{
+			$datei=str_replace('.txt', '', $datei);
+			$datei_info=explode('_', $datei);
+			if($hoststatus===true OR $datei_info[2]==$_SESSION['server_ip']."-".$whoami['virtualserver_port'])
+				{
+				$files[1][]=array('timestamp'=>$datei_info[1], 'server'=>$datei_info[2]);
+				}
+			}
+		}
+	}
+	
+if(!empty($folder[1]))
+	{
+	foreach($folder[1] AS $key=>$value)
+		{
+		$getdate=explode('-', $value);
+		$newdate=mktime(0,0,0, $getdate[1], $getdate[0], $getdate[2]);
+		$folder[1][$key]=$newdate;
+		}
+	rsort($folder[1]);
+	foreach($folder[1] AS $key=>$value)
+		{
+		$newdate=date("d-m-Y", $value);
+		$folder[1][$key]=$newdate;
 		}
 	}
 
 $smarty->assign("error", $error);
 $smarty->assign("noerror", $noerror);
 $smarty->assign("files", $files);
+$smarty->assign('folder', $folder);
 $smarty->assign("getserverip", $_SESSION['server_ip']."-".$whoami['virtualserver_port']);
-}
 ?>

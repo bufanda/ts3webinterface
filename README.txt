@@ -4,5 +4,4 @@ Dev-Website: http://ts3.cs-united.de
 
 This software uses the ts3admin.class.php from Par0noid (Stefan Z.)
 
-Dev-Website: http://ts3admin.6x.to
-
+Dev-Website: http://ts3admin.info

@@ -24,7 +24,7 @@
 							{/if}
 							<select name="sid" onchange="submit()">
 							{foreach key=key item=server from=$serverlist}
-								{if $sid == $server['virtualserver_sid']}
+								{if $sid == $server['virtualserver_id']}
 								<option selected="selected" value="{$server['virtualserver_id']}">{$server['virtualserver_name']}-{$server['virtualserver_port']}</option>
 								{else}
 								<option value="{$server['virtualserver_id']}">{$server['virtualserver_name']}-{$server['virtualserver_port']}</option>
