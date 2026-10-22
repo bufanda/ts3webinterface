@@ -32,10 +32,8 @@ require_once(SMARTY_DIR.'Smarty.class.php');
 
 $smarty=new Smarty\Smarty;
 
-
-
-$smarty->template_dir = TS3WI_DIR.DS.'templates/';
-$smarty->compile_dir = TS3WI_DIR.DS.'templates_c/';
+$smarty->setTemplateDir(TS3WI_DIR.DS.'templates/');
+$smarty->setCompileDir(TS3WI_DIR.DS.'templates_c/');
 
 $serverstatus='';
 $geticons=0;
