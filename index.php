@@ -35,6 +35,9 @@ $smarty=new Smarty\Smarty;
 $smarty->setTemplateDir(TS3WI_DIR.DS.'templates/');
 $smarty->setCompileDir(TS3WI_DIR.DS.'templates_c/');
 
+$smarty->registerPlugin("function", "strpos")
+
+
 $serverstatus='';
 $geticons=0;
 $site='';
