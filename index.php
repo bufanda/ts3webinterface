@@ -30,7 +30,7 @@ require_once('updatecheck.php');
 require_once('site/lang.php');
 require_once(SMARTY_DIR.'Smarty.class.php');
 
-$smarty=new Smarty();
+$smarty=new Smarty\Smarty;
 
 
 
