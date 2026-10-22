@@ -1,2 +1,3 @@
 Thumbs.db
 .php_cs.cache
+*.tpl.php

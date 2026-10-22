@@ -393,7 +393,7 @@
 		{/if}
 			{foreach key=key2 item=value2 from=$value.permissions}
 			{if $change_col % 2} {assign var=td_col value="green1"} {else} {assign var=td_col value="green2"} {/if}	
-				{if $showmyperms == 0 AND empty($searchperms) OR $showmyperms == 1 AND $value2['available'] == 1 OR $showmyperms == 0 AND $value2['permname']|strpos:{$searchperms} !== false OR $showmyperms == 0 AND $value2['permid']|strpos:{$searchperms} !== false}
+				{if $showmyperms == 0 AND empty($searchperms) OR $showmyperms == 1 AND $value2['available'] == 1 OR $showmyperms == 0 AND $value2['permname'] matches '/{$searchperms}/' OR $showmyperms == 0 AND $value2['permid'] matches '/{$searchperms}/'}
 				<tr>
 					<td class="{$td_col}" style="width:50px">&nbsp;</td>
 					<td class="{$td_col}" style="width:45px">{$value2['permid']}</td>

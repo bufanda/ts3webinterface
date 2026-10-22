@@ -60,7 +60,7 @@ function cmp($a, $b)
 if(isset($_GET['deletefile']))
 	{
 	$delfiles[]=$_GET['path']=="/" ? "/".$_GET['name']:$_GET['path']."/".$_GET['name'];
-	$isdelete=$ts3->ftDeleteFile($_GET['cid'], isset($_GET['cpw']) ? $_GET['cpw']:'', $delfiles);
+	$isdelete=$ts3->ftDeleteFile($_GET['cid'], $delfiles, isset($_GET['cpw']) ? $_GET['cpw']:'');
 	if($isdelete['success']===false)
 		{
 		$error .= $isdelete['errors'][0];
@@ -74,7 +74,7 @@ if(isset($_GET['deletefile']))
 if(isset($_POST['createdir']))
 	{
 	$dirname=$_GET['path']=="/" ? "/".$_POST['fname']:$_GET['path']."/".$_POST['fname'];
-	$iscreate=$ts3->ftCreateDir($_GET['cid'], isset($_GET['cpw']) ? $_GET['cpw']:'', $dirname);
+	$iscreate=$ts3->ftCreateDir($_GET['cid'], $dirname, isset($_GET['cpw']) ? $_GET['cpw']:'');
 	if($iscreate['success']===false)
 		{
 		$error .= $iscreate['errors'][0];
