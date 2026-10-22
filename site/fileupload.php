@@ -48,7 +48,7 @@ if(isset($_POST['upload']))
 	
 if(isset($_POST['delicons']) AND !empty($_POST['delicons']))
 	{
-	$ts3->ftDeleteFile(0, '', $_POST['delicons']);
+	$ts3->ftDeleteFile(0, $_POST['delicons'], '');
 	foreach($_POST['delicons'] AS $key=>$value)
 		{
 		@unlink('icons/'.$_SESSION['server_ip'].'-'.$whoami['virtualserver_port'].'/'.$value);

@@ -1349,7 +1349,7 @@ class ts3admin {
 			  $auid .= $newChars[$char & 0x0F];
 	  }
 
-	  $check = $this->ftgetfileinfo(0, '', '/avatar_'.$auid);
+	  $check = $this->ftgetfileinfo(0, '/avatar_'.$auid, '');
 
 	  if(!$check["success"])
 	  {
@@ -2152,7 +2152,7 @@ class ts3admin {
   * @param		string	$dirname	dirPath
   * @return     boolean success
   */
-	function ftCreateDir($cid, $cpw = null, $dirname) {
+	function ftCreateDir($cid, $dirname, $cpw = null) {
 		if(!$this->runtime['selected']) { return $this->checkSelected(); }
 		return $this->getData('boolean', 'ftcreatedir cid='.$cid.' cpw='.$this->escapeText($cpw).' dirname='.$this->escapeText($dirname));
 	}
@@ -2177,7 +2177,7 @@ class ts3admin {
   * @param		array	$files	files
   * @return     boolean success
   */
-	function ftDeleteFile($cid, $cpw = '', $files) {
+	function ftDeleteFile($cid, $files, $cpw = '') {
 		if(!$this->runtime['selected']) { return $this->checkSelected(); }
 		$fileArray = array();
 		
@@ -2239,7 +2239,7 @@ class ts3admin {
   * @param		string 	$file	path to file
   * @return     boolean success
   */
-	function ftGetFileInfo($cid, $cpw = '', $file) {
+	function ftGetFileInfo($cid, $file, $cpw = '') {
 		if(!$this->runtime['selected']) { return $this->checkSelected(); }
 
 		return $this->getData('multi', 'ftgetfileinfo cid='.$cid.' cpw='.$this->escapeText($cpw).' name='.$this->escapeText($file));
@@ -2269,7 +2269,7 @@ class ts3admin {
   * @param		string	$path	filePath
   * @return     array	fileList
   */
-	function ftGetFileList($cid, $cpw = '', $path) {
+	function ftGetFileList($cid, $path, $cpw = '') {
 		if(!$this->runtime['selected']) { return $this->checkSelected(); }
 		return $this->getData('multi', 'ftgetfilelist cid='.$cid.' cpw='.$this->escapeText($cpw).' path='.$this->escapeText($path));
 	}
@@ -2387,7 +2387,7 @@ class ts3admin {
   * @param		string  $tcpw		targetChannelPassword [optional]
   * @return     boolean success
   */
-	function ftRenameFile($cid, $cpw = null, $oldname, $newname, $tcid = null,  $tcpw = null) {
+	function ftRenameFile($cid, $oldname, $newname, $cpw = null, $tcid = null,  $tcpw = null) {
 		if(!$this->runtime['selected']) { return $this->checkSelected(); }
 		$newTarget = ($tcid != null ? ' tcid='.$tcid.' '.$tcpw : '');
 		return $this->getData('boolean', 'ftrenamefile cid='.$cid.' cpw='.$cpw.' oldname='.$this->escapeText($oldname).' newname='.$this->escapeText($newname).$newTarget);
@@ -2828,7 +2828,7 @@ class ts3admin {
 		
 		if($this->succeeded($result))
 		{
-			return $this->ftGetFileInfo(0, '', '/icon_'.$iconID);
+			return $this->ftGetFileInfo(0, '/icon_'.$iconID, '');
 			//return $this->generateOutput(true, null, array('iconid' => $iconID, 'size' => $size));
 		}
 		else
