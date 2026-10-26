@@ -24,7 +24,7 @@ if(isset($_GET['deletefile']))
 	{
 	$delfiles[]=$_GET['path']=="/" ? "/".$_GET['name']:$_GET['path']."/".$_GET['name'];
 	if(!isset($_GET['cpw'])) {$_GET['cpw']='';}
-	$isdelete=$ts3->ftDeleteFile($_GET['cid'], $delfiles, $_GET['cpw']);
+	$isdelete=$ts3->ftDeleteFile($_GET['cid'], $_GET['cpw'], $delfiles);
 	$_GET['path']=="/" ? $_GET['cid']='':'';
 	if($isdelete['success']===false)
 		{
@@ -42,7 +42,7 @@ if(isset($_GET['deletefile']))
 if(isset($_POST['createdir']))
 	{
 	$dirname=$_GET['path']=="/" ? "/".$_POST['fname']:$_GET['path']."/".$_POST['fname'];
-	$iscreate=$ts3->ftCreateDir($_REQUEST['cid'], $dirname, $_GET['cpw']);
+	$iscreate=$ts3->ftCreateDir($_REQUEST['cid'], $_GET['cpw'], $dirname);
 	if($iscreate['success']===false)
 		{
 		for($i=0; $i+1==count($iscreate['errors']); $i++)
@@ -119,7 +119,7 @@ if(!isset($_GET['cid']) or empty($_GET['cid']))
 	else
 	{
 	$_GET['path']=str_replace('%2', '+', $_GET['path']);
-	$getallfiles=$ts3->getElement('data', $ts3->ftGetFileList($_GET['cid'], $_GET['path'], ''));
+	$getallfiles=$ts3->getElement('data', $ts3->ftGetFileList($_GET['cid'], '', $_GET['path']));
 	}
 	
 if(!empty($getallfiles))

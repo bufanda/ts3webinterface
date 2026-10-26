@@ -1,55 +1,59 @@
 <?php
 /*
-*Copyright (C) 2012-2013  Psychokiller
-*
-*This program is free software; you can redistribute it and/or modify it under the terms of 
-*the GNU General Public License as published by the Free Software Foundation; either 
-*version 3 of the License, or any later version.
-*
-*This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; 
-*without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
-*See the GNU General Public License for more details.
-*
-*You should have received a copy of the GNU General Public License along with this program; if not, see <http://www.gnu.org/licenses/>. 
-*/
-if(!defined("SECURECHECK")) {die($lang['error_file_alone']);} 
-/*
-REGARD!!
-If you use the web interface, they must write the webserver ip in the query_ip_whitelist.txt.
-After adding the ip, the server must be restarted!
+ * ==============================================================================
+ *  TEAMSPEAK 3 WEBINTERFACE
+ * ==============================================================================
+ * 
+ *  Copyright (C) 2009-2026 Psychokiller
+ *  In Kooperation mit Psychokiller und TS-Rent.de entstanden
+ * 
+ *  DE: Dies ist ein kostenloses Community-Projekt! Bitte respektiere die 
+ *      Arbeit der urspruenglichen Entwickler, indem du diesen Copyright-Hinweis 
+ *      und die Copyright-Texte im Interface nicht entfernst.
+ *      Dieses Skript steht unter der GNU General Public License v3.
+ *      Danke, dass du diese offene Software nutzt und unterstuetzt!
+ * 
+ *  EN: This is a free community project! Please respect the work of the 
+ *      original developers by not removing this copyright notice and the 
+ *      copyright texts in the web interface. 
+ *      This script is licensed under the GNU General Public License v3.
+ *      Thank you for using and supporting this open software!
+ * 
+ * ==============================================================================
+ *  WICHTIGE INFORMATION / IMPORTANT INFORMATION
+ * ==============================================================================
+ * 
+ *  DE: Damit das Webinterface funktioniert, MUSS die IP-Adresse deines 
+ *      Webservers in die Datei 'query_ip_whitelist.txt' deines TeamSpeak 3 
+ *      Servers eingetragen werden! Nach dem Eintragen muss der TS3 Server 
+ *      neu gestartet werden.
+ * 
+ *  EN: For the web interface to work, the IP address of your web server MUST 
+ *      be added to the 'query_ip_whitelist.txt' file of your TeamSpeak 3 
+ *      server! After adding the IP, the TS3 server must be restarted.
+ * 
+ * ==============================================================================
+ *  SERVER KONFIGURATION / SERVER CONFIGURATION
+ * ==============================================================================
+ * 
+ *  DE: Hier kannst du beliebig viele Server hinzufuegen. Kopiere einfach 
+ *      einen Block und erhoehe die Nummer in den eckigen Klammern (z.B. $server[23]).
+ * 
+ *  EN: Here you can add as many servers as you like. Just copy a block 
+ *      and increase the number in the brackets (e.g. $server[23]).
+ */
 
-Add more Server Ip's.
-For Example
-$server[0]['alias']= "Lokaler Server1";
-$server[0]['ip']= "127.0.0.1";
-$server[0]['tport']= "10011";
+$server[0]['alias']= "";
+$server[0]['ip']= "";
+$server[0]['tport']= "";
 
-$server[1]['alias']= "Lokaler Server2";
-$server[1]['ip']= "127.0.0.2";
-$server[1]['tport']= "20022";
 
-$server[2]['alias']= "Lokaler Server3";
-$server[2]['ip']= "127.0.0.3";
-$server[2]['tport']= "30033";
-*/
-
-$server[0]['alias']= "Lokaler Server";
-$server[0]['ip']= "127.0.0.1";
-$server[0]['tport']= 10011;
-
-$cfglang	=	"de";			//Language German = de, English = en, Netherlandish=nl (by pd1evl), French = fr (by supra63200)
-
-$duration = "100";				//Set the Limit for Clients show per Page on Client List
-
-$fastswitch=true;				//If true you can switch the Server on the header
-
-$showicons="left";				//Define the position where the icons on the Viewer will show left or right
-
-$style="new";					//Chose your design  set 'new' for the default design or the name of your own create design
-
-$msgsend_name="Webinterface";	//This Name will be show if you send a message to a Server
-
-$show_motd=true;				// Set it to false to not show the message of the day window
-
-$show_version=true;				// Set it to false to not show the Webinterface Version on the footer
+$cfglang	=	"de";			// DE: Sprache (de, en, nl) | EN: Language (de, en, nl)
+$duration = "100";				// DE: Maximale Clients pro Seite | EN: Max clients per page
+$fastswitch=true;				// DE: Server-Schnellwechsel im Header erlauben? | EN: Allow quick server switch in header?
+$showicons="left";				// DE: Position der Icons im Viewer (left/right) | EN: Position of icons in viewer (left/right)
+$style="modern";				// DE: Design-Name ('modern' ist das neue UI!) | EN: Theme name ('modern' is the new UI!)
+$msgsend_name="Webinterface";	// DE: Absendername fuer Server-Nachrichten | EN: Sender name for server messages
+$show_motd=true;				// DE: "Nachricht des Tages" beim Login zeigen? | EN: Show "Message of the Day" on login?
+$show_version=true;				// DE: Version im Footer anzeigen? | EN: Show version in footer?
 ?>

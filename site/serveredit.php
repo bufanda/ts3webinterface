@@ -50,8 +50,19 @@ if(isset($_POST['editserver']))
 			{
 			$_POST['newsettings']['virtualserver_log_filetransfer']=0;
 			}
+		$string_fields = array(
+			'virtualserver_name', 'virtualserver_welcomemessage', 'virtualserver_hostmessage',
+			'virtualserver_hostbanner_url', 'virtualserver_hostbanner_gfx_url',
+			'virtualserver_hostbutton_tooltip', 'virtualserver_hostbutton_gfx_url',
+			'virtualserver_hostbutton_url', 'virtualserver_password'
+		);
+		
 		foreach($_POST['newsettings'] AS $key=>$value)
 			{
+			if($value === '' && !in_array($key, $string_fields)) {
+				$value = 0;
+			}
+			
 			$server_edit=$ts3->serverEdit(array($key=>$value));
 			
 			if($server_edit['success']===false)

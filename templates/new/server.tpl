@@ -77,7 +77,7 @@
 				<td class="{$td_col} center">{$value['virtualserver_clientsonline']} / {$value['virtualserver_maxclients']}</td>
 				<td class="{$td_col} center"><input type="checkbox" name="caction[{$value['virtualserver_id']}][auto]" value="1" {if $value['virtualserver_autostart'] == 1}checked="checked"{/if}/></td>
 				<td class="{$td_col} center">
-				<select id="caction{$value['virtualserver_id']}" name="caction[{$value['virtualserver_id']}][action]" onchange="confirmArray('{$value['virtualserver_id']}', '{$value['virtualserver_name']|escape:'quotes'}', '{$value['virtualserver_port']}', '');">
+				<select id="caction{$value['virtualserver_id']}" name="caction[{$value['virtualserver_id']}][action]" onchange="confirmArray('{$value['virtualserver_id']}', '{$value['virtualserver_name']|addslashes}', '{$value['virtualserver_port']}', '');">
 					<option value="">{$lang['select']}</option>
 					<option value="start">{$lang['start']}</option>
 					<option value="stop">{$lang['stop']}</option>

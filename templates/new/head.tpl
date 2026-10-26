@@ -17,7 +17,7 @@
 						<td style="text-align:right; height:30px">
 						{if $fastswitch == true AND $hoststatus === true}
 							<form method="get" action="index.php?site=serverview">
-							{if !($site matches '/edit/') OR $site == 'serveredit'}
+							{if strpos($site, 'edit') == false OR $site == serveredit}
 							<input type="hidden" name="site" value="{$site}" />
 							{else}
 							<input type="hidden" name="site" value="serverview" />

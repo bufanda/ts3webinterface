@@ -1,7 +1,21 @@
-Teamspeak 3 Webinterface written by Psychokiller (Daniel P.)
+Web-Interface – Psychokiller Edition
 
-Dev-Website: http://ts3.cs-united.de
+Dieses Web-Interface wurde von Psychokiller entwickelt
+in Kooperation mit dem TeamSpeak 3 Hoster ts-rent.de.
 
-This software uses the ts3admin.class.php from Par0noid (Stefan Z.)
+----------------------------------------
+Kontakt
+----------------------------------------
+Support: support@ts-rent.de
 
-Dev-Website: http://ts3admin.info
+----------------------------------------
+TeamSpeak Server
+----------------------------------------
+Adresse: 98.ts-rent.de
+
+----------------------------------------
+Stand
+----------------------------------------
+Version: 2026
+
+----------------------------------------

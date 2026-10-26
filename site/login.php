@@ -18,11 +18,13 @@ $error='';
 
 if($serverstatus===false)	
 	{
-	$debuglog=$ts3->getDebugLog();
-	foreach($debuglog AS $value)
-		{
-		$error .= $value."<br />";
-		}
+	if(isset($ts3)) {
+		$debuglog=$ts3->getDebugLog();
+		foreach($debuglog AS $value)
+			{
+			$error .= $value."<br />";
+			}
+	}
 	session_destroy();
 	}
 elseif($loginstatus===true AND $hoststatus===false AND isset($_POST['sendlogin']))

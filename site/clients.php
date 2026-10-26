@@ -15,8 +15,57 @@
 if(!defined("SECURECHECK")) {die($lang['error_file_alone']);} 
 if($sid===false OR empty($sid)) { echo "<meta http-equiv=\"refresh\" content=\"0; URL=index.php?site=server\">";} else {
 
+// AJAX Handler fuer Rechte-Modal und Rechte-Entzug
+if(isset($_REQUEST['ajax']))
+	{
+	header('Content-Type: application/json; charset=utf-8');
+	if($_REQUEST['ajax'] == 'get_client_groups' && isset($_REQUEST['cldbid']))
+		{
+		$cldbid = intval($_REQUEST['cldbid']);
+		$client_groups = $ts3->getElement('data', $ts3->serverGroupsByClientID($cldbid));
+		if(empty($client_groups) || isset($client_groups[0]['']))
+			{
+			$client_groups = array();
+			}
+		echo json_encode(array('success' => true, 'cldbid' => $cldbid, 'groups' => $client_groups));
+		exit;
+		}
+	elseif($_REQUEST['ajax'] == 'revoke_client_group' && isset($_REQUEST['cldbid']) && isset($_REQUEST['sgid']))
+		{
+		$cldbid = intval($_REQUEST['cldbid']);
+		$sgid = intval($_REQUEST['sgid']);
+		$sgroup_del_client = $ts3->serverGroupDeleteClient($sgid, $cldbid);
+		if($sgroup_del_client['success'] !== false)
+			{
+			// Aktualisierte Gruppenliste zurueckgeben
+			$updated_groups = $ts3->getElement('data', $ts3->serverGroupsByClientID($cldbid));
+			if(empty($updated_groups) || isset($updated_groups[0]['']))
+				{
+				$updated_groups = array();
+				}
+			echo json_encode(array('success' => true, 'msg' => $lang['clientremoveok'] ?? 'Recht erfolgreich entzogen.', 'groups' => $updated_groups));
+			}
+		else
+			{
+			$err_msg = '';
+			if(isset($sgroup_del_client['errors']) && is_array($sgroup_del_client['errors']))
+				{
+				$err_msg = implode(' ', $sgroup_del_client['errors']);
+				}
+			else
+				{
+				$err_msg = 'Das Recht konnte nicht entzogen werden.';
+				}
+			echo json_encode(array('success' => false, 'error' => $err_msg));
+			}
+		exit;
+		}
+	}
+
 $sortby="cldbid";
 $sorttype=SORT_ASC;
+
+$sgfilter = (isset($_REQUEST['sgfilter']) && !empty($_REQUEST['sgfilter'])) ? intval($_REQUEST['sgfilter']) : 0;
 
 if(empty($duration))
 	{
@@ -80,6 +129,24 @@ if(isset($_GET['sorttype']))
 		}
 	}
 
+// Servergruppen laden (fuer dynamischen Rechtefilter)
+$all_servergroups = $ts3->getElement('data', $ts3->serverGroupList());
+$servergroups = array();
+if(!empty($all_servergroups) && !isset($all_servergroups[0]['']))
+	{
+	foreach($all_servergroups as $sg)
+		{
+		if(isset($sg['type']) && $sg['type'] == 1) // Reguläre Servergruppen
+			{
+			$servergroups[] = $sg;
+			}
+		elseif(!isset($sg['type']))
+			{
+			$servergroups[] = $sg;
+			}
+		}
+	}
+
 if(isset($_POST['clientdel']))
 	{
 	$client_delete=$ts3->clientDbDelete($_POST['cldbid']);
@@ -98,6 +165,20 @@ if(isset($_POST['clientdel']))
 		}
 	}
 
+// Direkter Fallback fuer Recht-Entzug ueber Standard-POST
+if(isset($_POST['revokegroup']) && isset($_POST['cldbid']) && isset($_POST['sgid']))
+	{
+	$sgroup_del_client = $ts3->serverGroupDeleteClient(intval($_POST['sgid']), intval($_POST['cldbid']));
+	if($sgroup_del_client['success'] !== false)
+		{
+		echo "<div class=\"green1\" style=\"padding:10px; margin-bottom:10px; border-radius:8px;\">".$lang['clientremoveok']."</div>";
+		}
+	else
+		{
+		echo "<div class=\"error\" style=\"padding:10px; margin-bottom:10px; border-radius:8px;\">Das Recht konnte nicht entzogen werden.</div>";
+		}
+	}
+
 $clientdblist=array();
 while($getclientdblist=$ts3->getElement('data', $ts3->clientDbList($start, $duration)))
 	{
@@ -105,8 +186,31 @@ while($getclientdblist=$ts3->getElement('data', $ts3->clientDbList($start, $dura
 	$start=$start+$duration;
 	}
 
-
 $clientlist=$ts3->getElement('data', $ts3->clientList());
+
+// Optionaler Filter nach Servergruppe (sgfilter)
+if($sgfilter > 0)
+	{
+	$groupclients = $ts3->getElement('data', $ts3->serverGroupClientList($sgfilter, true));
+	$allowed_cldbids = array();
+	if(!empty($groupclients) && !isset($groupclients[0]['']))
+		{
+		foreach($groupclients as $gc)
+			{
+			$allowed_cldbids[] = $gc['cldbid'];
+			}
+		}
+	
+	foreach ($clientdblist AS $key => $value)
+		{
+		if(!in_array($value['cldbid'], $allowed_cldbids))
+			{
+			unset($clientdblist[$key]);
+			}
+		}
+	$clientdblist = array_values($clientdblist);
+	}
+
 $countclients=count($clientdblist);
 
 $pages=$countclients/$duration;
@@ -114,7 +218,6 @@ if(floor($pages)!=0)
 	{
 	$pages=ceil($pages);
 	}
-	
 
 if(isset($_POST['searchby']) AND $_POST['searchby']=='cldbid' AND  !empty($_POST['search']))
 	{
@@ -128,7 +231,6 @@ if(isset($_POST['searchby']) AND $_POST['searchby']=='cldbid' AND  !empty($_POST
 	}
 elseif(isset($_POST['searchby']) AND $_POST['searchby']=='name' AND !empty($_POST['search']))
 	{
-
 	foreach ($clientdblist AS $key => $value)
 		{
 		if(strpos(strtolower($value['client_nickname']),strtolower($_POST['search']))===false)
@@ -137,10 +239,19 @@ elseif(isset($_POST['searchby']) AND $_POST['searchby']=='name' AND !empty($_POS
 			}
 		}
 	}
+elseif(isset($_POST['searchby']) AND $_POST['searchby']=='uniqueid' AND !empty($_POST['search']))
+	{
+	foreach ($clientdblist AS $key => $value)
+		{
+		if($value['client_unique_identifier']!=$_POST['search'])
+			{
+			unset($clientdblist[$key]);
+			}
+		}
+	}
 	
 if(!empty($clientdblist))
 	{
-	
 	foreach($clientdblist AS $key => $value)
 		{
 		if(!empty($clientlist))
@@ -167,37 +278,7 @@ if(!isset($_GET['getstart']))
 		{
 		$getstart=$_GET['getstart'];
 		}
-		
-if(isset($_POST['searchby']) AND $_POST['searchby']=='cldbid' AND  !empty($_POST['search']) AND !empty($clientdblist))
-	{
-	foreach ($clientdblist AS $key => $value)
-		{
-		if($_POST['search']!=$value['cldbid'])
-			{
-			unset($clientdblist[$key]);
-			}
-		}
-	}
-elseif(isset($_POST['searchby']) AND $_POST['searchby']=='name' AND !empty($_POST['search']) AND !empty($clientdblist))
-	{
-	foreach ($clientdblist AS $key => $value)
-		{
-		if(strpos(strtolower($value['client_nickname']),strtolower($_POST['search']))===false)
-			{
-			unset($clientdblist[$key]);
-			}
-		}
-	}
-elseif(isset($_POST['searchby']) AND $_POST['searchby']=='uniqueid' AND !empty($_POST['search']) AND !empty($clientdblist))
-	{
-	foreach ($clientdblist AS $key => $value)
-		{
-		if($value['client_unique_identifier']!=$_POST['search'])
-			{
-			unset($clientdblist[$key]);
-			}
-		}
-	}
+
 $showclients=1;
 if(!empty($clientdblist))
 	{
@@ -221,4 +302,6 @@ $smarty->assign("countstarted", $countstarted);
 $smarty->assign("showclients", $showclients);
 $smarty->assign("print_pages", $print_pages);
 $smarty->assign("clientdblist", $clientdblist);
+$smarty->assign("servergroups", $servergroups);
+$smarty->assign("sgfilter", $sgfilter);
 ?>

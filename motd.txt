@@ -1,4 +1,22 @@
-This is a box for a message of the day.<br />
-You can turn it on/off on the config.php<br />
-
-The text can be changed on the motd.txt on the main folder<br />
+<div style="font-family: Arial, sans-serif; line-height: 1.6;">
+    <h3 style="margin-top: 0; color: #4CAF50; font-size: 1.2rem;">Willkommen in deinem TeamSpeak 3 Webinterface von TS-Rent 🎉</h3>
+    <br>
+    <p>
+        Bevor du loslegen kannst, benötigst du einen eigenen <strong>ServerQuery-Login</strong>.<br>
+        Das geht ganz einfach in 4 schnellen Schritten:
+    </p>
+    
+    <br>
+    
+    <ol style="margin-left: 20px; padding-left: 0; margin-top: 0;">
+        <li style="margin-bottom: 8px;">Verbinde dich als <strong>Server Admin</strong> mit deinem TS3 Server.</li>
+        <li style="margin-bottom: 8px;">Klicke oben im TeamSpeak-Menü auf <strong>Extras</strong> ➔ <strong>ServerQuery Login</strong>.</li>
+        <li style="margin-bottom: 8px;">Denke dir einen coolen Loginnamen aus und trage ihn ein.</li>
+        <li style="margin-bottom: 8px;">Nach dem Bestätigen erhältst du deine Zugangsdaten. <strong>Achtung:</strong> Speichere sie dir gut ab! Das Passwort wird dir nur ein einziges Mal angezeigt und kann nicht wiederhergestellt werden.</li>
+    </ol>
+    
+    <p style="margin-bottom: 0; margin-top: 15px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 10px;">
+        Wir wünschen dir viel Spaß beim Testen des neuen WI!<br>
+        <strong>Dein Team von TS-Rent</strong>
+    </p>
+</div>

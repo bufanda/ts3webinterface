@@ -73,7 +73,7 @@ if(isset($geticons) AND $geticons==1)
 		}
 	$count=0;
 
-	$ft=$ts3->ftGetFileList(0, '/icons', '');
+	$ft=$ts3->ftGetFileList(0, '', '/icons');
 	
 	if(is_dir('icons/'.$ip.'-'.$port.'/'))
 			{
